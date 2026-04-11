@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        config([
+            'view.compiled' => env('VIEW_COMPILED_PATH', storage_path('framework/views')),
+        ]);
     }
 }

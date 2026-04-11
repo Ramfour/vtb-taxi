@@ -18,7 +18,7 @@ class EmployeePortalController extends Controller
 
     public function index(): View
     {
-        return view('employee.dashboard', [
+        return view('employee.dashboard-v2', [
             'dashboard' => $this->workflowService->employeeDashboard(request()->user()),
             'currentUser' => request()->user(),
         ]);
@@ -32,7 +32,7 @@ class EmployeePortalController extends Controller
         );
 
         return redirect()
-            ->route('employee.requests.index', ['user_id' => $request->user()->id])
+            ->route('employee.requests.index')
             ->with('status', 'Заявка отправлена в буфер на согласование.');
     }
 
@@ -45,7 +45,7 @@ class EmployeePortalController extends Controller
         );
 
         return redirect()
-            ->route('employee.requests.index', ['user_id' => $request->user()->id])
+            ->route('employee.requests.index')
             ->with('status', 'Заявка отменена.');
     }
 }

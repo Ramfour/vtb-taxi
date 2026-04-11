@@ -51,6 +51,45 @@ class RequestWorkflowService
         return $tempRequest->refresh();
     }
 
+    public function approveTempRequests(User $manager, array $requestIds = [], string $scope = 'selected', ?string $managerComment = null): int
+    {
+        return DB::transaction(function () use ($manager, $requestIds, $scope, $managerComment) {
+            $query = TempRequest::query()
+                ->where('status', RequestStatus::Pending)
+                ->orderBy('date_time');
+
+            if ($scope === 'selected') {
+                if ($requestIds === []) {
+                    throw ValidationException::withMessages([
+                        'request_ids' => 'Select at least one request to approve.',
+                    ]);
+                }
+
+                $query->whereKey($requestIds);
+            }
+
+            $tempRequests = $query->lockForUpdate()->get();
+
+            if ($tempRequests->isEmpty()) {
+                throw ValidationException::withMessages([
+                    'request_ids' => 'No pending requests were found for approval.',
+                ]);
+            }
+
+            foreach ($tempRequests as $tempRequest) {
+                $tempRequest->fill([
+                    'status' => RequestStatus::Approved,
+                    'reviewed_by' => $manager->id,
+                    'reviewed_at' => now(),
+                    'manager_comment' => $managerComment,
+                    'rejection_reason' => null,
+                ])->save();
+            }
+
+            return $tempRequests->count();
+        });
+    }
+
     public function cancelTempRequest(TempRequest $tempRequest, User $user, ?string $reason = null): TempRequest
     {
         if ($tempRequest->user_id !== $user->id && ! in_array($user->role->value, [2, 3], true)) {
