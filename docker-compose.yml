@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # Nginx – веб-сервер
+  webserver:
+    image: nginx:alpine
+    container_name: vtb-taxi-webserver
+    restart: unless-stopped
+    ports:
+      - "8080:80"                         # доступ к сайту через localhost:8080
+    volumes:
+      - ./:/var/www/html                  # монтируем код
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - vtb-taxi-network
+
+  # PHP-FPM с кастомным Dockerfile
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: vtb-taxi-php
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html                  # тот же код
+    networks:
+      - vtb-taxi-network
+
+  # MySQL 8.4
+  mysql:
+    image: mysql:8.4
+    container_name: vtb-taxi-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: vtb_taxi
+      MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - "3307:3306"                       # внешний порт 3307, чтобы не конфликтовать с локальным MySQL
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - vtb-taxi-network
+
+  # Redis для очередей
+  redis:
+    image: redis:alpine
+    container_name: vtb-taxi-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - vtb-taxi-network
+
+  # PhpMyAdmin (удобно для просмотра БД)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: vtb-taxi-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - vtb-taxi-network
+
+networks:
+  vtb-taxi-network:
+    driver: bridge
+
+volumes:
+  db_data:

@@ -1,0 +1,13 @@
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.osp
+.env
+mysql_data/
+postgres_data/
+redis_data/
