@@ -49,6 +49,7 @@
     subheading="Согласование заявок, приглашения сотрудников и перевод подтверждённых поездок в финальный слой для выгрузки."
     :current-user="$currentUser"
 >
+    <div>
     <section class="manager-grid manager-grid--compact">
         <article class="panel panel--compact" data-reveal>
             <div class="panel-header panel-header--tight">
@@ -145,14 +146,15 @@
 
         <form id="bulk-approve-form" method="POST" action="{{ route('manager.requests.bulk-approve') }}" class="buffer-toolbar">
             @csrf
+            <input type="hidden" name="approve_scope" value="selected" data-approve-scope-input>
             <div class="field buffer-toolbar__comment">
                 <label for="bulk_manager_comment">Комментарий руководителя для массового одобрения</label>
                 <textarea id="bulk_manager_comment" class="textarea textarea--compact" name="manager_comment" placeholder="Необязательно. Комментарий будет записан во все массово одобренные заявки."></textarea>
             </div>
 
             <div class="buffer-toolbar__actions">
-                <button class="button-success" type="submit" name="approve_scope" value="selected">Одобрить выбранные</button>
-                <button class="button-secondary" type="submit" name="approve_scope" value="all_pending">Одобрить все на согласовании</button>
+                <button class="button-success" type="submit" name="approve_scope" value="selected" data-approve-scope="selected">Одобрить выбранные</button>
+                <button class="button-secondary" type="submit" name="approve_scope" value="all_pending" data-approve-scope="all_pending">Одобрить все на согласовании</button>
             </div>
         </form>
 
@@ -273,66 +275,31 @@
         @endif
     </section>
 
-    <details class="compact-disclosure panel panel--compact buffer-transfer" data-reveal>
-        <summary>
-            <span>
-                <span class="kicker">Сворачиваемый раздел</span>
-                <strong>Перенос одобренных заявок</strong>
-            </span>
-            <span class="disclosure-meta">
-                <span class="disclosure-hint">Нажмите, чтобы раскрыть</span>
-                <span class="pill-count">{{ $countLabel($approvedCount, 'к переносу') }}</span>
-            </span>
-        </summary>
-
-        <div class="disclosure-body">
-            <p class="muted">Перенос берёт уже одобренные заявки из временного буфера и делает из них финальные записи. После этого они считаются подтверждёнными для выгрузки и попадают в основной рабочий список.</p>
-
-            <form method="POST" action="{{ route('manager.requests.finalize') }}" class="form-grid">
-                @csrf
-                <div class="form-grid-two">
-                    <div class="field">
-                        <label for="from">С</label>
-                        <input id="from" class="input" type="datetime-local" name="from" data-range-from>
-                    </div>
-                    <div class="field">
-                        <label for="to">По</label>
-                        <input id="to" class="input" type="datetime-local" name="to" data-range-to>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button class="button-warm" type="submit">Перенести в финальный список</button>
-                    <button class="button-secondary" type="button" data-set-today-range>На сегодня (22:00–06:00)</button>
-                </div>
-            </form>
-        </div>
-    </details>
-
-    <section class="panel panel--compact" data-reveal>
+    <section class="panel panel--compact buffer-transfer" data-reveal>
         <div class="panel-header panel-header--tight">
             <div>
-                <span class="kicker">Выгрузка</span>
-                <h2>CSV для перевозчика</h2>
-                <p>Файл с заголовками: номер по порядку, дата+время, ФИО, адрес подачи, телефон. Предпросмотр ниже на странице.</p>
+                <span class="kicker">Финализация</span>
+                <h2>Перенести заявки в базу перед выгрузкой</h2>
+                <p>Выберите период и перенесите одобренные заявки в финальный слой. Предпросмотр ниже показывает, какие записи попадут в выгрузку.</p>
             </div>
+            <span class="pill-count">{{ $countLabel($approvedCount, 'к переносу') }}</span>
         </div>
 
-        <form method="POST" action="{{ route('manager.requests.export-csv') }}" class="form-grid">
+        <form method="POST" action="{{ route('manager.requests.finalize') }}" class="form-grid">
             @csrf
             <div class="form-grid-two">
                 <div class="field">
-                    <label for="export_from">С</label>
-                    <input id="export_from" class="input" type="datetime-local" name="from" data-range-from value="{{ $export_from }}" data-preview-input>
+                    <label for="from">С</label>
+                    <input id="from" class="input" type="datetime-local" name="from" data-range-from value="{{ $export_from }}">
                 </div>
                 <div class="field">
-                    <label for="export_to">По</label>
-                    <input id="export_to" class="input" type="datetime-local" name="to" data-range-to value="{{ $export_to }}" data-preview-input>
+                    <label for="to">По</label>
+                    <input id="to" class="input" type="datetime-local" name="to" data-range-to value="{{ $export_to }}">
                 </div>
             </div>
 
             <div class="form-actions">
-                <button class="button" type="submit">Скачать CSV</button>
+                <button class="button-warm" type="submit">Перенести в финальный список</button>
                 <button class="button-secondary" type="button" data-set-today-range>На сегодня (22:00–06:00)</button>
                 <button class="button-ghost" type="submit" formmethod="GET" formaction="{{ route('manager.requests.index') }}">Обновить предпросмотр</button>
             </div>
@@ -370,15 +337,15 @@
                             : false;
                     @endphp
                     <div class="request-row inline-edit {{ $outsideNight ? 'row-warning' : '' }}">
-                        <div data-label="№">{{ ($export_preview->currentPage() - 1) * $export_preview->perPage() + $index + 1 }}</div>
+                        <div data-label="#"> {{ ($export_preview->currentPage() - 1) * $export_preview->perPage() + $index + 1 }}</div>
                         <div data-label="Дата + время">
                             <input class="inline-input" type="datetime-local" name="date_time" value="{{ optional($request->date_time)->format('Y-m-d\\TH:i') }}" form="update-final-{{ $request->id }}" required>
                         </div>
                         <div data-label="ФИО">
-                            <input class="inline-input" type="text" name="full_name" value="{{ $displayName($request->full_name) }}" form="update-final-{{ $request->id }}" required>
+                            <textarea class="inline-textarea" name="full_name" form="update-final-{{ $request->id }}" rows="2" required>{{ $displayName($request->full_name) }}</textarea>
                         </div>
                         <div data-label="Адрес подачи">
-                            <input class="inline-input" type="text" name="address_raw" value="{{ $request->address_raw }}" form="update-final-{{ $request->id }}" required>
+                            <textarea class="inline-textarea" name="address_raw" form="update-final-{{ $request->id }}" rows="2" required>{{ $request->address_raw }}</textarea>
                         </div>
                         <div data-label="Телефон">
                             <input class="inline-input" type="text" name="phone" value="{{ $request->phone }}" form="update-final-{{ $request->id }}" required>
@@ -431,4 +398,34 @@
         </div>
     </section>
 
+    <section class="panel panel--compact" data-reveal>
+        <div class="panel-header panel-header--tight">
+            <div>
+                <span class="kicker">Выгрузка</span>
+                <h2>CSV для перевозчика</h2>
+                <p>Файл с заголовками: номер по порядку, дата+время, ФИО, адрес подачи, телефон.</p>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ route('manager.requests.export-csv') }}" class="form-grid">
+            @csrf
+            <div class="form-grid-two">
+                <div class="field">
+                    <label for="export_from">С</label>
+                    <input id="export_from" class="input" type="datetime-local" name="from" data-range-from value="{{ $export_from }}">
+                </div>
+                <div class="field">
+                    <label for="export_to">По</label>
+                    <input id="export_to" class="input" type="datetime-local" name="to" data-range-to value="{{ $export_to }}">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="button" type="submit">Скачать CSV</button>
+                <button class="button-secondary" type="button" data-set-today-range>На сегодня (22:00–06:00)</button>
+            </div>
+        </form>
+    </section>
+
+    </div>
 </x-layouts.portal-vtb>

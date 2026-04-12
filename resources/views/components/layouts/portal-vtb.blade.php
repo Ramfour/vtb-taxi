@@ -80,17 +80,16 @@
                         <div class="account-stack">
                         <div class="identity-chip">
                             <span class="identity-label">Аккаунт</span>
+                            <span class="identity-role">{{ $roleLabels[$currentUser->role->name] ?? $currentUser->role->name }}</span>
                             <strong>{{ $displayName($currentUser->full_name) }}</strong>
                             <span>{{ $currentUser->employee_number }} · {{ $roleLabels[$currentUser->role->name] ?? $currentUser->role->name }}</span>
                         </div>
                         <details class="compact-disclosure account-disclosure">
                             <summary>
-                                <span>
+                                <span class="disclosure-title">
                                     <span class="kicker">Аккаунт</span>
                                     <strong>Сменить пароль</strong>
-                                </span>
-                                <span class="disclosure-meta">
-                                    <span class="disclosure-hint">Нажмите, чтобы раскрыть</span>
+                                    <span class="disclosure-hint">Нажмите</span>
                                 </span>
                             </summary>
 
@@ -101,24 +100,22 @@
                                         <label for="current_password_topbar">Текущий пароль</label>
                                         <div class="password-field">
                                             <input id="current_password_topbar" class="input" type="password" name="current_password" required>
-                                            <button class="password-toggle" type="button" data-password-toggle>Показать</button>
                                         </div>
                                     </div>
                                     <div class="field">
                                         <label for="new_password_topbar">Новый пароль</label>
                                         <div class="password-field">
                                             <input id="new_password_topbar" class="input" type="password" name="password" required>
-                                            <button class="password-toggle" type="button" data-password-toggle>Показать</button>
                                         </div>
                                     </div>
                                     <div class="field">
                                         <label for="new_password_topbar_confirmation">Подтверждение нового пароля</label>
                                         <div class="password-field">
                                             <input id="new_password_topbar_confirmation" class="input" type="password" name="password_confirmation" required>
-                                            <button class="password-toggle" type="button" data-password-toggle>Показать</button>
                                         </div>
                                     </div>
-                                    <div class="form-actions">
+                                    <div class="form-actions form-actions--stack">
+                                        <button class="button-ghost password-toggle-all" type="button" data-password-toggle-all>Показать пароли</button>
                                         <button class="button" type="submit">Обновить пароль</button>
                                     </div>
                                 </form>
@@ -136,6 +133,9 @@
                         @if (in_array($currentUser->role->name, ['Manager', 'Admin'], true))
                             <a href="{{ route('manager.requests.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'manager.') ? 'is-active' : '' }}">Панель руководителя</a>
                             <a href="{{ route('manager.employees.index') }}" class="{{ $currentRoute === 'manager.employees.index' ? 'is-active' : '' }}">Сотрудники</a>
+                            @if ($currentUser->role->name === 'Admin')
+                                <a href="{{ route('admin.audit.index') }}" class="{{ $currentRoute === 'admin.audit.index' ? 'is-active' : '' }}">Аудит</a>
+                            @endif
                         @endif
                     @endif
 

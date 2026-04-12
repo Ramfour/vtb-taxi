@@ -11,10 +11,13 @@ use App\Models\Invitation;
 use App\Models\Request as FinalRequest;
 use App\Models\TempRequest;
 use App\Models\User;
+use App\Models\AuditLog;
 use App\Enums\UserRole;
+use App\Services\AuditLogger;
 use App\Services\RequestWorkflowService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Carbon;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\View\View;
 
@@ -58,6 +61,222 @@ class ManagerPortalController extends Controller
                 ->withQueryString(),
             'search' => $search,
         ]);
+    }
+
+    public function audit(): View
+    {
+        if ($this->isNotAdmin(request()->user())) {
+            abort(403);
+        }
+
+        $search = trim((string) request()->query('q', ''));
+        $action = trim((string) request()->query('action', ''));
+        $entity = trim((string) request()->query('entity', ''));
+        $from = request()->query('from');
+        $to = request()->query('to');
+
+        $query = AuditLog::query()
+            ->with('user')
+            ->latest('created_at');
+
+        if ($search !== '') {
+            $query->where(function ($builder) use ($search) {
+                $builder
+                    ->where('action', 'like', '%'.$search.'%')
+                    ->orWhere('entity_type', 'like', '%'.$search.'%')
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery
+                            ->where('full_name', 'like', '%'.$search.'%')
+                            ->orWhere('employee_number', 'like', '%'.$search.'%');
+                    });
+            });
+
+            if (ctype_digit($search)) {
+                $query->orWhere('entity_id', (int) $search);
+            }
+        }
+
+        if ($action !== '') {
+            $query->where('action', $action);
+        }
+
+        if ($entity !== '') {
+            $query->where('entity_type', $entity);
+        }
+
+        if ($from) {
+            $query->where('created_at', '>=', Carbon::parse($from));
+        }
+
+        if ($to) {
+            $query->where('created_at', '<=', Carbon::parse($to));
+        }
+
+        $actions = AuditLog::query()
+            ->select('action')
+            ->distinct()
+            ->orderBy('action')
+            ->limit(50)
+            ->pluck('action')
+            ->map(fn (string $actionItem) => [
+                'value' => $actionItem,
+                'label' => $this->actionLabel($actionItem),
+            ]);
+
+        $entities = AuditLog::query()
+            ->select('entity_type')
+            ->distinct()
+            ->orderBy('entity_type')
+            ->limit(50)
+            ->pluck('entity_type');
+
+        return view('manager.audit', [
+            'currentUser' => request()->user(),
+            'logs' => $query->paginate(20)->withQueryString(),
+            'search' => $search,
+            'actionFilter' => $action,
+            'entityFilter' => $entity,
+            'from' => $from,
+            'to' => $to,
+            'actions' => $actions,
+            'entities' => $entities,
+            'actionLabelMap' => $this->actionLabelMap(),
+        ]);
+    }
+
+    public function exportAuditCsv(): StreamedResponse
+    {
+        if ($this->isNotAdmin(request()->user())) {
+            abort(403);
+        }
+
+        $search = trim((string) request()->query('q', ''));
+        $action = trim((string) request()->query('action', ''));
+        $entity = trim((string) request()->query('entity', ''));
+        $from = request()->query('from');
+        $to = request()->query('to');
+
+        $query = AuditLog::query()
+            ->with('user')
+            ->latest('created_at');
+
+        if ($search !== '') {
+            $query->where(function ($builder) use ($search) {
+                $builder
+                    ->where('action', 'like', '%'.$search.'%')
+                    ->orWhere('entity_type', 'like', '%'.$search.'%')
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery
+                            ->where('full_name', 'like', '%'.$search.'%')
+                            ->orWhere('employee_number', 'like', '%'.$search.'%');
+                    });
+            });
+
+            if (ctype_digit($search)) {
+                $query->orWhere('entity_id', (int) $search);
+            }
+        }
+
+        if ($action !== '') {
+            $query->where('action', $action);
+        }
+
+        if ($entity !== '') {
+            $query->where('entity_type', $entity);
+        }
+
+        if ($from) {
+            $query->where('created_at', '>=', Carbon::parse($from));
+        }
+
+        if ($to) {
+            $query->where('created_at', '<=', Carbon::parse($to));
+        }
+
+        $logs = $query->limit(2000)->get();
+        $timestamp = now()->format('Ymd_His');
+        $filename = "vtb_audit_{$timestamp}.csv";
+        $content = $this->buildAuditCsvContent($logs);
+
+        AuditLogger::logFor(request()->user(), 'export_audit_csv', 'AuditLog', null, [], [
+            'count' => $logs->count(),
+            'filename' => $filename,
+        ]);
+
+        return response()->streamDownload(function () use ($content) {
+            echo $content;
+        }, $filename, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename*=UTF-8''{$filename}",
+        ]);
+    }
+
+    private function buildAuditCsvContent($logs): string
+    {
+        $handle = fopen('php://temp', 'r+');
+        fwrite($handle, "\xEF\xBB\xBF");
+        fputcsv($handle, [
+            'Дата',
+            'Пользователь',
+            'Табельный',
+            'Действие',
+            'Сущность',
+            'ID сущности',
+            'IP',
+            'Было',
+            'Стало',
+        ], ';');
+
+        foreach ($logs as $log) {
+            fputcsv($handle, [
+                $log->created_at?->format('d.m.Y H:i'),
+                $log->user?->full_name ?? '',
+                $log->user?->employee_number ?? '',
+                $this->actionLabel($log->action),
+                $log->entity_type,
+                $log->entity_id,
+                $log->ip_address ?? '',
+                $log->old_values ? json_encode($log->old_values, JSON_UNESCAPED_UNICODE) : '',
+                $log->new_values ? json_encode($log->new_values, JSON_UNESCAPED_UNICODE) : '',
+            ], ';');
+        }
+
+        rewind($handle);
+        $content = stream_get_contents($handle);
+        fclose($handle);
+
+        return $content;
+    }
+
+    private function actionLabel(string $action): string
+    {
+        $map = $this->actionLabelMap();
+
+        return $map[$action] ?? $action;
+    }
+
+    private function actionLabelMap(): array
+    {
+        return [
+            'temp_request_created' => 'Создана заявка (буфер)',
+            'temp_request_reviewed' => 'Заявка рассмотрена',
+            'temp_request_bulk_approved' => 'Заявка одобрена массово',
+            'temp_request_cancelled' => 'Заявка отменена',
+            'temp_request_finalized' => 'Заявка перенесена в финал',
+            'temp_request_deleted' => 'Заявка удалена навсегда',
+            'final_request_created' => 'Финальная заявка создана',
+            'final_request_updated' => 'Финальная заявка изменена',
+            'final_request_deleted' => 'Финальная заявка удалена',
+            'invitation_created' => 'Создано приглашение',
+            'invitation_used' => 'Приглашение использовано',
+            'invitation_deleted' => 'Приглашение удалено',
+            'user_registered' => 'Пользователь зарегистрирован',
+            'user_soft_deleted' => 'Сотрудник скрыт',
+            'user_force_deleted' => 'Сотрудник удалён навсегда',
+            'export_csv' => 'Выгрузка заявок CSV',
+            'export_audit_csv' => 'Выгрузка аудита CSV',
+            'password_updated' => 'Смена пароля',
+        ];
     }
 
     public function review(ReviewTempRequestRequest $request, TempRequest $tempRequest): RedirectResponse
@@ -108,6 +327,13 @@ class ManagerPortalController extends Controller
             // If storage is not writable inside container, still allow download.
         }
 
+        AuditLogger::logFor($request->user(), 'export_csv', 'Request', null, [], [
+            'from' => $request->validated('from'),
+            'to' => $request->validated('to'),
+            'count' => $requests->count(),
+            'filename' => $filename,
+        ]);
+
         return response()->streamDownload(function () use ($content) {
             echo $content;
         }, $filename, [
@@ -121,6 +347,13 @@ class ManagerPortalController extends Controller
         $data = $request->validated();
         $addressChanged = $data['address_raw'] !== $finalRequest->address_raw;
 
+        $oldValues = [
+            'full_name' => $finalRequest->full_name,
+            'phone' => $finalRequest->phone,
+            'address_raw' => $finalRequest->address_raw,
+            'date_time' => $finalRequest->date_time?->toDateTimeString(),
+        ];
+
         $finalRequest->fill([
             'full_name' => $data['full_name'],
             'phone' => $data['phone'],
@@ -128,6 +361,13 @@ class ManagerPortalController extends Controller
             'date_time' => $data['date_time'],
             'address_norm' => $addressChanged ? null : $finalRequest->address_norm,
         ])->save();
+
+        AuditLogger::log($request->user(), 'final_request_updated', $finalRequest, $oldValues, [
+            'full_name' => $finalRequest->full_name,
+            'phone' => $finalRequest->phone,
+            'address_raw' => $finalRequest->address_raw,
+            'date_time' => $finalRequest->date_time?->toDateTimeString(),
+        ]);
 
         $redirectUrl = route('manager.requests.index', [
             'from' => $request->input('from'),
@@ -203,7 +443,17 @@ class ManagerPortalController extends Controller
             abort(403);
         }
 
+        $oldValues = [
+            'full_name' => $tempRequest->full_name,
+            'phone' => $tempRequest->phone,
+            'address_raw' => $tempRequest->address_raw,
+            'date_time' => $tempRequest->date_time?->toDateTimeString(),
+            'status' => $tempRequest->status->value,
+        ];
+
         $tempRequest->forceDelete();
+
+        AuditLogger::log(request()->user(), 'temp_request_deleted', $tempRequest, $oldValues, []);
 
         return redirect()
             ->route('manager.requests.index')
@@ -216,7 +466,17 @@ class ManagerPortalController extends Controller
             abort(403);
         }
 
+        $oldValues = [
+            'full_name' => $finalRequest->full_name,
+            'phone' => $finalRequest->phone,
+            'address_raw' => $finalRequest->address_raw,
+            'date_time' => $finalRequest->date_time?->toDateTimeString(),
+            'status' => $finalRequest->status->value,
+        ];
+
         $finalRequest->forceDelete();
+
+        AuditLogger::log(request()->user(), 'final_request_deleted', $finalRequest, $oldValues, []);
 
         $redirectUrl = route('manager.requests.index', [
             'from' => request()->input('from'),
@@ -245,7 +505,15 @@ class ManagerPortalController extends Controller
                 ->with('status', 'Нельзя удалить свой аккаунт.');
         }
 
+        $oldValues = [
+            'full_name' => $user->full_name,
+            'employee_number' => $user->employee_number,
+            'role' => $user->role?->name,
+        ];
+
         $user->delete();
+
+        AuditLogger::log(request()->user(), 'user_soft_deleted', $user, $oldValues, []);
 
         return redirect()
             ->route('manager.requests.index')
@@ -268,7 +536,15 @@ class ManagerPortalController extends Controller
                 ->with('status', 'Нельзя удалить свой аккаунт.');
         }
 
+        $oldValues = [
+            'full_name' => $user->full_name,
+            'employee_number' => $user->employee_number,
+            'role' => $user->role?->name,
+        ];
+
         $user->forceDelete();
+
+        AuditLogger::log(request()->user(), 'user_force_deleted', $user, $oldValues, []);
 
         return redirect()
             ->route('manager.requests.index')
@@ -281,7 +557,16 @@ class ManagerPortalController extends Controller
             abort(403);
         }
 
+        $oldValues = [
+            'employee_number' => $invitation->employee_number,
+            'role' => $invitation->role?->name,
+            'expires_at' => $invitation->expires_at?->toDateTimeString(),
+            'is_used' => $invitation->is_used,
+        ];
+
         $invitation->delete();
+
+        AuditLogger::log(request()->user(), 'invitation_deleted', $invitation, $oldValues, []);
 
         return redirect()
             ->back()
@@ -302,7 +587,7 @@ class ManagerPortalController extends Controller
     {
         $exportFrom = request()->query('from');
         $exportTo = request()->query('to');
-        $exportPreview = $this->workflowService->previewFinalRequests($exportFrom, $exportTo, 12);
+        $exportPreview = $this->workflowService->previewFinalRequests($exportFrom, $exportTo, 5);
         $exportTotal = $exportPreview->total();
 
         return view('manager.dashboard-v3', [

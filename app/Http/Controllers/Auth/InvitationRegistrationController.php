@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AcceptInvitationRequest;
 use App\Models\Invitation;
 use App\Models\User;
+use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +50,18 @@ class InvitationRegistrationController extends Controller
 
             return $user;
         });
+
+        AuditLogger::log($user, 'invitation_used', $invitation, [
+            'is_used' => false,
+        ], [
+            'is_used' => true,
+            'used_by' => $user->id,
+        ]);
+
+        AuditLogger::log($user, 'user_registered', $user, [], [
+            'employee_number' => $user->employee_number,
+            'role' => $user->role?->name,
+        ]);
 
         Auth::login($user, true);
         $request->session()->regenerate();

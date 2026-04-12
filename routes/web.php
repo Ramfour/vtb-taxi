@@ -51,4 +51,9 @@ Route::middleware('guest')->group(function () {
             Route::post('/invitations', [ManagerInvitationController::class, 'store'])->name('manager.invitations.store');
             Route::delete('/invitations/{invitation}', [ManagerPortalController::class, 'destroyInvitation'])->name('manager.invitations.destroy');
         });
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/admin/audit', [ManagerPortalController::class, 'audit'])->name('admin.audit.index');
+        Route::get('/admin/audit/export', [ManagerPortalController::class, 'exportAuditCsv'])->name('admin.audit.export');
+    });
 });

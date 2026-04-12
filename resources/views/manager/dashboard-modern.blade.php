@@ -11,6 +11,7 @@
     subheading="Управляйте входящим буфером заявок, запускайте регистрацию сотрудников и готовьте финальный слой для выгрузки перевозчику."
     :current-user="$currentUser"
 >
+    <div class="manager-dashboard">
     <section class="manager-grid">
         <article class="hero-banner" data-reveal>
             <span class="kicker">Контроль потока</span>
@@ -230,4 +231,5 @@
             </section>
         </aside>
     </section>
+    </div>
 </x-layouts.portal-vtb>

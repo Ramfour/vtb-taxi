@@ -1,4 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
+    const vtbAjaxVersion = '1';
     const root = document.documentElement;
     const toggle = document.querySelector('[data-theme-toggle]');
     const label = document.querySelector('[data-theme-label]');
@@ -21,6 +22,142 @@
         });
     }
 
+    const bindTodayRange = (scope = document) => {
+        scope.querySelectorAll('[data-set-today-range]').forEach((button) => {
+            if (button.dataset.boundToday === '1') {
+                return;
+            }
+            button.dataset.boundToday = '1';
+            button.addEventListener('click', () => {
+                const form = button.closest('form');
+                const fromInput = form ? form.querySelector('[data-range-from]') : document.querySelector('#from');
+                const toInput = form ? form.querySelector('[data-range-to]') : document.querySelector('#to');
+
+                if (!fromInput || !toInput) {
+                    return;
+                }
+
+                const now = new Date();
+                const from = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 0, 0);
+                const to = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 6, 0, 0);
+
+                const toLocalInput = (value) => {
+                    const pad = (num) => String(num).padStart(2, '0');
+                    return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`;
+                };
+
+                fromInput.value = toLocalInput(from);
+                toInput.value = toLocalInput(to);
+            });
+        });
+    };
+
+    const bindCopyButtons = (scope = document) => {
+        scope.querySelectorAll('[data-copy-target]').forEach((button) => {
+            if (button.dataset.boundCopy === '1') {
+                return;
+            }
+            button.dataset.boundCopy = '1';
+            button.addEventListener('click', async () => {
+                const selector = button.getAttribute('data-copy-target');
+                const target = selector ? document.querySelector(selector) : null;
+
+                if (!target) {
+                    return;
+                }
+
+                try {
+                    await navigator.clipboard.writeText(target.textContent.trim());
+                    const original = button.textContent;
+                    button.textContent = 'Скопировано';
+
+                    window.setTimeout(() => {
+                        button.textContent = original;
+                    }, 1800);
+                } catch (error) {
+                    button.textContent = 'Не удалось';
+                }
+            });
+        });
+    };
+
+    const bindDateInputs = (scope = document) => {
+        scope.querySelectorAll('input[type=\"datetime-local\"]').forEach((input) => {
+            if (input.dataset.boundDate === '1') {
+                return;
+            }
+            input.dataset.boundDate = '1';
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                }
+            });
+        });
+    };
+
+    const bindPasswordToggles = (scope = document) => {
+        scope.querySelectorAll('[data-password-toggle]').forEach((button) => {
+            if (button.dataset.boundPassword === '1') {
+                return;
+            }
+            button.dataset.boundPassword = '1';
+            button.addEventListener('click', () => {
+                const field = button.closest('.password-field');
+                const input = field ? field.querySelector('input') : null;
+                if (!input) {
+                    return;
+                }
+                const isPassword = input.type === 'password';
+                input.type = isPassword ? 'text' : 'password';
+                button.textContent = isPassword ? 'Скрыть' : 'Показать';
+            });
+        });
+    };
+
+    const bindPasswordToggleAll = (scope = document) => {
+        scope.querySelectorAll('[data-password-toggle-all]').forEach((button) => {
+            if (button.dataset.boundPasswordAll === '1') {
+                return;
+            }
+            button.dataset.boundPasswordAll = '1';
+            button.addEventListener('click', () => {
+                const form = button.closest('form');
+                if (!form) {
+                    return;
+                }
+                const inputs = Array.from(form.querySelectorAll('input[type="password"], input[type="text"]'));
+                if (!inputs.length) {
+                    return;
+                }
+                const shouldShow = inputs.some((input) => input.type === 'password');
+                inputs.forEach((input) => {
+                    input.type = shouldShow ? 'text' : 'password';
+                });
+                button.textContent = shouldShow ? 'Скрыть пароли' : 'Показать пароли';
+            });
+        });
+    };
+
+    const bindApproveScopeButtons = (scope = document) => {
+        scope.querySelectorAll('[data-approve-scope]').forEach((button) => {
+            if (button.dataset.boundApproveScope === '1') {
+                return;
+            }
+            button.dataset.boundApproveScope = '1';
+            button.addEventListener('click', () => {
+                const form = button.closest('form');
+                if (!form) {
+                    return;
+                }
+                const hiddenInput = form.querySelector('[data-approve-scope-input]');
+                if (!hiddenInput) {
+                    return;
+                }
+                hiddenInput.value = button.getAttribute('data-approve-scope') || hiddenInput.value || 'selected';
+            });
+        });
+    };
+
     document.querySelectorAll('[data-confirm-logout]').forEach((form) => {
         form.addEventListener('submit', (event) => {
             const message = form.getAttribute('data-confirm-logout') || 'Вы уверены, что хотите выйти?';
@@ -39,29 +176,7 @@
         });
     });
 
-    document.querySelectorAll('[data-set-today-range]').forEach((button) => {
-        button.addEventListener('click', () => {
-            const form = button.closest('form');
-            const fromInput = form ? form.querySelector('[data-range-from]') : document.querySelector('#from');
-            const toInput = form ? form.querySelector('[data-range-to]') : document.querySelector('#to');
-
-            if (!fromInput || !toInput) {
-                return;
-            }
-
-            const now = new Date();
-            const from = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 0, 0);
-            const to = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 6, 0, 0);
-
-            const toLocalInput = (value) => {
-                const pad = (num) => String(num).padStart(2, '0');
-                return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`;
-            };
-
-            fromInput.value = toLocalInput(from);
-            toInput.value = toLocalInput(to);
-        });
-    });
+    bindTodayRange();
 
     document.querySelectorAll('[data-reveal]').forEach((element, index) => {
         window.setTimeout(() => {
@@ -69,28 +184,7 @@
         }, index * 60);
     });
 
-    document.querySelectorAll('[data-copy-target]').forEach((button) => {
-        button.addEventListener('click', async () => {
-            const selector = button.getAttribute('data-copy-target');
-            const target = selector ? document.querySelector(selector) : null;
-
-            if (!target) {
-                return;
-            }
-
-            try {
-                await navigator.clipboard.writeText(target.textContent.trim());
-                const original = button.textContent;
-                button.textContent = 'Скопировано';
-
-                window.setTimeout(() => {
-                    button.textContent = original;
-                }, 1800);
-            } catch (error) {
-                button.textContent = 'Не удалось';
-            }
-        });
-    });
+    bindCopyButtons();
 
     const qrModal = document.querySelector('[data-qr-modal]');
     const qrPreview = document.querySelector('[data-qr-preview]');
@@ -333,24 +427,189 @@
         loadAddresses();
     });
 
-    document.querySelectorAll('input[type=\"datetime-local\"]').forEach((input) => {
-        input.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
+    bindDateInputs();
+    bindPasswordToggles();
+    bindPasswordToggleAll();
+    bindApproveScopeButtons();
+
+    const resolveAjaxTargets = (element) => {
+        const rawTargets = element.getAttribute('data-ajax-targets');
+        if (rawTargets) {
+            return rawTargets.split(',').map((item) => item.trim()).filter(Boolean);
+        }
+        const container = element.closest('[data-ajax-container]');
+        if (container) {
+            const name = container.getAttribute('data-ajax-container');
+            if (name) {
+                return [`[data-ajax-container="${name}"]`];
+            }
+        }
+        return [];
+    };
+
+    const swapAjaxTargets = (html, targets) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        targets.forEach((selector) => {
+            const fresh = doc.querySelector(selector);
+            const current = document.querySelector(selector);
+            if (fresh && current) {
+                current.replaceWith(fresh);
             }
         });
-    });
+        document.querySelectorAll('[data-reveal]').forEach((element) => {
+            element.classList.add('is-visible');
+        });
+        bindCopyButtons();
+        bindTodayRange();
+        bindDateInputs();
+        bindPasswordToggles();
+        bindPasswordToggleAll();
+        bindApproveScopeButtons();
+    };
 
-    document.querySelectorAll('[data-password-toggle]').forEach((button) => {
-        button.addEventListener('click', () => {
-            const field = button.closest('.password-field');
-            const input = field ? field.querySelector('input') : null;
-            if (!input) {
+    const fetchHtml = async (url, options = {}) => {
+        try {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    ...(options.headers || {}),
+                },
+            });
+            if (!response.ok) {
+                return null;
+            }
+            return await response.text();
+        } catch (error) {
+            return null;
+        }
+    };
+
+    document.addEventListener('submit', async (event) => {
+        if (event.defaultPrevented) {
+            return;
+        }
+        const form = event.target instanceof Element ? event.target.closest('form[data-ajax]') : null;
+        if (!form) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const noFallback = form.hasAttribute('data-ajax-no-fallback');
+        try {
+            const targets = resolveAjaxTargets(form);
+            if (!targets.length) {
+                if (noFallback) {
+                    return;
+                }
+                form.submit();
                 return;
             }
-            const isPassword = input.type === 'password';
-            input.type = isPassword ? 'text' : 'password';
-            button.textContent = isPassword ? 'Скрыть' : 'Показать';
-        });
+
+            const method = (form.getAttribute('method') || 'POST').toUpperCase();
+            const action = form.getAttribute('action') || window.location.href;
+            const formData = new FormData(form);
+            const submitter = event.submitter instanceof HTMLElement ? event.submitter : null;
+            if (submitter && submitter.getAttribute('name')) {
+                const name = submitter.getAttribute('name');
+                const value = submitter.getAttribute('value') ?? '1';
+                formData.set(name, value);
+            }
+            const scrollY = window.scrollY;
+            let url = action;
+            let options = {
+                method,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            };
+
+            if (method === 'GET') {
+                const urlObj = new URL(action, window.location.origin);
+                formData.forEach((value, key) => {
+                    urlObj.searchParams.set(key, value.toString());
+                });
+                url = urlObj.toString();
+            } else {
+                options.body = formData;
+            }
+
+            const html = await fetchHtml(url, options);
+            if (!html) {
+                if (noFallback) {
+                    window.alert('Не удалось обновить без перезагрузки. Проверьте соединение и попробуйте ещё раз.');
+                    return;
+                }
+                form.submit();
+                return;
+            }
+
+            swapAjaxTargets(html, targets);
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    window.scrollTo({ top: scrollY, left: 0, behavior: 'auto' });
+                });
+            });
+            if (method === 'GET') {
+                history.pushState({}, '', url);
+            }
+        } catch (error) {
+            if (noFallback) {
+                window.alert('Не удалось обновить без перезагрузки. Попробуйте ещё раз.');
+                return;
+            }
+            form.submit();
+        }
     });
+
+    document.addEventListener('click', async (event) => {
+        const ajaxLink = event.target instanceof Element ? event.target.closest('a[data-ajax-link]') : null;
+        if (!ajaxLink) {
+            return;
+        }
+
+        event.preventDefault();
+        try {
+            const targets = resolveAjaxTargets(ajaxLink);
+            if (!targets.length) {
+                window.location.href = ajaxLink.href;
+                return;
+            }
+
+            const scrollY = window.scrollY;
+            const html = await fetchHtml(ajaxLink.href);
+            if (!html) {
+                window.location.href = ajaxLink.href;
+                return;
+            }
+
+            swapAjaxTargets(html, targets);
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    window.scrollTo({ top: scrollY, left: 0, behavior: 'auto' });
+                });
+            });
+            history.pushState({}, '', ajaxLink.href);
+        } catch (error) {
+            window.location.href = ajaxLink.href;
+        }
+    });
+
+    window.addEventListener('popstate', async () => {
+        const containers = document.querySelectorAll('[data-ajax-container]');
+        if (!containers.length) {
+            return;
+        }
+        const selectors = Array.from(containers)
+            .map((container) => container.getAttribute('data-ajax-container'))
+            .filter(Boolean)
+            .map((name) => `[data-ajax-container="${name}"]`);
+        const html = await fetchHtml(window.location.href);
+        if (html) {
+            swapAjaxTargets(html, selectors);
+        }
+    });
+
 });

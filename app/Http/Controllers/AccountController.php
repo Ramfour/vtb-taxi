@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdatePasswordRequest;
+use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 
 class AccountController extends Controller
@@ -12,6 +13,8 @@ class AccountController extends Controller
         $request->user()->update([
             'password' => $request->validated('password'),
         ]);
+
+        AuditLogger::log($request->user(), 'password_updated', $request->user(), [], []);
 
         return redirect()
             ->back()

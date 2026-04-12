@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateInvitationRequest;
 use App\Models\Invitation;
 use App\Enums\UserRole;
+use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 
@@ -23,6 +24,12 @@ class ManagerInvitationController extends Controller
             'role' => $role,
             'created_by' => $request->user()->id,
             'expires_at' => now()->addDays((int) ($request->validated('expires_in_days') ?? 7)),
+        ]);
+
+        AuditLogger::log($request->user(), 'invitation_created', $invitation, [], [
+            'employee_number' => $invitation->employee_number,
+            'role' => $invitation->role?->name,
+            'expires_at' => $invitation->expires_at?->toDateTimeString(),
         ]);
 
         return redirect()

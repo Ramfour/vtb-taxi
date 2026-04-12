@@ -10,19 +10,21 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use App\Services\AuditLogger;
 
 class RequestWorkflowService
 {
     public function createTempRequest(User $user, array $attributes): TempRequest
     {
         $dateTime = Carbon::parse($attributes['date_time']);
+        $phone = $this->normalizeEmployeePhone($attributes['phone'] ?? '');
 
         $this->ensureNoDuplicateRequest($user, $dateTime, null);
 
         $tempRequest = TempRequest::query()->create([
             'user_id' => $user->id,
             'full_name' => $attributes['full_name'],
-            'phone' => $attributes['phone'],
+            'phone' => $phone,
             'address_raw' => $attributes['address_raw'],
             'date_time' => $dateTime,
         ]);
@@ -33,6 +35,13 @@ class RequestWorkflowService
             ])->save();
         }
 
+        AuditLogger::log($user, 'temp_request_created', $tempRequest, [], [
+            'date_time' => $tempRequest->date_time?->toDateTimeString(),
+            'full_name' => $tempRequest->full_name,
+            'phone' => $tempRequest->phone,
+            'address_raw' => $tempRequest->address_raw,
+        ]);
+
         return $tempRequest;
     }
 
@@ -42,7 +51,7 @@ class RequestWorkflowService
 
         if ($tempRequest->status !== RequestStatus::Pending) {
             throw ValidationException::withMessages([
-                'temp_request' => 'Only pending requests can be reviewed.',
+                'temp_request' => 'Можно рассматривать только заявки со статусом «На согласовании».',
             ]);
         }
 
@@ -53,9 +62,15 @@ class RequestWorkflowService
             ])->save();
 
             throw ValidationException::withMessages([
-                'temp_request' => 'The request time has already passed.',
+                'temp_request' => 'Время подачи машины уже прошло.',
             ]);
         }
+
+        $oldValues = [
+            'status' => $tempRequest->status->value,
+            'manager_comment' => $tempRequest->manager_comment,
+            'rejection_reason' => $tempRequest->rejection_reason,
+        ];
 
         $tempRequest->fill([
             'status' => $attributes['action'] === 'approve'
@@ -69,7 +84,15 @@ class RequestWorkflowService
                 : null,
         ])->save();
 
-        return $tempRequest->refresh();
+        $tempRequest = $tempRequest->refresh();
+
+        AuditLogger::log($manager, 'temp_request_reviewed', $tempRequest, $oldValues, [
+            'status' => $tempRequest->status->value,
+            'manager_comment' => $tempRequest->manager_comment,
+            'rejection_reason' => $tempRequest->rejection_reason,
+        ]);
+
+        return $tempRequest;
     }
 
     public function approveTempRequests(User $manager, array $requestIds = [], string $scope = 'selected', ?string $managerComment = null): int
@@ -85,7 +108,7 @@ class RequestWorkflowService
             if ($scope === 'selected') {
                 if ($requestIds === []) {
                     throw ValidationException::withMessages([
-                        'request_ids' => 'Select at least one request to approve.',
+                        'request_ids' => 'Выберите хотя бы одну заявку для одобрения.',
                     ]);
                 }
 
@@ -96,11 +119,17 @@ class RequestWorkflowService
 
             if ($tempRequests->isEmpty()) {
                 throw ValidationException::withMessages([
-                    'request_ids' => 'No pending requests were found for approval.',
+                    'request_ids' => 'Нет заявок на согласовании для одобрения.',
                 ]);
             }
 
             foreach ($tempRequests as $tempRequest) {
+                $oldValues = [
+                    'status' => $tempRequest->status->value,
+                    'manager_comment' => $tempRequest->manager_comment,
+                    'rejection_reason' => $tempRequest->rejection_reason,
+                ];
+
                 $tempRequest->fill([
                     'status' => RequestStatus::Approved,
                     'reviewed_by' => $manager->id,
@@ -108,6 +137,11 @@ class RequestWorkflowService
                     'manager_comment' => $managerComment,
                     'rejection_reason' => null,
                 ])->save();
+
+                AuditLogger::log($manager, 'temp_request_bulk_approved', $tempRequest, $oldValues, [
+                    'status' => $tempRequest->status->value,
+                    'manager_comment' => $tempRequest->manager_comment,
+                ]);
             }
 
             return $tempRequests->count();
@@ -135,6 +169,13 @@ class RequestWorkflowService
             'cancelled_at' => now(),
             'manager_comment' => $reason,
         ])->save();
+
+        AuditLogger::log($user, 'temp_request_cancelled', $tempRequest, [
+            'status' => RequestStatus::Pending->value,
+        ], [
+            'status' => $tempRequest->status->value,
+            'manager_comment' => $tempRequest->manager_comment,
+        ]);
 
         return $tempRequest->refresh();
     }
@@ -175,6 +216,20 @@ class RequestWorkflowService
                     'approved_by' => $manager->id,
                     'temp_request_id' => $tempRequest->id,
                     'approved_at' => $tempRequest->reviewed_at ?? now(),
+                ]);
+
+                AuditLogger::log($manager, 'final_request_created', $finalRequest, [], [
+                    'temp_request_id' => $tempRequest->id,
+                    'date_time' => $finalRequest->date_time?->toDateTimeString(),
+                    'full_name' => $finalRequest->full_name,
+                    'phone' => $finalRequest->phone,
+                    'address_raw' => $finalRequest->address_raw,
+                ]);
+
+                AuditLogger::log($manager, 'temp_request_finalized', $tempRequest, [
+                    'status' => $tempRequest->status->value,
+                ], [
+                    'final_request_id' => $finalRequest->id,
                 ]);
 
                 $tempRequest->delete();
@@ -420,5 +475,20 @@ class RequestWorkflowService
             'from' => $from,
             'to' => $to,
         ];
+    }
+
+    private function normalizeEmployeePhone(string $phone): string
+    {
+        $value = trim($phone);
+
+        if ($value === '') {
+            return $value;
+        }
+
+        if (str_starts_with($value, '+7')) {
+            return '8'.substr($value, 2);
+        }
+
+        return $value;
     }
 }
