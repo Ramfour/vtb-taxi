@@ -612,4 +612,33 @@
         }
     });
 
+    const passwordModal = document.querySelector('[data-password-modal]');
+    const openPasswordModal = document.querySelector('[data-password-modal-open]');
+    const closePasswordModal = document.querySelector('[data-password-modal-close]');
+
+    const closePassword = () => {
+        if (!passwordModal) {
+            return;
+        }
+        passwordModal.classList.remove('is-open');
+    };
+
+    if (openPasswordModal && passwordModal) {
+        openPasswordModal.addEventListener('click', () => {
+            passwordModal.classList.add('is-open');
+        });
+    }
+
+    if (closePasswordModal) {
+        closePasswordModal.addEventListener('click', closePassword);
+    }
+
+    if (passwordModal) {
+        passwordModal.addEventListener('click', (event) => {
+            if (event.target === passwordModal) {
+                closePassword();
+            }
+        });
+    }
+
 });

@@ -84,43 +84,9 @@
                             <strong>{{ $displayName($currentUser->full_name) }}</strong>
                             <span>{{ $currentUser->employee_number }} · {{ $roleLabels[$currentUser->role->name] ?? $currentUser->role->name }}</span>
                         </div>
-                        <details class="compact-disclosure account-disclosure">
-                            <summary>
-                                <span class="disclosure-title">
-                                    <span class="kicker">Аккаунт</span>
-                                    <strong>Сменить пароль</strong>
-                                    <span class="disclosure-hint">Нажмите</span>
-                                </span>
-                            </summary>
-
-                            <div class="disclosure-body">
-                                <form method="POST" action="{{ route('account.password.update') }}" class="form-grid form-grid--tight">
-                                    @csrf
-                                    <div class="field">
-                                        <label for="current_password_topbar">Текущий пароль</label>
-                                        <div class="password-field">
-                                            <input id="current_password_topbar" class="input" type="password" name="current_password" required>
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <label for="new_password_topbar">Новый пароль</label>
-                                        <div class="password-field">
-                                            <input id="new_password_topbar" class="input" type="password" name="password" required>
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <label for="new_password_topbar_confirmation">Подтверждение нового пароля</label>
-                                        <div class="password-field">
-                                            <input id="new_password_topbar_confirmation" class="input" type="password" name="password_confirmation" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-actions form-actions--stack">
-                                        <button class="button-ghost password-toggle-all" type="button" data-password-toggle-all>Показать пароли</button>
-                                        <button class="button" type="submit">Обновить пароль</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </details>
+                        <button class="button-ghost account-password-trigger" type="button" data-password-modal-open>
+                            Сменить пароль
+                        </button>
                         </div>
                     @endif
                 </div>
@@ -185,6 +151,42 @@
                 <div class="modal-body">
                     <div class="qr-preview" data-qr-preview></div>
                     <div class="qr-caption" data-qr-caption></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" data-password-modal>
+            <div class="modal-card modal-card--form">
+                <div class="modal-head">
+                    <strong>Смена пароля</strong>
+                    <button class="modal-close" type="button" data-password-modal-close>Закрыть</button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('account.password.update') }}" class="form-grid form-grid--tight">
+                        @csrf
+                        <div class="field">
+                            <label for="current_password_modal">Текущий пароль</label>
+                            <div class="password-field">
+                                <input id="current_password_modal" class="input" type="password" name="current_password" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="new_password_modal">Новый пароль</label>
+                            <div class="password-field">
+                                <input id="new_password_modal" class="input" type="password" name="password" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="new_password_modal_confirmation">Подтверждение нового пароля</label>
+                            <div class="password-field">
+                                <input id="new_password_modal_confirmation" class="input" type="password" name="password_confirmation" required>
+                            </div>
+                        </div>
+                        <div class="form-actions form-actions--stack">
+                            <button class="button-ghost password-toggle-all" type="button" data-password-toggle-all>Показать пароли</button>
+                            <button class="button" type="submit">Обновить пароль</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

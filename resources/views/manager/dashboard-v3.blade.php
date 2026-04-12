@@ -173,11 +173,16 @@
             @forelse ($bufferItems as $index => $request)
                 <div class="request-row">
                     <div class="request-row__index" data-label="№">{{ $index + 1 }}</div>
-                    <div class="request-row__select" data-label="Выбор">
+                <div class="request-row__select" data-label="Выбор">
+                    <label class="select-check">
                         @if ($request->status === \App\Enums\RequestStatus::Pending)
                             <input type="checkbox" name="request_ids[]" value="{{ $request->id }}" form="bulk-approve-form" aria-label="Выбрать заявку {{ $request->id }}">
+                        @else
+                            <input type="checkbox" disabled aria-label="Выбор недоступен">
                         @endif
-                    </div>
+                        <span class="select-check__box" aria-hidden="true"></span>
+                    </label>
+                </div>
 
                     <div class="request-row__employee" data-label="Сотрудник">
                         <strong>{{ $displayName($request->full_name) }}</strong>
@@ -313,7 +318,7 @@
             <div class="export-legend">
                 <span class="legend-item legend-item--warning">Вне окна 22:00–06:00</span>
             </div>
-            <div class="request-table export-table">
+            <div class="request-table export-table request-table--scroll">
                 <div class="request-table__head">
                     <span>#</span>
                     <span>Дата + время</span>
@@ -426,6 +431,7 @@
             </div>
         </form>
     </section>
+
 
     </div>
 </x-layouts.portal-vtb>
