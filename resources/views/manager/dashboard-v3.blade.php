@@ -76,42 +76,47 @@
         </article>
 
         <aside class="compact-side-stack">
-            <section class="panel panel--compact" data-reveal>
-                <div class="panel-header panel-header--tight">
-                    <div>
-                        <span class="kicker">Быстрые действия</span>
-                        <h2>Новый сотрудник</h2>
-                    </div>
+            <details class="compact-disclosure panel panel--compact" data-reveal hidden>
+                <summary>
+                    <span>
+                        <span class="kicker">Аккаунт</span>
+                        <strong>Сменить пароль</strong>
+                    </span>
+                    <span class="disclosure-meta">
+                        <span class="disclosure-hint">Нажмите, чтобы раскрыть</span>
+                    </span>
+                </summary>
+
+                <div class="disclosure-body">
+                    <form method="POST" action="{{ route('account.password.update') }}" class="form-grid">
+                        @csrf
+                        <div class="field">
+                            <label for="current_password_manager">Текущий пароль</label>
+                            <div class="password-field">
+                                <input id="current_password_manager" class="input" type="password" name="current_password" required>
+                                <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="new_password_manager">Новый пароль</label>
+                            <div class="password-field">
+                                <input id="new_password_manager" class="input" type="password" name="password" required>
+                                <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="new_password_manager_confirmation">Подтверждение нового пароля</label>
+                            <div class="password-field">
+                                <input id="new_password_manager_confirmation" class="input" type="password" name="password_confirmation" required>
+                                <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="button" type="submit">Обновить пароль</button>
+                        </div>
+                    </form>
                 </div>
-
-                <form method="POST" action="{{ route('manager.invitations.store') }}" class="form-grid">
-                    @csrf
-                    <div class="form-grid-two">
-                        <div class="field">
-                            <label for="employee_number">Табельный номер</label>
-                            <input id="employee_number" class="input" type="text" name="employee_number" placeholder="70320699" required>
-                        </div>
-                        <div class="field">
-                            <label for="expires_in_days">Дней активности</label>
-                            <input id="expires_in_days" class="input" type="number" name="expires_in_days" value="7" min="1" max="30">
-                        </div>
-                    </div>
-                    @if ($currentUser?->role?->name === 'Admin')
-                        <div class="field">
-                            <label for="invitation_role">Роль приглашения</label>
-                            <select id="invitation_role" class="select" name="role">
-                                <option value="employee">Сотрудник</option>
-                                <option value="manager">Руководитель</option>
-                            </select>
-                        </div>
-                    @endif
-
-                    <div class="form-actions">
-                        <button class="button" type="submit">Создать приглашение</button>
-                    </div>
-                </form>
-            </section>
-
+            </details>
         </aside>
     </section>
 
@@ -151,8 +156,9 @@
             </div>
         </form>
 
-        <div class="request-table">
+        <div class="request-table request-table--scroll">
             <div class="request-table__head">
+                <span>№</span>
                 <span>Выбор</span>
                 <span>Сотрудник</span>
                 <span>Когда</span>
@@ -162,28 +168,29 @@
                 <span>Действия</span>
             </div>
 
-            @forelse ($bufferItems as $request)
+            @forelse ($bufferItems as $index => $request)
                 <div class="request-row">
-                    <div class="request-row__select">
+                    <div class="request-row__index" data-label="№">{{ $index + 1 }}</div>
+                    <div class="request-row__select" data-label="Выбор">
                         @if ($request->status === \App\Enums\RequestStatus::Pending)
                             <input type="checkbox" name="request_ids[]" value="{{ $request->id }}" form="bulk-approve-form" aria-label="Выбрать заявку {{ $request->id }}">
                         @endif
                     </div>
 
-                    <div class="request-row__employee">
+                    <div class="request-row__employee" data-label="Сотрудник">
                         <strong>{{ $displayName($request->full_name) }}</strong>
                         <span>{{ $request->user?->employee_number }}</span>
                     </div>
 
-                    <div class="request-row__date">{{ $request->date_time?->format('d.m.Y H:i') }}</div>
-                    <div class="request-row__phone">{{ $request->phone }}</div>
-                    <div class="request-row__address">{{ $displayAddress($request->address_norm ?? $request->address_raw) }}</div>
+                    <div class="request-row__date" data-label="Когда">{{ $request->date_time?->format('d.m.Y H:i') }}</div>
+                    <div class="request-row__phone" data-label="Телефон">{{ $request->phone }}</div>
+                    <div class="request-row__address" data-label="Адрес подачи">{{ $displayAddress($request->address_norm ?? $request->address_raw) }}</div>
 
-                    <div class="request-row__status">
+                    <div class="request-row__status" data-label="Статус">
                         <x-status-pill :status="$request->status" />
                     </div>
 
-                    <div class="request-row__actions">
+                    <div class="request-row__actions" data-label="Действия">
                         @if ($request->status === \App\Enums\RequestStatus::Pending)
                             <details class="row-actions">
                                 <summary>Открыть действия</summary>
@@ -336,6 +343,9 @@
                 <strong>Предпросмотр (первые 50 строк)</strong>
                 <span class="pill-count">{{ $countLabel($export_total ?? 0, 'строк') }}</span>
             </div>
+            <div class="export-legend">
+                <span class="legend-item legend-item--warning">Вне окна 22:00–06:00</span>
+            </div>
             <div class="request-table export-table">
                 <div class="request-table__head">
                     <span>#</span>
@@ -343,15 +353,56 @@
                     <span>ФИО</span>
                     <span>Адрес подачи</span>
                     <span>Телефон</span>
+                    <span>Действия</span>
                 </div>
 
-                @forelse ($export_preview as $index => $row)
-                    <div class="request-row {{ $row['is_outside_night'] ? 'row-warning' : '' }}">
-                        <div>{{ $index + 1 }}</div>
-                        <div>{{ $row['date_time'] }}</div>
-                        <div>{{ $displayName($row['full_name']) }}</div>
-                        <div>{{ $row['address'] }}</div>
-                        <div>{{ $row['phone'] }}</div>
+                @php
+                    $nightFrom = now()->copy()->setTime(22, 0);
+                    if (now()->hour < 6) {
+                        $nightFrom = $nightFrom->subDay();
+                    }
+                    $nightTo = $nightFrom->copy()->addHours(8);
+                @endphp
+                @forelse ($export_preview as $index => $request)
+                    @php
+                        $outsideNight = $request->date_time
+                            ? ! $request->date_time->between($nightFrom, $nightTo)
+                            : false;
+                    @endphp
+                    <div class="request-row inline-edit {{ $outsideNight ? 'row-warning' : '' }}">
+                        <div data-label="№">{{ ($export_preview->currentPage() - 1) * $export_preview->perPage() + $index + 1 }}</div>
+                        <div data-label="Дата + время">
+                            <input class="inline-input" type="datetime-local" name="date_time" value="{{ optional($request->date_time)->format('Y-m-d\\TH:i') }}" form="update-final-{{ $request->id }}" required>
+                        </div>
+                        <div data-label="ФИО">
+                            <input class="inline-input" type="text" name="full_name" value="{{ $displayName($request->full_name) }}" form="update-final-{{ $request->id }}" required>
+                        </div>
+                        <div data-label="Адрес подачи">
+                            <input class="inline-input" type="text" name="address_raw" value="{{ $request->address_raw }}" form="update-final-{{ $request->id }}" required>
+                        </div>
+                        <div data-label="Телефон">
+                            <input class="inline-input" type="text" name="phone" value="{{ $request->phone }}" form="update-final-{{ $request->id }}" required>
+                        </div>
+                        <div class="request-row__actions" data-label="Действия">
+                            <form id="update-final-{{ $request->id }}" method="POST" action="{{ route('manager.requests.update-final', $request) }}">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="from" value="{{ $export_from }}">
+                                <input type="hidden" name="to" value="{{ $export_to }}">
+                                <input type="hidden" name="export_page" value="{{ $export_preview->currentPage() }}">
+                                <button class="button" type="submit">Сохранить</button>
+                            </form>
+                            @if ($currentUser?->role?->name === 'Admin')
+                                <form method="POST" action="{{ route('manager.requests.destroy-final', $request) }}" data-confirm-delete="Удалить финальную запись навсегда? Это действие нельзя отменить.">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="from" value="{{ $export_from }}">
+                                    <input type="hidden" name="to" value="{{ $export_to }}">
+                                    <input type="hidden" name="export_page" value="{{ $export_preview->currentPage() }}">
+                                    <button class="button-danger" type="submit">Удалить</button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                 @empty
                     <div class="empty-state">
@@ -359,100 +410,25 @@
                     </div>
                 @endforelse
             </div>
+            @if ($export_preview->lastPage() > 1)
+                <div class="pagination">
+                    <span class="muted">Страница {{ $export_preview->currentPage() }} из {{ $export_preview->lastPage() }}</span>
+                    <div class="pagination__actions">
+                        @if ($export_preview->onFirstPage())
+                            <span class="button-ghost">Назад</span>
+                        @else
+                            <a class="button-ghost" href="{{ $export_preview->previousPageUrl() }}">Назад</a>
+                        @endif
+
+                        @if ($export_preview->hasMorePages())
+                            <a class="button-ghost" href="{{ $export_preview->nextPageUrl() }}">Вперёд</a>
+                        @else
+                            <span class="button-ghost">Вперёд</span>
+                        @endif
+                    </div>
+                </div>
+            @endif
         </div>
     </section>
 
-    <section class="manager-grid manager-grid--compact">
-        <details class="compact-disclosure panel panel--compact" data-reveal open>
-            <summary>
-                <span>
-                    <span class="kicker">Сворачиваемый раздел</span>
-                    <strong>Последние приглашения</strong>
-                </span>
-                <span class="disclosure-meta">
-                    <span class="disclosure-hint">Нажмите, чтобы раскрыть</span>
-                    <span class="pill-count">{{ $countLabel($invitations->count(), 'ссылок') }}</span>
-                </span>
-            </summary>
-
-            <div class="disclosure-body">
-                <div class="list-stack">
-                    @forelse ($invitations as $invitation)
-                        <article class="invitation-card invitation-card--compact">
-                            <strong>{{ $invitation->employee_number }}</strong>
-                            <p>{{ $invitation->is_used ? 'Ссылка уже использована' : 'Ожидает активации' }} · до {{ optional($invitation->expires_at)->format('d.m.Y H:i') }}</p>
-
-                            <div class="copy-box">
-                                <code id="invite-link-{{ $invitation->id }}">{{ route('invitation.accept.show', $invitation->token) }}</code>
-                                <button type="button" class="button-secondary copy-button" data-copy-target="#invite-link-{{ $invitation->id }}">Копировать</button>
-                                <button type="button" class="button-ghost" data-qr-link="{{ route('invitation.accept.show', $invitation->token) }}">QR</button>
-                            </div>
-                        </article>
-                    @empty
-                        <div class="empty-state">
-                            Приглашений пока нет.
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-        </details>
-
-        <details class="compact-disclosure panel panel--compact" data-reveal>
-            <summary>
-                <span>
-                    <span class="kicker">Сворачиваемый раздел</span>
-                    <strong>Недавние финальные заявки</strong>
-                </span>
-                <span class="disclosure-meta">
-                    <span class="disclosure-hint">Нажмите, чтобы раскрыть</span>
-                    <span class="pill-count">{{ $countLabel($finalized->count(), 'записей') }}</span>
-                </span>
-            </summary>
-
-            <div class="disclosure-body">
-                <div class="list-stack">
-                @forelse ($finalized as $request)
-                    <article class="invitation-card invitation-card--compact">
-                        <strong>{{ $displayName($request->full_name) }}</strong>
-                        <p>{{ $request->date_time?->format('d.m.Y H:i') }} · {{ $request->phone }}</p>
-                        <div class="list-address">{{ $displayAddress($request->address_norm ?? $request->address_raw) }}</div>
-                        <details class="row-actions" style="margin-top: 12px;">
-                            <summary>Редактировать</summary>
-                            <div class="row-actions__body">
-                                <form method="POST" action="{{ route('manager.requests.update-final', $request) }}" class="row-actions__form">
-                                    @csrf
-                                    @method('PATCH')
-                                    <label for="final_full_name_{{ $request->id }}">ФИО</label>
-                                    <input id="final_full_name_{{ $request->id }}" class="input" type="text" name="full_name" value="{{ $request->full_name }}" required>
-
-                                    <label for="final_phone_{{ $request->id }}">Телефон</label>
-                                    <input id="final_phone_{{ $request->id }}" class="input" type="text" name="phone" value="{{ $request->phone }}" required>
-
-                                    <label for="final_address_{{ $request->id }}">Адрес подачи</label>
-                                    <textarea id="final_address_{{ $request->id }}" class="textarea textarea--compact" name="address_raw" required>{{ $request->address_raw }}</textarea>
-
-                                    <label for="final_date_{{ $request->id }}">Дата и время</label>
-                                    <input id="final_date_{{ $request->id }}" class="input" type="datetime-local" name="date_time" value="{{ optional($request->date_time)->format('Y-m-d\\TH:i') }}" required>
-
-                                    <button class="button" type="submit">Сохранить</button>
-                                </form>
-                            </div>
-                        </details>
-                        @if ($currentUser?->role?->name === 'Admin')
-                            <form method="POST" action="{{ route('manager.requests.destroy-final', $request) }}" class="form-actions" data-confirm-delete="Удалить финальную запись навсегда? Это действие нельзя отменить.">
-                                @csrf
-                                @method('DELETE')
-                                    <button class="button-danger" type="submit">Удалить запись</button>
-                                </form>
-                            @endif
-                        </article>
-                    @empty
-                        <div class="empty-state">
-                            Финальных записей пока нет.
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-        </details>
-    </section>
 </x-layouts.portal-vtb>

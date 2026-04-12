@@ -216,12 +216,34 @@ class RequestWorkflowService
             return [
                 'id' => $request->id,
                 'date_time' => $request->date_time?->format('d.m.Y H:i') ?? '',
+                'date_time_raw' => $request->date_time?->format('Y-m-d\\TH:i') ?? '',
                 'full_name' => $this->formatFullNameForExport($request->full_name),
                 'address' => $this->formatAddressForExport($request->address_norm ?? $request->address_raw),
+                'address_raw' => $request->address_raw ?? '',
                 'phone' => $request->phone,
                 'is_outside_night' => $isOutsideNight,
             ];
         });
+    }
+
+    public function previewFinalRequests(?string $from = null, ?string $to = null, int $perPage = 10)
+    {
+        $query = FinalRequest::query()->orderBy('date_time');
+
+        if ($from) {
+            $query->where('date_time', '>=', Carbon::parse($from));
+        }
+
+        if ($to) {
+            $query->where('date_time', '<=', Carbon::parse($to));
+        }
+
+        if (! $from && ! $to) {
+            $range = $this->todayNightRange();
+            $query->whereBetween('date_time', [$range['from'], $range['to']]);
+        }
+
+        return $query->paginate($perPage, ['*'], 'export_page')->withQueryString();
     }
 
     public function countFinalRequests(?string $from = null, ?string $to = null): int

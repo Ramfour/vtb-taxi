@@ -10,6 +10,8 @@ use App\Http\Requests\UpdateFinalRequestRequest;
 use App\Models\Invitation;
 use App\Models\Request as FinalRequest;
 use App\Models\TempRequest;
+use App\Models\User;
+use App\Enums\UserRole;
 use App\Services\RequestWorkflowService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -25,25 +27,36 @@ class ManagerPortalController extends Controller
 
     public function index(): View
     {
-        $exportFrom = request()->query('from');
-        $exportTo = request()->query('to');
-        $exportPreview = $this->workflowService->exportFinalRequests($exportFrom, $exportTo, 50);
-        $exportTotal = $this->workflowService->countFinalRequests($exportFrom, $exportTo);
+        return $this->renderDashboard();
+    }
 
-        return view('manager.dashboard-v3', [
-            'dashboard' => $this->workflowService->managerDashboard(
-                request()->query('buffer_status'),
-                request()->query('buffer_sort'),
-            ),
+    public function employees(): View
+    {
+        $query = User::query()
+            ->where('role', UserRole::Employee)
+            ->whereNull('deleted_at');
+
+        $search = trim((string) request()->query('q', ''));
+        if ($search !== '') {
+            $query->where(function ($builder) use ($search) {
+                $builder
+                    ->where('full_name', 'like', '%'.$search.'%')
+                    ->orWhere('employee_number', 'like', '%'.$search.'%')
+                    ->orWhere('phone', 'like', '%'.$search.'%');
+            });
+        }
+
+        return view('manager.employees', [
             'currentUser' => request()->user(),
             'invitations' => Invitation::query()
                 ->latest()
                 ->limit(20)
                 ->get(),
-            'export_preview' => $exportPreview,
-            'export_total' => $exportTotal,
-            'export_from' => $exportFrom,
-            'export_to' => $exportTo,
+            'employees' => $query
+                ->orderBy('full_name')
+                ->paginate(12)
+                ->withQueryString(),
+            'search' => $search,
         ]);
     }
 
@@ -116,11 +129,14 @@ class ManagerPortalController extends Controller
             'address_norm' => $addressChanged ? null : $finalRequest->address_norm,
         ])->save();
 
+        $redirectUrl = route('manager.requests.index', [
+            'from' => $request->input('from'),
+            'to' => $request->input('to'),
+            'export_page' => $request->input('export_page'),
+        ]);
+
         return redirect()
-            ->route('manager.requests.index', [
-                'from' => request()->query('from'),
-                'to' => request()->query('to'),
-            ])
+            ->to($redirectUrl.'#export-preview')
             ->with('status', 'Финальная заявка обновлена.');
     }
 
@@ -202,13 +218,107 @@ class ManagerPortalController extends Controller
 
         $finalRequest->forceDelete();
 
+        $redirectUrl = route('manager.requests.index', [
+            'from' => request()->input('from'),
+            'to' => request()->input('to'),
+            'export_page' => request()->input('export_page'),
+        ]);
+
+        return redirect()
+            ->to($redirectUrl.'#export-preview')
+            ->with('status', 'Финальная запись удалена навсегда.');
+    }
+
+    public function destroyUser(User $user): RedirectResponse
+    {
+        if ($this->isNotManager(request()->user())) {
+            abort(403);
+        }
+
+        if ($user->role !== UserRole::Employee) {
+            abort(403);
+        }
+
+        if ($user->id === request()->user()?->id) {
+            return redirect()
+                ->route('manager.requests.index')
+                ->with('status', 'Нельзя удалить свой аккаунт.');
+        }
+
+        $user->delete();
+
         return redirect()
             ->route('manager.requests.index')
-            ->with('status', 'Финальная запись удалена навсегда.');
+            ->with('status', 'Сотрудник удалён.');
+    }
+
+    public function destroyUserForce(User $user): RedirectResponse
+    {
+        if ($this->isNotAdmin(request()->user())) {
+            abort(403);
+        }
+
+        if ($user->role !== UserRole::Employee) {
+            abort(403);
+        }
+
+        if ($user->id === request()->user()?->id) {
+            return redirect()
+                ->route('manager.requests.index')
+                ->with('status', 'Нельзя удалить свой аккаунт.');
+        }
+
+        $user->forceDelete();
+
+        return redirect()
+            ->route('manager.requests.index')
+            ->with('status', 'Сотрудник удалён навсегда.');
+    }
+
+    public function destroyInvitation(Invitation $invitation): RedirectResponse
+    {
+        if ($this->isNotManager(request()->user())) {
+            abort(403);
+        }
+
+        $invitation->delete();
+
+        return redirect()
+            ->back()
+            ->with('status', 'Приглашение удалено.');
     }
 
     private function isNotAdmin(?\App\Models\User $user): bool
     {
         return $user?->role?->name !== 'Admin';
+    }
+
+    private function isNotManager(?\App\Models\User $user): bool
+    {
+        return ! in_array($user?->role?->name, ['Manager', 'Admin'], true);
+    }
+
+    private function renderDashboard(?string $activeSection = null): View
+    {
+        $exportFrom = request()->query('from');
+        $exportTo = request()->query('to');
+        $exportPreview = $this->workflowService->previewFinalRequests($exportFrom, $exportTo, 12);
+        $exportTotal = $exportPreview->total();
+
+        return view('manager.dashboard-v3', [
+            'dashboard' => $this->workflowService->managerDashboard(
+                request()->query('buffer_status'),
+                request()->query('buffer_sort'),
+            ),
+            'currentUser' => request()->user(),
+            'invitations' => Invitation::query()
+                ->latest()
+                ->limit(20)
+                ->get(),
+            'export_preview' => $exportPreview,
+            'export_total' => $exportTotal,
+            'export_from' => $exportFrom,
+            'export_to' => $exportTo,
+        ]);
     }
 }

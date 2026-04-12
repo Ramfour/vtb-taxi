@@ -58,6 +58,10 @@ select {
     pointer-events: none;
     position: fixed;
     inset: 0;
+    width: 100svw;
+    height: 100svh;
+    max-width: 100vw;
+    max-height: 100vh;
 }
 
 .ambient-one {

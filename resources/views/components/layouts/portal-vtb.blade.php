@@ -60,12 +60,13 @@
         <div class="ambient ambient-grid"></div>
 
         <div class="shell">
-            <header class="topbar" data-reveal>
-                <div class="brand-lockup">
-                    <a href="{{ route('home') }}" class="brand-mark" aria-label="VTB Taxi">
-                        <span>VTB</span>
-                    </a>
-                    <div>
+            <div class="topbar-nav">
+                <header class="topbar" data-reveal>
+                    <div class="brand-lockup">
+                        <a href="{{ route('home') }}" class="brand-mark" aria-label="VTB Taxi">
+                            <span>VTB</span>
+                        </a>
+                        <div>
                         <p class="eyebrow">Корпоративное такси</p>
                         <h1>{{ $heading }}</h1>
                         @if ($subheading)
@@ -76,23 +77,67 @@
 
                 <div class="topbar-actions">
                     @if ($currentUser)
+                        <div class="account-stack">
                         <div class="identity-chip">
                             <span class="identity-label">Аккаунт</span>
                             <strong>{{ $displayName($currentUser->full_name) }}</strong>
                             <span>{{ $currentUser->employee_number }} · {{ $roleLabels[$currentUser->role->name] ?? $currentUser->role->name }}</span>
                         </div>
+                        <details class="compact-disclosure account-disclosure">
+                            <summary>
+                                <span>
+                                    <span class="kicker">Аккаунт</span>
+                                    <strong>Сменить пароль</strong>
+                                </span>
+                                <span class="disclosure-meta">
+                                    <span class="disclosure-hint">Нажмите, чтобы раскрыть</span>
+                                </span>
+                            </summary>
+
+                            <div class="disclosure-body">
+                                <form method="POST" action="{{ route('account.password.update') }}" class="form-grid form-grid--tight">
+                                    @csrf
+                                    <div class="field">
+                                        <label for="current_password_topbar">Текущий пароль</label>
+                                        <div class="password-field">
+                                            <input id="current_password_topbar" class="input" type="password" name="current_password" required>
+                                            <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label for="new_password_topbar">Новый пароль</label>
+                                        <div class="password-field">
+                                            <input id="new_password_topbar" class="input" type="password" name="password" required>
+                                            <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label for="new_password_topbar_confirmation">Подтверждение нового пароля</label>
+                                        <div class="password-field">
+                                            <input id="new_password_topbar_confirmation" class="input" type="password" name="password_confirmation" required>
+                                            <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button class="button" type="submit">Обновить пароль</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </details>
+                        </div>
                     @endif
                 </div>
-            </header>
+                </header>
 
-            <nav class="nav-pills" data-reveal>
-                <a href="{{ route('home') }}" class="{{ $currentRoute === 'home' ? 'is-active' : '' }}">Главная</a>
-                @if ($currentUser)
-                    <a href="{{ route('employee.requests.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'employee.') ? 'is-active' : '' }}">Мои заявки</a>
-                    @if (in_array($currentUser->role->name, ['Manager', 'Admin'], true))
-                        <a href="{{ route('manager.requests.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'manager.') ? 'is-active' : '' }}">Панель руководителя</a>
+                <nav class="nav-pills" data-reveal>
+                    <a href="{{ route('home') }}" class="{{ $currentRoute === 'home' ? 'is-active' : '' }}">Главная</a>
+                    @if ($currentUser)
+                        <a href="{{ route('employee.requests.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'employee.') ? 'is-active' : '' }}">Мои заявки</a>
+                        @if (in_array($currentUser->role->name, ['Manager', 'Admin'], true))
+                            <a href="{{ route('manager.requests.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'manager.') ? 'is-active' : '' }}">Панель руководителя</a>
+                            <a href="{{ route('manager.employees.index') }}" class="{{ $currentRoute === 'manager.employees.index' ? 'is-active' : '' }}">Сотрудники</a>
+                        @endif
                     @endif
-                @endif
 
                 <button type="button" class="theme-toggle" data-theme-toggle aria-label="Переключить тему">
                     <span class="theme-toggle__dot"></span>
@@ -104,10 +149,11 @@
                         @csrf
                         <button type="submit" class="nav-ghost">Выйти</button>
                     </form>
-                @else
-                    <a href="{{ route('login') }}" class="{{ str_starts_with($currentRoute ?? '', 'login') ? 'is-active' : '' }}">Войти</a>
-                @endif
-            </nav>
+                    @else
+                        <a href="{{ route('login') }}" class="{{ str_starts_with($currentRoute ?? '', 'login') ? 'is-active' : '' }}">Войти</a>
+                    @endif
+                </nav>
+            </div>
 
             @if (session('status'))
                 <div class="flash flash-success" data-reveal>

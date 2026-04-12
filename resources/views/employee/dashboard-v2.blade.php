@@ -151,6 +151,48 @@
                     </div>
                 </div>
             </section>
+
+            <details class="compact-disclosure panel" data-reveal hidden>
+                <summary>
+                    <span>
+                        <span class="kicker">Аккаунт</span>
+                        <strong>Сменить пароль</strong>
+                    </span>
+                    <span class="disclosure-meta">
+                        <span class="disclosure-hint">Нажмите, чтобы раскрыть</span>
+                    </span>
+                </summary>
+
+                <div class="disclosure-body">
+                    <form method="POST" action="{{ route('account.password.update') }}" class="form-grid">
+                        @csrf
+                        <div class="field">
+                            <label for="current_password_employee">Текущий пароль</label>
+                            <div class="password-field">
+                                <input id="current_password_employee" class="input" type="password" name="current_password" required>
+                                <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="new_password_employee">Новый пароль</label>
+                            <div class="password-field">
+                                <input id="new_password_employee" class="input" type="password" name="password" required>
+                                <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="new_password_employee_confirmation">Подтверждение нового пароля</label>
+                            <div class="password-field">
+                                <input id="new_password_employee_confirmation" class="input" type="password" name="password_confirmation" required>
+                                <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="button" type="submit">Обновить пароль</button>
+                        </div>
+                    </form>
+                </div>
+            </details>
         </aside>
     </section>
 

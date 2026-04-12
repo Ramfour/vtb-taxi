@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\InvitationRegistrationController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\EmployeePortalController;
 use App\Http\Controllers\EmployeeAddressController;
 use App\Http\Controllers\HomeController;
@@ -18,8 +19,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/invite/{token}', [InvitationRegistrationController::class, 'store'])->name('invitation.accept.store');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::middleware('auth')->group(function () {
+        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+        Route::post('/account/password', [AccountController::class, 'updatePassword'])->name('account.password.update');
 
     Route::prefix('employee')
         ->middleware('role:employee,manager,admin')
@@ -36,6 +38,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:manager,admin')
         ->group(function () {
             Route::get('/requests', [ManagerPortalController::class, 'index'])->name('manager.requests.index');
+            Route::get('/employees', [ManagerPortalController::class, 'employees'])->name('manager.employees.index');
             Route::patch('/requests/{tempRequest}/review', [ManagerPortalController::class, 'review'])->name('manager.requests.review');
             Route::post('/requests/bulk-approve', [ManagerPortalController::class, 'bulkApprove'])->name('manager.requests.bulk-approve');
             Route::post('/requests/finalize', [ManagerPortalController::class, 'finalize'])->name('manager.requests.finalize');
@@ -43,6 +46,9 @@ Route::middleware('auth')->group(function () {
             Route::delete('/requests/{tempRequest}', [ManagerPortalController::class, 'destroyTemp'])->name('manager.requests.destroy-temp');
             Route::patch('/final-requests/{finalRequest}', [ManagerPortalController::class, 'updateFinal'])->name('manager.requests.update-final');
             Route::delete('/final-requests/{finalRequest}', [ManagerPortalController::class, 'destroyFinal'])->name('manager.requests.destroy-final');
+            Route::delete('/users/{user}', [ManagerPortalController::class, 'destroyUser'])->name('manager.users.destroy');
+            Route::delete('/users/{user}/force', [ManagerPortalController::class, 'destroyUserForce'])->name('manager.users.destroy-force');
             Route::post('/invitations', [ManagerInvitationController::class, 'store'])->name('manager.invitations.store');
+            Route::delete('/invitations/{invitation}', [ManagerPortalController::class, 'destroyInvitation'])->name('manager.invitations.destroy');
         });
 });
