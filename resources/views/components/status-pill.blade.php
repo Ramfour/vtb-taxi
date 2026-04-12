@@ -1,4 +1,4 @@
-@props(['status'])
+﻿@props(['status'])
 
 @php
     $classMap = [
@@ -6,6 +6,7 @@
         'Approved' => 'status-approved',
         'Rejected' => 'status-rejected',
         'Cancelled' => 'status-cancelled',
+        'Expired' => 'status-expired',
     ];
 
     $labelMap = [
@@ -13,6 +14,7 @@
         'Approved' => 'Одобрено',
         'Rejected' => 'Отклонено',
         'Cancelled' => 'Отменено',
+        'Expired' => 'Истекла',
     ];
 @endphp
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\InvitationRegistrationController;
 use App\Http\Controllers\EmployeePortalController;
+use App\Http\Controllers\EmployeeAddressController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagerInvitationController;
 use App\Http\Controllers\ManagerPortalController;
@@ -26,6 +27,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/requests', [EmployeePortalController::class, 'index'])->name('employee.requests.index');
             Route::post('/requests', [EmployeePortalController::class, 'store'])->name('employee.requests.store');
             Route::patch('/requests/{tempRequest}/cancel', [EmployeePortalController::class, 'cancel'])->name('employee.requests.cancel');
+            Route::get('/addresses', [EmployeeAddressController::class, 'index'])->name('employee.addresses.index');
+            Route::post('/addresses', [EmployeeAddressController::class, 'store'])->name('employee.addresses.store');
+            Route::delete('/addresses/{address}', [EmployeeAddressController::class, 'destroy'])->name('employee.addresses.destroy');
         });
 
     Route::prefix('manager')
@@ -35,6 +39,10 @@ Route::middleware('auth')->group(function () {
             Route::patch('/requests/{tempRequest}/review', [ManagerPortalController::class, 'review'])->name('manager.requests.review');
             Route::post('/requests/bulk-approve', [ManagerPortalController::class, 'bulkApprove'])->name('manager.requests.bulk-approve');
             Route::post('/requests/finalize', [ManagerPortalController::class, 'finalize'])->name('manager.requests.finalize');
+            Route::post('/requests/export-csv', [ManagerPortalController::class, 'exportCsv'])->name('manager.requests.export-csv');
+            Route::delete('/requests/{tempRequest}', [ManagerPortalController::class, 'destroyTemp'])->name('manager.requests.destroy-temp');
+            Route::patch('/final-requests/{finalRequest}', [ManagerPortalController::class, 'updateFinal'])->name('manager.requests.update-final');
+            Route::delete('/final-requests/{finalRequest}', [ManagerPortalController::class, 'destroyFinal'])->name('manager.requests.destroy-final');
             Route::post('/invitations', [ManagerInvitationController::class, 'store'])->name('manager.invitations.store');
         });
 });

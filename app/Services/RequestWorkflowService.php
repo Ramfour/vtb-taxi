@@ -19,20 +19,41 @@ class RequestWorkflowService
 
         $this->ensureNoDuplicateRequest($user, $dateTime, null);
 
-        return TempRequest::query()->create([
+        $tempRequest = TempRequest::query()->create([
             'user_id' => $user->id,
             'full_name' => $attributes['full_name'],
             'phone' => $attributes['phone'],
             'address_raw' => $attributes['address_raw'],
             'date_time' => $dateTime,
         ]);
+
+        if (($attributes['address_raw'] ?? null) !== null) {
+            $user->forceFill([
+                'default_address' => $attributes['address_raw'],
+            ])->save();
+        }
+
+        return $tempRequest;
     }
 
     public function reviewTempRequest(TempRequest $tempRequest, User $manager, array $attributes): TempRequest
     {
+        $this->expirePastTempRequests();
+
         if ($tempRequest->status !== RequestStatus::Pending) {
             throw ValidationException::withMessages([
                 'temp_request' => 'Only pending requests can be reviewed.',
+            ]);
+        }
+
+        if ($tempRequest->date_time->isPast()) {
+            $tempRequest->fill([
+                'status' => RequestStatus::Expired,
+                'cancelled_at' => now(),
+            ])->save();
+
+            throw ValidationException::withMessages([
+                'temp_request' => 'The request time has already passed.',
             ]);
         }
 
@@ -53,9 +74,12 @@ class RequestWorkflowService
 
     public function approveTempRequests(User $manager, array $requestIds = [], string $scope = 'selected', ?string $managerComment = null): int
     {
+        $this->expirePastTempRequests();
+
         return DB::transaction(function () use ($manager, $requestIds, $scope, $managerComment) {
             $query = TempRequest::query()
                 ->where('status', RequestStatus::Pending)
+                ->where('date_time', '>=', now())
                 ->orderBy('date_time');
 
             if ($scope === 'selected') {
@@ -92,6 +116,8 @@ class RequestWorkflowService
 
     public function cancelTempRequest(TempRequest $tempRequest, User $user, ?string $reason = null): TempRequest
     {
+        $this->expirePastTempRequests();
+
         if ($tempRequest->user_id !== $user->id && ! in_array($user->role->value, [2, 3], true)) {
             throw ValidationException::withMessages([
                 'temp_request' => 'You cannot cancel another user request.',
@@ -115,6 +141,8 @@ class RequestWorkflowService
 
     public function finalizeApprovedRequests(User $manager, ?string $from = null, ?string $to = null): Collection
     {
+        $this->expirePastTempRequests();
+
         return DB::transaction(function () use ($manager, $from, $to) {
             $query = TempRequest::query()
                 ->where('status', RequestStatus::Approved)
@@ -158,8 +186,68 @@ class RequestWorkflowService
         });
     }
 
+    public function exportFinalRequests(?string $from = null, ?string $to = null, ?int $limit = null): \Illuminate\Support\Collection
+    {
+        $query = FinalRequest::query()->orderBy('date_time');
+
+        if ($from) {
+            $query->where('date_time', '>=', Carbon::parse($from));
+        }
+
+        if ($to) {
+            $query->where('date_time', '<=', Carbon::parse($to));
+        }
+
+        if (! $from && ! $to) {
+            $range = $this->todayNightRange();
+            $query->whereBetween('date_time', [$range['from'], $range['to']]);
+        }
+
+        if ($limit) {
+            $query->limit($limit);
+        }
+
+        return $query->get()->map(function (FinalRequest $request) {
+            $nightRange = $this->todayNightRange();
+            $isOutsideNight = $request->date_time
+                ? ! $request->date_time->between($nightRange['from'], $nightRange['to'])
+                : false;
+
+            return [
+                'id' => $request->id,
+                'date_time' => $request->date_time?->format('d.m.Y H:i') ?? '',
+                'full_name' => $this->formatFullNameForExport($request->full_name),
+                'address' => $this->formatAddressForExport($request->address_norm ?? $request->address_raw),
+                'phone' => $request->phone,
+                'is_outside_night' => $isOutsideNight,
+            ];
+        });
+    }
+
+    public function countFinalRequests(?string $from = null, ?string $to = null): int
+    {
+        $query = FinalRequest::query();
+
+        if ($from) {
+            $query->where('date_time', '>=', Carbon::parse($from));
+        }
+
+        if ($to) {
+            $query->where('date_time', '<=', Carbon::parse($to));
+        }
+
+        if (! $from && ! $to) {
+            $range = $this->todayNightRange();
+            $query->whereBetween('date_time', [$range['from'], $range['to']]);
+        }
+
+        return $query->count();
+    }
+
     public function employeeDashboard(User $user): array
     {
+        $this->expirePastTempRequests();
+
         return [
             'temp_requests' => TempRequest::query()
                 ->where('user_id', $user->id)
@@ -172,12 +260,56 @@ class RequestWorkflowService
         ];
     }
 
-    public function managerDashboard(): array
+    public function managerDashboard(?string $statusFilter = null, ?string $sort = null): array
     {
+        $this->expirePastTempRequests();
+
+        $statusFilter = $statusFilter ?: 'all';
+        $sort = $sort ?: 'asc';
+
+        $statusMap = [
+            'pending' => RequestStatus::Pending,
+            'approved' => RequestStatus::Approved,
+            'rejected' => RequestStatus::Rejected,
+            'cancelled' => RequestStatus::Cancelled,
+            'expired' => RequestStatus::Expired,
+        ];
+
+        if (! isset($statusMap[$statusFilter]) && $statusFilter !== 'all') {
+            $statusFilter = 'all';
+        }
+
+        if (! in_array($sort, ['asc', 'desc'], true)) {
+            $sort = 'asc';
+        }
+
+        $bufferQuery = TempRequest::query();
+
+        if ($statusFilter !== 'all') {
+            $bufferQuery->where('status', $statusMap[$statusFilter]);
+        }
+
+        if ($sort === 'asc') {
+            $bufferQuery->orderBy('date_time')->orderBy('id');
+        } else {
+            $bufferQuery->orderByDesc('date_time')->orderByDesc('id');
+        }
+
+        $bufferVisibleTotal = (clone $bufferQuery)->count();
+        $bufferTotal = TempRequest::query()->count();
+
         return [
-            'buffer' => TempRequest::query()
-                ->latest('date_time')
-                ->get(),
+            'buffer' => $bufferQuery->paginate(12)->withQueryString(),
+            'buffer_total' => $bufferTotal,
+            'buffer_visible_total' => $bufferVisibleTotal,
+            'buffer_status' => $statusFilter,
+            'buffer_sort' => $sort,
+            'pending_total' => TempRequest::query()
+                ->where('status', RequestStatus::Pending)
+                ->count(),
+            'approved_total' => TempRequest::query()
+                ->where('status', RequestStatus::Approved)
+                ->count(),
             'finalized' => FinalRequest::query()
                 ->latest('date_time')
                 ->limit(50)
@@ -207,5 +339,64 @@ class RequestWorkflowService
                 'date_time' => 'A request for this user and time already exists.',
             ]);
         }
+    }
+
+    private function expirePastTempRequests(): void
+    {
+        TempRequest::query()
+            ->where('status', RequestStatus::Pending)
+            ->where('date_time', '<', now())
+            ->update([
+                'status' => RequestStatus::Expired,
+                'cancelled_at' => now(),
+            ]);
+    }
+
+    private function formatAddressForExport(?string $address): string
+    {
+        $address = trim((string) $address);
+
+        if ($address === '') {
+            return '';
+        }
+
+        $address = preg_replace('/^Россия,\s*/u', '', $address);
+        $address = preg_replace('/\bг\.\s*/u', '', $address);
+
+        return preg_replace('/\s{2,}/u', ' ', $address) ?? $address;
+    }
+
+    private function formatFullNameForExport(?string $fullName): string
+    {
+        $fullName = trim((string) $fullName);
+
+        if ($fullName === '') {
+            return '';
+        }
+
+        $parts = preg_split('/\s+/u', $fullName, -1, PREG_SPLIT_NO_EMPTY);
+
+        if (count($parts) === 3 && preg_match('/(ич|вич|ьмич|оглы|кызы|овна|евна|ична)$/u', $parts[1])) {
+            return implode(' ', [$parts[2], $parts[0], $parts[1]]);
+        }
+
+        return $fullName;
+    }
+
+    private function todayNightRange(): array
+    {
+        $today = now();
+        $from = $today->copy()->setTime(22, 0);
+
+        if ($today->hour < 6) {
+            $from = $from->subDay();
+        }
+
+        $to = $from->copy()->addHours(8);
+
+        return [
+            'from' => $from,
+            'to' => $to,
+        ];
     }
 }

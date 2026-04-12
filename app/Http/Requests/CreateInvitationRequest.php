@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateInvitationRequest extends FormRequest
 {
@@ -20,6 +21,7 @@ class CreateInvitationRequest extends FormRequest
         return [
             'employee_number' => ['required', 'digits:8'],
             'expires_in_days' => ['nullable', 'integer', 'min:1', 'max:30'],
+            'role' => ['nullable', Rule::in(['employee', 'manager'])],
         ];
     }
 }

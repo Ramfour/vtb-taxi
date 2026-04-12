@@ -25,4 +25,11 @@ class StoreTempRequestRequest extends FormRequest
             'date_time' => ['required', 'date', 'after:now'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'date_time.after' => 'Возможно, у вас неправильная дата или время подачи машины уже прошло.',
+        ];
+    }
 }

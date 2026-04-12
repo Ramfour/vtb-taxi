@@ -86,6 +86,11 @@ class User extends Authenticatable
         return $this->hasMany(AuditLog::class);
     }
 
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(UserAddress::class);
+    }
+
     #[Scope]
     protected function active(Builder $query): void
     {

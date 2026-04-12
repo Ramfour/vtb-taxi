@@ -36,7 +36,7 @@ class InvitationRegistrationController extends Controller
                     'email' => $request->validated('email'),
                     'default_address' => $request->validated('default_address'),
                     'password' => $request->validated('password'),
-                    'role' => UserRole::Employee,
+                    'role' => $invitation->role ?? UserRole::Employee,
                     'is_active' => true,
                 ],
             );

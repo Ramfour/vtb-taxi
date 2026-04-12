@@ -10,6 +10,7 @@ class Invitation extends Model
     protected $fillable = [
         'token',
         'employee_number',
+        'role',
         'created_by',
         'used_by',
         'is_used',
@@ -23,6 +24,7 @@ class Invitation extends Model
             'is_used' => 'boolean',
             'used_at' => 'datetime',
             'expires_at' => 'datetime',
+            'role' => \App\Enums\UserRole::class,
         ];
     }
 

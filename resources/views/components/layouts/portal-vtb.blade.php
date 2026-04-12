@@ -12,6 +12,22 @@
         'Admin' => 'Администратор',
     ];
 
+    $displayName = function (?string $fullName): string {
+        $fullName = trim((string) $fullName);
+
+        if ($fullName === '') {
+            return '';
+        }
+
+        $parts = preg_split('/\s+/u', $fullName, -1, PREG_SPLIT_NO_EMPTY);
+
+        if (count($parts) === 3 && preg_match('/(ич|вич|ьмич|оглы|кызы|овна|евна|ична)$/u', $parts[1])) {
+            return implode(' ', [$parts[2], $parts[0], $parts[1]]);
+        }
+
+        return $fullName;
+    };
+
     $currentRoute = request()->route()?->getName();
 @endphp
 
@@ -20,6 +36,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ $title }}</title>
         <script>
             (() => {
@@ -34,6 +51,7 @@
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
+        <script defer src="{{ asset('qrcode.min.js') }}"></script>
         <script defer src="{{ asset('theme-vtb.js') }}"></script>
     </head>
     <body class="theme-body">
@@ -60,7 +78,7 @@
                     @if ($currentUser)
                         <div class="identity-chip">
                             <span class="identity-label">Аккаунт</span>
-                            <strong>{{ $currentUser->full_name }}</strong>
+                            <strong>{{ $displayName($currentUser->full_name) }}</strong>
                             <span>{{ $currentUser->employee_number }} · {{ $roleLabels[$currentUser->role->name] ?? $currentUser->role->name }}</span>
                         </div>
                     @endif
@@ -82,7 +100,7 @@
                 </button>
 
                 @if ($currentUser)
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}" data-confirm-logout="Вы уверены, что хотите выйти?">
                         @csrf
                         <button type="submit" class="nav-ghost">Выйти</button>
                     </form>
@@ -110,6 +128,19 @@
             <main class="page-stack">
                 {{ $slot }}
             </main>
+        </div>
+
+        <div class="modal-overlay" data-qr-modal>
+            <div class="modal-card">
+                <div class="modal-head">
+                    <strong>QR приглашения</strong>
+                    <button class="modal-close" type="button" data-qr-close>Закрыть</button>
+                </div>
+                <div class="modal-body">
+                    <div class="qr-preview" data-qr-preview></div>
+                    <div class="qr-caption" data-qr-caption></div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

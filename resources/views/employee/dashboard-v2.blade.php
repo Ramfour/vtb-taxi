@@ -54,7 +54,7 @@
                 <div class="form-grid-two">
                     <div class="field">
                         <label for="full_name">ФИО</label>
-                        <input id="full_name" class="input" type="text" name="full_name" value="{{ old('full_name', $currentUser->full_name) }}" required>
+                        <input id="full_name" class="input" type="text" name="full_name" value="{{ old('full_name', $displayName($currentUser->full_name)) }}" required>
                     </div>
                     <div class="field">
                         <label for="phone">Телефон</label>
@@ -64,13 +64,33 @@
 
                 <div class="field">
                     <label for="address_raw">Адрес подачи машины</label>
-                    <textarea id="address_raw" class="textarea" name="address_raw" required>{{ old('address_raw', $currentUser->default_address) }}</textarea>
-                    <small>Укажите адрес, где сотрудника нужно забрать. Позже добавим отдельное поле для редких исключений по адресу отправления.</small>
+                    <textarea id="address_raw" class="textarea" name="address_raw" required data-default-address="{{ $currentUser->default_address }}" data-has-old="{{ old('address_raw') ? '1' : '0' }}">{{ old('address_raw') }}</textarea>
+                    <small>Укажите адрес, где сотрудника нужно забрать. Последний введённый адрес сохраняется для следующей поездки.</small>
                 </div>
 
                 <div class="field">
                     <label for="date_time">Дата и время такси</label>
                     <input id="date_time" class="input" type="datetime-local" name="date_time" value="{{ old('date_time') }}" required>
+                </div>
+
+                <div class="address-presets" data-address-presets data-employee="{{ $currentUser->employee_number }}">
+                    <input type="hidden" data-address-endpoint="{{ route('employee.addresses.index') }}">
+                    <div class="address-presets__head">
+                        <span class="field-label">Быстрые адреса</span>
+                    </div>
+                    <div class="field">
+                        <label for="address_select">Выбрать из списка</label>
+                        <select id="address_select" class="select" data-address-select>
+                            <option value="">Выберите адрес</option>
+                        </select>
+                    </div>
+                    <div class="address-presets__controls">
+                        <input class="input" type="text" placeholder="Добавить адрес в быстрые" data-address-input>
+                        <button class="button-ghost" type="button" data-address-add>Добавить</button>
+                        <button class="button-ghost" type="button" data-address-add-current>Добавить текущий</button>
+                    </div>
+                    <div class="address-presets__list" data-address-list></div>
+                    <small class="muted">Клик по адресу подставит его в поле. Адреса можно удалять, список хранится в браузере этого устройства.</small>
                 </div>
 
                 <div class="split-note">
