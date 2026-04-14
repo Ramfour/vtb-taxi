@@ -12,7 +12,10 @@
             </label>
             <label class="block">
                 <span class="mb-2 block text-sm font-medium text-slate-200">Пароль</span>
-                <input class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/60" type="password" name="password" required>
+                <div class="flex items-center gap-2">
+                    <input class="flex-1 rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/60" type="password" name="password" required data-password-input>
+                    <button type="button" class="rounded-2xl border border-white/10 px-4 py-3 text-xs font-semibold text-slate-200 transition hover:border-cyan-300/50 hover:bg-cyan-400/10" data-password-toggle>Показать</button>
+                </div>
             </label>
             <button class="w-full rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300" type="submit">Войти</button>
         </form>

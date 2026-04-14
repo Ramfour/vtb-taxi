@@ -23,7 +23,10 @@
 
                 <div class="field">
                     <label for="password">Пароль</label>
-                    <input id="password" class="input" type="password" name="password" required>
+                    <div class="password-field">
+                        <input id="password" class="input" type="password" name="password" required>
+                        <button class="password-toggle" type="button" data-password-toggle>Показать</button>
+                    </div>
                 </div>
 
                 <div class="form-actions">

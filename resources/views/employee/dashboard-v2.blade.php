@@ -64,7 +64,7 @@
 
                 <div class="field">
                     <label for="address_raw">Адрес подачи машины</label>
-                    <textarea id="address_raw" class="textarea" name="address_raw" required data-default-address="{{ $currentUser->default_address }}" data-has-old="{{ old('address_raw') ? '1' : '0' }}">{{ old('address_raw') }}</textarea>
+                    <textarea id="address_raw" class="textarea" name="address_raw" required data-default-address="{{ $currentUser->latestAddress?->address ?? '' }}" data-has-old="{{ old('address_raw') ? '1' : '0' }}">{{ old('address_raw') }}</textarea>
                     <small>Укажите адрес, где сотрудника нужно забрать. Последний введённый адрес сохраняется для следующей поездки.</small>
                 </div>
 

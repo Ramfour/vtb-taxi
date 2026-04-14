@@ -18,9 +18,11 @@ class EmployeePortalController extends Controller
 
     public function index(): View
     {
+        $currentUser = request()->user()->load('latestAddress');
+
         return view('employee.dashboard-v2', [
-            'dashboard' => $this->workflowService->employeeDashboard(request()->user()),
-            'currentUser' => request()->user(),
+            'dashboard' => $this->workflowService->employeeDashboard($currentUser),
+            'currentUser' => $currentUser,
         ]);
     }
 

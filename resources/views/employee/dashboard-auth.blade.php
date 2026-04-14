@@ -19,7 +19,7 @@
                 </label>
                 <label class="block">
                     <span class="mb-2 block text-sm font-medium text-slate-200">Адрес назначения</span>
-                    <textarea class="min-h-28 w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/60" name="address_raw" required>{{ old('address_raw', $currentUser->default_address) }}</textarea>
+                    <textarea class="min-h-28 w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/60" name="address_raw" required>{{ old('address_raw', $currentUser->latestAddress?->address ?? '') }}</textarea>
                 </label>
                 <label class="block">
                     <span class="mb-2 block text-sm font-medium text-slate-200">Дата и время поездки</span>

@@ -24,6 +24,7 @@ class Request extends Model
         'approved_by',
         'temp_request_id',
         'approved_at',
+        'exported_at',
         'cancelled_at',
         'rejection_reason',
     ];
@@ -36,6 +37,7 @@ class Request extends Model
             'date_time' => 'datetime',
             'status' => RequestStatus::class,
             'approved_at' => 'datetime',
+            'exported_at' => 'datetime',
             'cancelled_at' => 'datetime',
         ];
     }

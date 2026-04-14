@@ -2,6 +2,11 @@
     $countLabel = function (int $count, string $label): string {
         return $count.' '.$label;
     };
+    $roleLabels = [
+        'Employee' => 'Сотрудник',
+        'Manager' => 'Руководитель',
+        'Admin' => 'Администратор',
+    ];
     $displayName = function (?string $fullName): string {
         $fullName = trim((string) $fullName);
 
@@ -98,6 +103,7 @@
         <div class="employee-table">
             <div class="employee-table__head">
                 <span>Сотрудник</span>
+                <span>Роль</span>
                 <span>Табельный</span>
                 <span>Телефон</span>
                 <span>Адрес</span>
@@ -107,9 +113,10 @@
             @forelse ($employees as $employee)
                 <div class="employee-row">
                     <div class="employee-name" data-label="Сотрудник">{{ $displayName($employee->full_name) }}</div>
+                    <div data-label="Роль">{{ $roleLabels[$employee->role->name] ?? $employee->role->name }}</div>
                     <div data-label="Табельный">{{ $employee->employee_number }}</div>
                     <div data-label="Телефон">{{ $employee->phone }}</div>
-                    <div class="employee-address" data-label="Адрес">{{ $displayAddress($employee->default_address) }}</div>
+                    <div class="employee-address" data-label="Адрес">{{ $displayAddress($employee->latestAddress?->address) }}</div>
                     <div class="employee-actions" data-label="Действия">
                         <form method="POST" action="{{ route('manager.users.destroy', $employee) }}" data-confirm-delete="Удалить сотрудника из системы? Все его заявки останутся в истории.">
                             @csrf

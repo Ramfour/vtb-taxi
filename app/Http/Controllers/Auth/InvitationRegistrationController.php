@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AcceptInvitationRequest;
 use App\Models\Invitation;
+use App\Models\UserAddress;
 use App\Models\User;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
@@ -34,13 +35,26 @@ class InvitationRegistrationController extends Controller
                 [
                     'full_name' => $request->validated('full_name'),
                     'phone' => $request->validated('phone'),
-                    'email' => $request->validated('email'),
-                    'default_address' => $request->validated('default_address'),
                     'password' => $request->validated('password'),
                     'role' => $invitation->role ?? UserRole::Employee,
                     'is_active' => true,
                 ],
             );
+
+            $defaultAddress = trim((string) $request->validated('default_address'));
+            if ($defaultAddress !== '') {
+                $exists = UserAddress::query()
+                    ->where('user_id', $user->id)
+                    ->whereRaw('LOWER(address) = ?', [mb_strtolower($defaultAddress)])
+                    ->exists();
+
+                if (! $exists) {
+                    UserAddress::query()->create([
+                        'user_id' => $user->id,
+                        'address' => $defaultAddress,
+                    ]);
+                }
+            }
 
             $invitation->forceFill([
                 'is_used' => true,

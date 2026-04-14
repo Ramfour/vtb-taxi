@@ -9,24 +9,25 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasTable('users')) {
+            return;
+        }
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('employee_number')->unique();
-            $table->unsignedBigInteger('telegram_id')->nullable()->unique();
             $table->string('full_name');
-            $table->string('email')->nullable();
-            $table->string('phone', 20);
-            $table->text('default_address')->nullable();
-            $table->string('password')->nullable();
+            $table->string('employee_number', 20)->unique();
+            $table->string('phone', 20)->nullable();
+            $table->string('password');
             $table->unsignedSmallInteger('role')->default(UserRole::Employee->value);
             $table->boolean('is_active')->default(true);
+            $table->string('telegram_id')->nullable()->unique();
             $table->timestamp('do_not_disturb_until')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('role');
-            $table->index('is_active');
+            $table->index(['is_active', 'role']);
         });
     }
 

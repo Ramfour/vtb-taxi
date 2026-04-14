@@ -19,16 +19,14 @@ class HomeController extends Controller
         }
 
         return view('landing-modern', [
-            'employees' => User::query()
+            'employeeCount' => User::query()
                 ->active()
                 ->where('role', UserRole::Employee->value)
-                ->orderBy('full_name')
-                ->get(),
-            'managers' => User::query()
+                ->count(),
+            'managerCount' => User::query()
                 ->active()
                 ->whereIn('role', [UserRole::Manager->value, UserRole::Admin->value])
-                ->orderBy('full_name')
-                ->get(),
+                ->count(),
         ]);
     }
 }

@@ -68,13 +68,6 @@ class EmployeeAddressController extends Controller
             ->latest('created_at')
             ->get();
 
-        if ($addresses->isEmpty() && $user->default_address) {
-            $addresses->push(UserAddress::query()->create([
-                'user_id' => $user->id,
-                'address' => $user->default_address,
-            ]));
-        }
-
         return $addresses->map(fn (UserAddress $address) => [
             'id' => $address->id,
             'address' => $address->address,

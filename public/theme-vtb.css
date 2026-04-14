@@ -849,7 +849,7 @@ html[data-theme="light"] .employee-table {
 .employee-table__head,
 .employee-row {
     display: grid;
-    grid-template-columns: minmax(180px, 1.3fr) 130px 140px minmax(220px, 1.6fr) 200px;
+    grid-template-columns: minmax(180px, 1.2fr) 140px 130px 140px minmax(220px, 1.5fr) 200px;
     gap: 12px;
     align-items: center;
 }
@@ -1609,7 +1609,7 @@ html[data-theme="light"] .input::placeholder {
 
     .employee-table__head,
     .employee-row {
-        grid-template-columns: minmax(160px, 1.2fr) 120px 120px minmax(200px, 1.4fr) 180px;
+        grid-template-columns: minmax(160px, 1.2fr) 120px 110px 120px minmax(200px, 1.4fr) 180px;
     }
 
     .audit-row,

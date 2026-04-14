@@ -9,6 +9,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (! Schema::hasTable('invitations') || Schema::hasColumn('invitations', 'role')) {
+            return;
+        }
+
         Schema::table('invitations', function (Blueprint $table) {
             $table->unsignedSmallInteger('role')
                 ->default(UserRole::Employee->value)

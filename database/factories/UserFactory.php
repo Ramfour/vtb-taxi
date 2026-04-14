@@ -19,11 +19,9 @@ class UserFactory extends Factory
     {
         return [
             'employee_number' => fake()->unique()->numerify('EMP####'),
-            'telegram_id' => fake()->optional()->unique()->numberBetween(100000000, 999999999),
+            'telegram_id' => fake()->optional()->unique()->numerify('7########'),
             'full_name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->numerify('+7##########'),
-            'default_address' => fake()->optional()->address(),
+            'phone' => fake()->optional()->numerify('8##########'),
             'role' => UserRole::Employee,
             'is_active' => true,
             'password' => static::$password ??= Hash::make('password'),

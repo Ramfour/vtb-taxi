@@ -36,7 +36,7 @@
 
                 <div class="field">
                     <label for="address_raw">Куда должна приехать машина</label>
-                    <textarea id="address_raw" class="textarea" name="address_raw" required>{{ old('address_raw', $currentUser->default_address) }}</textarea>
+                    <textarea id="address_raw" class="textarea" name="address_raw" required>{{ old('address_raw', $currentUser->latestAddress?->address ?? '') }}</textarea>
                     <small>Чем точнее адрес, тем проще будет будущая нормализация и выгрузка.</small>
                 </div>
 

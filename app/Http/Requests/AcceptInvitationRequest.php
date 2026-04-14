@@ -17,7 +17,6 @@ class AcceptInvitationRequest extends FormRequest
         return [
             'full_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'regex:/^8\d{10}$/'],
-            'email' => ['nullable', 'email', 'max:255'],
             'default_address' => ['nullable', 'string', 'max:2000'],
             'password' => ['required', 'confirmed', Password::min(8)],
         ];

@@ -71,5 +71,24 @@
 
             {{ $slot }}
         </div>
+
+        <script>
+            document.querySelectorAll('[data-password-toggle]').forEach((button) => {
+                if (button.dataset.boundPassword === '1') {
+                    return;
+                }
+                button.dataset.boundPassword = '1';
+                button.addEventListener('click', () => {
+                    const field = button.closest('label, .password-field, .flex');
+                    const input = field ? field.querySelector('input[type="password"], input[type="text"]') : null;
+                    if (!input) {
+                        return;
+                    }
+                    const isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+                    button.textContent = isPassword ? 'Скрыть' : 'Показать';
+                });
+            });
+        </script>
     </body>
 </html>

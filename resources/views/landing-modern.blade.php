@@ -1,6 +1,6 @@
 @php
-    $employeeCount = $employees->count();
-    $managerCount = $managers->count();
+    $employeeCount = $employeeCount ?? 0;
+    $managerCount = $managerCount ?? 0;
 @endphp
 
 <x-layouts.portal-vtb
@@ -10,7 +10,7 @@
 >
     <section class="hero-grid">
         <article class="hero-banner" data-reveal>
-            <span class="kicker">Запуск MVP</span>
+            <span class="kicker">Корпоративный сервис</span>
             <h2>Один интерфейс для сотрудника, руководителя и финальной диспетчеризации.</h2>
             <p>
                 Уже работает вход по табельному номеру, приглашения для новых сотрудников, буфер согласования,
@@ -19,19 +19,19 @@
 
             <div class="metric-grid">
                 <div class="stat-card">
-                    <span class="stat-label">Сотрудники в демо</span>
+                    <span class="stat-label">Сотрудники</span>
                     <div class="stat-value">{{ $employeeCount }}</div>
-                    <div class="stat-note">Готовы для тестовой регистрации и подачи заявок.</div>
+                    <div class="stat-note">Активные пользователи, оформляющие заявки.</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-label">Руководители</span>
                     <div class="stat-value">{{ $managerCount }}</div>
-                    <div class="stat-note">Могут согласовывать заявки и создавать приглашения.</div>
+                    <div class="stat-note">Согласуют заявки и управляют доступом.</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-label">Следующий этап</span>
+                    <span class="stat-label">Выгрузка</span>
                     <div class="stat-value">CSV</div>
-                    <div class="stat-note">Готовим красивый интерфейс под рабочую выгрузку перевозчику.</div>
+                    <div class="stat-note">Финальные заявки выгружаются для перевозчика.</div>
                 </div>
             </div>
 
@@ -95,25 +95,20 @@
         <article class="panel" data-reveal>
             <div class="panel-header">
                 <div>
-                    <span class="kicker">Тестовые доступы</span>
-                    <h2>Можно посмотреть прямо сейчас</h2>
-                    <p>Для демо уже подготовлены пользователи и пароль по умолчанию.</p>
+                    <span class="kicker">Доступ</span>
+                    <h2>Как получить вход в систему</h2>
+                    <p>Вход выполняется по табельному номеру и паролю. Если доступа ещё нет — руководитель отправит приглашение.</p>
                 </div>
-                <span class="pill-count">Пароль: password</span>
             </div>
 
             <div class="plain-list">
                 <div class="timeline-card">
-                    <strong>MNG0001</strong>
-                    <p>Основной руководитель. Открывает панель согласования и создаёт приглашения.</p>
+                    <strong>Приглашение от руководителя</strong>
+                    <p>Руководитель создаёт одноразовую ссылку, сотрудник завершает регистрацию и задаёт пароль.</p>
                 </div>
                 <div class="timeline-card">
-                    <strong>EMP0001</strong>
-                    <p>Администратор. Имеет расширенные права и также может работать как руководитель.</p>
-                </div>
-                <div class="timeline-card">
-                    <strong>EMP0002 / EMP0003</strong>
-                    <p>Демо-сотрудники. Через их аккаунты удобно проверять подачу новых заявок.</p>
+                    <strong>Вход по табельному номеру</strong>
+                    <p>После регистрации используйте табельный номер VTB и пароль для авторизации.</p>
                 </div>
             </div>
         </article>

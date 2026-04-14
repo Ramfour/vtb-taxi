@@ -6,6 +6,7 @@ use App\Enums\RequestStatus;
 use App\Models\Request as FinalRequest;
 use App\Models\TempRequest;
 use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -29,11 +30,7 @@ class RequestWorkflowService
             'date_time' => $dateTime,
         ]);
 
-        if (($attributes['address_raw'] ?? null) !== null) {
-            $user->forceFill([
-                'default_address' => $attributes['address_raw'],
-            ])->save();
-        }
+        $this->rememberUserAddress($user, $attributes['address_raw'] ?? null);
 
         AuditLogger::log($user, 'temp_request_created', $tempRequest, [], [
             'date_time' => $tempRequest->date_time?->toDateTimeString(),
@@ -490,5 +487,28 @@ class RequestWorkflowService
         }
 
         return $value;
+    }
+
+    private function rememberUserAddress(User $user, ?string $addressRaw): void
+    {
+        $address = trim((string) $addressRaw);
+
+        if ($address === '') {
+            return;
+        }
+
+        $exists = UserAddress::query()
+            ->where('user_id', $user->id)
+            ->whereRaw('LOWER(address) = ?', [mb_strtolower($address)])
+            ->exists();
+
+        if ($exists) {
+            return;
+        }
+
+        UserAddress::query()->create([
+            'user_id' => $user->id,
+            'address' => $address,
+        ]);
     }
 }

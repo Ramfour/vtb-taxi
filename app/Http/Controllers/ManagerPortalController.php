@@ -35,8 +35,13 @@ class ManagerPortalController extends Controller
 
     public function employees(): View
     {
+        $currentUser = request()->user();
+        $roles = $this->isNotAdmin($currentUser)
+            ? [UserRole::Employee]
+            : [UserRole::Employee, UserRole::Manager];
+
         $query = User::query()
-            ->where('role', UserRole::Employee)
+            ->whereIn('role', $roles)
             ->whereNull('deleted_at');
 
         $search = trim((string) request()->query('q', ''));
@@ -50,12 +55,13 @@ class ManagerPortalController extends Controller
         }
 
         return view('manager.employees', [
-            'currentUser' => request()->user(),
+            'currentUser' => $currentUser,
             'invitations' => Invitation::query()
                 ->latest()
                 ->limit(20)
                 ->get(),
             'employees' => $query
+                ->with('latestAddress')
                 ->orderBy('full_name')
                 ->paginate(12)
                 ->withQueryString(),
@@ -312,6 +318,18 @@ class ManagerPortalController extends Controller
             $request->validated('to'),
         );
 
+        // Mark exported rows so we can safely auto-clean them later.
+        try {
+            $ids = $requests->pluck('id')->filter()->values()->all();
+            if ($ids !== []) {
+                FinalRequest::query()
+                    ->whereIn('id', $ids)
+                    ->update(['exported_at' => now()]);
+            }
+        } catch (\Throwable $exception) {
+            // If DB schema is not up to date yet, still allow download.
+        }
+
         $timestamp = now()->format('Ymd_His');
         $filename = "vtb_requests_{$timestamp}.csv";
         $content = $this->buildCsvContent($requests);
@@ -495,11 +513,16 @@ class ManagerPortalController extends Controller
             abort(403);
         }
 
-        if ($user->role !== UserRole::Employee) {
+        $currentUser = request()->user();
+        $allowedRoles = $this->isNotAdmin($currentUser)
+            ? [UserRole::Employee]
+            : [UserRole::Employee, UserRole::Manager];
+
+        if (! in_array($user->role, $allowedRoles, true) || $user->role === UserRole::Admin) {
             abort(403);
         }
 
-        if ($user->id === request()->user()?->id) {
+        if ($user->id === $currentUser?->id) {
             return redirect()
                 ->route('manager.requests.index')
                 ->with('status', 'Нельзя удалить свой аккаунт.');
@@ -513,11 +536,11 @@ class ManagerPortalController extends Controller
 
         $user->delete();
 
-        AuditLogger::log(request()->user(), 'user_soft_deleted', $user, $oldValues, []);
+        AuditLogger::log($currentUser, 'user_soft_deleted', $user, $oldValues, []);
 
         return redirect()
             ->route('manager.requests.index')
-            ->with('status', 'Сотрудник удалён.');
+            ->with('status', $user->role === UserRole::Manager ? 'Руководитель удалён.' : 'Сотрудник удалён.');
     }
 
     public function destroyUserForce(User $user): RedirectResponse
@@ -526,7 +549,7 @@ class ManagerPortalController extends Controller
             abort(403);
         }
 
-        if ($user->role !== UserRole::Employee) {
+        if (! in_array($user->role, [UserRole::Employee, UserRole::Manager], true) || $user->role === UserRole::Admin) {
             abort(403);
         }
 
@@ -548,7 +571,7 @@ class ManagerPortalController extends Controller
 
         return redirect()
             ->route('manager.requests.index')
-            ->with('status', 'Сотрудник удалён навсегда.');
+            ->with('status', $user->role === UserRole::Manager ? 'Руководитель удалён навсегда.' : 'Сотрудник удалён навсегда.');
     }
 
     public function destroyInvitation(Invitation $invitation): RedirectResponse

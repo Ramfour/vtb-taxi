@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,9 +22,7 @@ class User extends Authenticatable
         'employee_number',
         'telegram_id',
         'full_name',
-        'email',
         'phone',
-        'default_address',
         'password',
         'role',
         'is_active',
@@ -38,7 +37,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'telegram_id' => 'integer',
+            'telegram_id' => 'string',
             'role' => UserRole::class,
             'is_active' => 'boolean',
             'do_not_disturb_until' => 'datetime',
@@ -89,6 +88,11 @@ class User extends Authenticatable
     public function addresses(): HasMany
     {
         return $this->hasMany(UserAddress::class);
+    }
+
+    public function latestAddress(): HasOne
+    {
+        return $this->hasOne(UserAddress::class)->latestOfMany();
     }
 
     #[Scope]
