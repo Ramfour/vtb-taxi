@@ -32,6 +32,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+_about
 
 # Local overrides & secrets
 docker-compose.override.yml
