@@ -47,12 +47,12 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800|space-grotesk:500,700" rel="stylesheet" />
         <link rel="stylesheet" href="{{ asset('theme.css') }}">
-        <link rel="stylesheet" href="{{ asset('theme-vtb.css') }}">
+        <link rel="stylesheet" href="{{ asset('theme-vtb.css') }}?v={{ @filemtime(public_path('theme-vtb.css')) ?: '1' }}">
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
         <script defer src="{{ asset('qrcode.min.js') }}"></script>
-        <script defer src="{{ asset('theme-vtb.js') }}"></script>
+        <script defer src="{{ asset('theme-vtb.js') }}?v={{ @filemtime(public_path('theme-vtb.js')) ?: '1' }}"></script>
     </head>
     <body class="theme-body">
         <div class="ambient ambient-one"></div>
@@ -64,7 +64,7 @@
                 <header class="topbar" data-reveal>
                     <div class="brand-lockup">
                         <a href="{{ route('home') }}" class="brand-mark" aria-label="VTB Taxi">
-                            <span>VTB</span>
+                            <img src="{{ asset('assets/vtb-taxi.png') }}" alt="VTB Taxi" loading="eager">
                         </a>
                         <div>
                         <p class="eyebrow">Корпоративное такси</p>
@@ -84,9 +84,6 @@
                             <strong>{{ $displayName($currentUser->full_name) }}</strong>
                             <span>{{ $currentUser->employee_number }} · {{ $roleLabels[$currentUser->role->name] ?? $currentUser->role->name }}</span>
                         </div>
-                        <button class="button-ghost account-password-trigger" type="button" data-password-modal-open>
-                            Сменить пароль
-                        </button>
                         </div>
                     @endif
                 </div>
@@ -94,6 +91,7 @@
 
                 <nav class="nav-pills" data-reveal>
                     <a href="{{ route('home') }}" class="{{ $currentRoute === 'home' ? 'is-active' : '' }}">Главная</a>
+                    <a href="{{ route('about') }}" class="{{ $currentRoute === 'about' ? 'is-active' : '' }}">О нас</a>
                     @if ($currentUser)
                         <a href="{{ route('employee.requests.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'employee.') ? 'is-active' : '' }}">Мои заявки</a>
                         @if (in_array($currentUser->role->name, ['Manager', 'Admin'], true))
@@ -111,6 +109,9 @@
                 </button>
 
                 @if ($currentUser)
+                    <button class="nav-ghost account-password-trigger" type="button" data-password-modal-open>
+                        Сменить пароль
+                    </button>
                     <form method="POST" action="{{ route('logout') }}" data-confirm-logout="Вы уверены, что хотите выйти?">
                         @csrf
                         <button type="submit" class="nav-ghost">Выйти</button>
@@ -140,6 +141,16 @@
             <main class="page-stack">
                 {{ $slot }}
             </main>
+
+            <footer class="site-footer" data-reveal>
+                <div class="site-footer__inner">
+                    <span class="site-footer__badge">152‑ФЗ</span>
+                    <span class="site-footer__text">
+                        Проект выполняется по официальному запросу ВТБ; vtb.ru использовался как референс интерфейса.
+                        <a href="{{ route('privacy') }}">Политика ПДн</a> · <a href="{{ route('about') }}">О нас</a>
+                    </span>
+                </div>
+            </footer>
         </div>
 
         <div class="modal-overlay" data-qr-modal>

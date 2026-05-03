@@ -49,77 +49,7 @@
     subheading="Согласование заявок, приглашения сотрудников и перевод подтверждённых поездок в финальный слой для выгрузки."
     :current-user="$currentUser"
 >
-    <div>
-    <section class="manager-grid manager-grid--compact">
-        <article class="panel panel--compact" data-reveal>
-            <div class="panel-header panel-header--tight">
-                <div>
-                    <span class="kicker">Сводка</span>
-                    <h2>Рабочий статус смены</h2>
-                    <p>Ключевые числа наверху, всё остальное ниже без визуального шума.</p>
-                </div>
-            </div>
-
-            <div class="metric-grid metric-grid--dense">
-                <div class="stat-card">
-                    <span class="stat-label">Всего в буфере</span>
-                    <div class="stat-value">{{ $bufferTotal }}</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-label">На согласовании</span>
-                    <div class="stat-value">{{ $pendingCount }}</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-label">Готовы к переносу</span>
-                    <div class="stat-value">{{ $approvedCount }}</div>
-                </div>
-            </div>
-        </article>
-
-        <aside class="compact-side-stack">
-            <details class="compact-disclosure panel panel--compact" data-reveal hidden>
-                <summary>
-                    <span>
-                        <span class="kicker">Аккаунт</span>
-                        <strong>Сменить пароль</strong>
-                    </span>
-                    <span class="disclosure-meta">
-                        <span class="disclosure-hint">Нажмите, чтобы раскрыть</span>
-                    </span>
-                </summary>
-
-                <div class="disclosure-body">
-                    <form method="POST" action="{{ route('account.password.update') }}" class="form-grid">
-                        @csrf
-                        <div class="field">
-                            <label for="current_password_manager">Текущий пароль</label>
-                            <div class="password-field">
-                                <input id="current_password_manager" class="input" type="password" name="current_password" required>
-                                <button class="password-toggle" type="button" data-password-toggle>Показать</button>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label for="new_password_manager">Новый пароль</label>
-                            <div class="password-field">
-                                <input id="new_password_manager" class="input" type="password" name="password" required>
-                                <button class="password-toggle" type="button" data-password-toggle>Показать</button>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label for="new_password_manager_confirmation">Подтверждение нового пароля</label>
-                            <div class="password-field">
-                                <input id="new_password_manager_confirmation" class="input" type="password" name="password_confirmation" required>
-                                <button class="password-toggle" type="button" data-password-toggle>Показать</button>
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <button class="button" type="submit">Обновить пароль</button>
-                        </div>
-                    </form>
-                </div>
-            </details>
-        </aside>
-    </section>
+    <div class="ops-page">
 
     <section class="panel panel--compact" data-reveal>
         <div class="panel-header panel-header--tight">
@@ -128,47 +58,65 @@
                 <h2>Очередь заявок</h2>
                 <p>Основной рабочий блок сделан плотнее и ближе по ощущению к табличному инструменту.</p>
             </div>
-                <span class="pill-count">{{ $countLabel($bufferVisibleTotal, 'в очереди') }}</span>
+            <span class="pill-count">{{ $countLabel($bufferVisibleTotal, 'в очереди') }}</span>
         </div>
 
-        <div class="buffer-filters">
-            <form method="GET" action="{{ route('manager.requests.index') }}" class="buffer-filter-group">
-                <input type="hidden" name="buffer_sort" value="{{ $bufferSort }}">
-                <button class="button-ghost {{ $bufferStatus === 'all' ? 'is-active' : '' }}" type="submit" name="buffer_status" value="all">Все заявки</button>
-                <button class="button-ghost {{ $bufferStatus === 'pending' ? 'is-active' : '' }}" type="submit" name="buffer_status" value="pending">Только на согласовании</button>
-            </form>
-            <form method="GET" action="{{ route('manager.requests.index') }}" class="buffer-filter-group">
-                <input type="hidden" name="buffer_status" value="{{ $bufferStatus }}">
-                <button class="button-ghost {{ $bufferSort === 'asc' ? 'is-active' : '' }}" type="submit" name="buffer_sort" value="asc">Сначала ближайшие</button>
-                <button class="button-ghost {{ $bufferSort === 'desc' ? 'is-active' : '' }}" type="submit" name="buffer_sort" value="desc">Сначала дальние</button>
-            </form>
-        </div>
+        <div class="buffer-shell" aria-label="Очередь со sticky панелью">
+            <div class="buffer-sticky buffer-sticky--outer">
+                <div class="ops-kpi-strip" aria-label="Сводка по очереди">
+                    <span class="ops-badge">Все: {{ $bufferTotal }}</span>
+                    <span class="ops-badge ops-badge--pending">На согласовании: {{ $pendingCount }}</span>
+                    <span class="ops-badge ops-badge--approved">Готовы к переносу: {{ $approvedCount }}</span>
+                </div>
 
-        <form id="bulk-approve-form" method="POST" action="{{ route('manager.requests.bulk-approve') }}" class="buffer-toolbar">
-            @csrf
-            <input type="hidden" name="approve_scope" value="selected" data-approve-scope-input>
-            <div class="field buffer-toolbar__comment">
-                <label for="bulk_manager_comment">Комментарий руководителя для массового одобрения</label>
-                <textarea id="bulk_manager_comment" class="textarea textarea--compact" name="manager_comment" placeholder="Необязательно. Комментарий будет записан во все массово одобренные заявки."></textarea>
+                <div class="buffer-filters">
+                    <form method="GET" action="{{ route('manager.requests.index') }}" class="buffer-filter-group">
+                        <input type="hidden" name="buffer_sort" value="{{ $bufferSort }}">
+                        <button class="button-ghost {{ $bufferStatus === 'all' ? 'is-active' : '' }}" type="submit" name="buffer_status" value="all">Все заявки</button>
+                        <button class="button-ghost {{ $bufferStatus === 'pending' ? 'is-active' : '' }}" type="submit" name="buffer_status" value="pending">Только на согласовании</button>
+                    </form>
+                    <form method="GET" action="{{ route('manager.requests.index') }}" class="buffer-filter-group">
+                        <input type="hidden" name="buffer_status" value="{{ $bufferStatus }}">
+                        <button class="button-ghost {{ $bufferSort === 'asc' ? 'is-active' : '' }}" type="submit" name="buffer_sort" value="asc">Сначала ближайшие</button>
+                        <button class="button-ghost {{ $bufferSort === 'desc' ? 'is-active' : '' }}" type="submit" name="buffer_sort" value="desc">Сначала дальние</button>
+                    </form>
+                </div>
+
+                <form id="bulk-approve-form" method="POST" action="{{ route('manager.requests.bulk-approve') }}" class="buffer-toolbar">
+                    @csrf
+                    <input type="hidden" name="approve_scope" value="selected" data-approve-scope-input>
+                    <details class="ops-disclosure ops-disclosure--inline">
+                        <summary>Комментарий (необязательно)</summary>
+                        <div class="disclosure-body">
+                            <div class="field buffer-toolbar__comment">
+                                <label for="bulk_manager_comment">Комментарий руководителя для массового одобрения</label>
+                                <textarea id="bulk_manager_comment" class="textarea textarea--compact" name="manager_comment" placeholder="Необязательно. Комментарий будет записан во все массово одобренные заявки."></textarea>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="buffer-toolbar__actions">
+                        <span class="buffer-toolbar__selected muted" aria-live="polite" data-selected-count>Выбрано: 0</span>
+                        <button class="button-ghost" type="button" data-clear-selection>Снять выделение</button>
+                        <button class="button-success" type="submit" name="approve_scope" value="selected" data-approve-scope="selected">Одобрить выбранные</button>
+                        <button class="button-secondary" type="submit" name="approve_scope" value="all_pending" data-approve-scope="all_pending">Одобрить все на согласовании</button>
+                    </div>
+                </form>
+
             </div>
 
-            <div class="buffer-toolbar__actions">
-                <button class="button-success" type="submit" name="approve_scope" value="selected" data-approve-scope="selected">Одобрить выбранные</button>
-                <button class="button-secondary" type="submit" name="approve_scope" value="all_pending" data-approve-scope="all_pending">Одобрить все на согласовании</button>
-            </div>
-        </form>
-
-        <div class="request-table request-table--scroll">
-            <div class="request-table__head">
-                <span>№</span>
-                <span>Выбор</span>
-                <span>Сотрудник</span>
-                <span>Когда</span>
-                <span>Телефон</span>
-                <span>Адрес подачи</span>
-                <span>Статус</span>
-                <span>Действия</span>
-            </div>
+            <div class="buffer-scroll">
+            <div class="request-table request-table--scroll">
+                <div class="request-table__head request-table__head--sticky" role="row">
+                    <span>№</span>
+                    <span>Выбор</span>
+                    <span>Сотрудник</span>
+                    <span>Когда</span>
+                    <span>Телефон</span>
+                    <span>Адрес подачи</span>
+                    <span>Статус</span>
+                    <span>Действия</span>
+                </div>
 
             @forelse ($bufferItems as $index => $request)
                 <div class="request-row">
@@ -258,6 +206,8 @@
                     Буфер пуст. Как только сотрудники отправят новые поездки, они появятся здесь.
                 </div>
             @endforelse
+            </div>
+            </div>
         </div>
 
         @if ($buffer instanceof \Illuminate\Pagination\LengthAwarePaginator)
@@ -310,7 +260,9 @@
             </div>
         </form>
 
-        <div class="export-preview" id="export-preview">
+        <details class="ops-disclosure ops-disclosure--section" open>
+            <summary>Предпросмотр диапазона</summary>
+            <div class="export-preview" id="export-preview">
             <div class="export-preview__head">
                 <strong>Предпросмотр (первые 50 строк)</strong>
                 <span class="pill-count">{{ $countLabel($export_total ?? 0, 'строк') }}</span>
@@ -400,7 +352,8 @@
                     </div>
                 </div>
             @endif
-        </div>
+            </div>
+        </details>
     </section>
 
     <section class="panel panel--compact" data-reveal>

@@ -95,6 +95,11 @@ class User extends Authenticatable
         return $this->hasOne(UserAddress::class)->latestOfMany();
     }
 
+    public function commuteSchedule(): HasOne
+    {
+        return $this->hasOne(CommuteSchedule::class);
+    }
+
     #[Scope]
     protected function active(Builder $query): void
     {

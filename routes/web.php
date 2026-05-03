@@ -5,12 +5,15 @@ use App\Http\Controllers\Auth\InvitationRegistrationController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\EmployeePortalController;
 use App\Http\Controllers\EmployeeAddressController;
+use App\Http\Controllers\EmployeeCommuteScheduleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagerInvitationController;
 use App\Http\Controllers\ManagerPortalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+Route::view('/about', 'about')->name('about');
+Route::view('/privacy', 'privacy')->name('privacy');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -29,6 +32,7 @@ Route::middleware('guest')->group(function () {
             Route::get('/requests', [EmployeePortalController::class, 'index'])->name('employee.requests.index');
             Route::post('/requests', [EmployeePortalController::class, 'store'])->name('employee.requests.store');
             Route::patch('/requests/{tempRequest}/cancel', [EmployeePortalController::class, 'cancel'])->name('employee.requests.cancel');
+            Route::post('/commute-schedule', [EmployeeCommuteScheduleController::class, 'upsert'])->name('employee.commute-schedule.upsert');
             Route::get('/addresses', [EmployeeAddressController::class, 'index'])->name('employee.addresses.index');
             Route::post('/addresses', [EmployeeAddressController::class, 'store'])->name('employee.addresses.store');
             Route::delete('/addresses/{address}', [EmployeeAddressController::class, 'destroy'])->name('employee.addresses.destroy');

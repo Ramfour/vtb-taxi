@@ -55,7 +55,7 @@
             <div class="form-grid-two">
                 <div class="field">
                     <label for="employee_number">Табельный номер</label>
-                    <input id="employee_number" class="input" type="text" name="employee_number" placeholder="70320699" required>
+                    <input id="employee_number" class="input" type="text" name="employee_number" placeholder="71234567" required>
                 </div>
                 <div class="field">
                     <label for="expires_in_days">Дней активности</label>
@@ -91,7 +91,7 @@
             <div class="form-grid-two">
                 <div class="field">
                     <label for="employee_search">Поиск по ФИО, табельному или телефону</label>
-                    <input id="employee_search" class="input" type="text" name="q" value="{{ $search }}" placeholder="Например: 70320699 или Смирнов">
+                    <input id="employee_search" class="input" type="text" name="q" value="{{ $search }}" placeholder="Например: 71234567 или Смирнов">
                 </div>
                 <div class="form-actions" style="align-self: end;">
                     <button class="button" type="submit">Найти</button>
@@ -165,14 +165,31 @@
             </div>
         </div>
 
-        <div class="list-stack">
-            @forelse ($invitations as $invitation)
-                <article class="invitation-card invitation-card--compact">
-                    <strong>{{ $invitation->employee_number }}</strong>
-                    <p>{{ $invitation->is_used ? 'Ссылка уже использована' : 'Ожидает активации' }} · до {{ optional($invitation->expires_at)->format('d.m.Y H:i') }}</p>
+        <div class="invitation-table invitation-table--scroll" role="table" aria-label="Приглашения">
+            <div class="invitation-table__head" role="row">
+                <span role="columnheader">Табельный</span>
+                <span role="columnheader">Статус</span>
+                <span role="columnheader">Ссылка</span>
+                <span role="columnheader">Действия</span>
+            </div>
 
-                    <div class="copy-box">
+            @forelse ($invitations as $invitation)
+                <div class="invitation-row" role="row">
+                    <div role="cell" data-label="Табельный">
+                        <strong>{{ $invitation->employee_number }}</strong>
+                    </div>
+                    <div role="cell" data-label="Статус">
+                        <div class="muted">
+                            {{ $invitation->is_used ? 'Использовано' : 'Ожидает активации' }}
+                            @if ($invitation->expires_at)
+                                · до {{ $invitation->expires_at->format('d.m.Y H:i') }}
+                            @endif
+                        </div>
+                    </div>
+                    <div role="cell" data-label="Ссылка" class="invitation-linkcell">
                         <code id="invite-link-{{ $invitation->id }}">{{ route('invitation.accept.show', $invitation->token) }}</code>
+                    </div>
+                    <div role="cell" data-label="Действия" class="invitation-actions">
                         <button type="button" class="button-secondary copy-button" data-copy-target="#invite-link-{{ $invitation->id }}">Копировать</button>
                         <button type="button" class="button-ghost" data-qr-link="{{ route('invitation.accept.show', $invitation->token) }}">QR</button>
                         <form method="POST" action="{{ route('manager.invitations.destroy', $invitation) }}" data-confirm-delete="Удалить приглашение? Ссылка перестанет работать." class="inline-form">
@@ -181,7 +198,7 @@
                             <button class="button-danger" type="submit">Удалить</button>
                         </form>
                     </div>
-                </article>
+                </div>
             @empty
                 <div class="empty-state">
                     Приглашений пока нет.

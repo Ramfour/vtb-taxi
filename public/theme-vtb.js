@@ -3,6 +3,13 @@
     const root = document.documentElement;
     const toggle = document.querySelector('[data-theme-toggle]');
     const label = document.querySelector('[data-theme-label]');
+    const safe = (name, fn) => {
+        try {
+            fn();
+        } catch (error) {
+            console.error(`[vtb-ui] ${name} failed`, error);
+        }
+    };
 
     const applyTheme = (theme) => {
         root.dataset.theme = theme;
@@ -158,6 +165,39 @@
         });
     };
 
+    const bindBulkSelectionCounter = (scope = document) => {
+        const countEl = scope.querySelector('[data-selected-count]');
+        if (!countEl || countEl.dataset.boundSelectedCount === '1') {
+            return;
+        }
+        countEl.dataset.boundSelectedCount = '1';
+
+        const clearButton = scope.querySelector('[data-clear-selection]');
+        const checkboxes = Array.from(scope.querySelectorAll('input[type="checkbox"][name="request_ids[]"][form="bulk-approve-form"]'));
+
+        const updateCount = () => {
+            const selected = checkboxes.filter((cb) => cb.checked).length;
+            countEl.textContent = `Выбрано: ${selected}`;
+        };
+
+        checkboxes.forEach((cb) => {
+            cb.addEventListener('change', updateCount);
+        });
+
+        if (clearButton) {
+            clearButton.addEventListener('click', () => {
+                checkboxes.forEach((cb) => {
+                    if (!cb.disabled) {
+                        cb.checked = false;
+                    }
+                });
+                updateCount();
+            });
+        }
+
+        updateCount();
+    };
+
     document.querySelectorAll('[data-confirm-logout]').forEach((form) => {
         form.addEventListener('submit', (event) => {
             const message = form.getAttribute('data-confirm-logout') || 'Вы уверены, что хотите выйти?';
@@ -176,7 +216,296 @@
         });
     });
 
-    bindTodayRange();
+    const bindCommuteWizard = () => {
+        const modal = document.querySelector('[data-commute-modal]');
+        const openButtons = Array.from(document.querySelectorAll('[data-commute-wizard-open]'));
+        const closeBtn = document.querySelector('[data-commute-modal-close]');
+        const wizard = document.querySelector('[data-commute-wizard]');
+
+        if (!modal || !openButtons.length || !wizard) {
+            return;
+        }
+
+        if (modal.dataset.boundCommuteWizard === '1') {
+            return;
+        }
+        modal.dataset.boundCommuteWizard = '1';
+
+        const panes = Array.from(wizard.querySelectorAll('[data-step]'));
+        const indicators = Array.from(wizard.querySelectorAll('[data-step-indicator]'));
+        const backBtn = wizard.querySelector('[data-wizard-back]');
+        const nextBtn = wizard.querySelector('[data-wizard-next]');
+        const applyBtn = wizard.querySelector('[data-wizard-apply]');
+        const grid = wizard.querySelector('[data-calendar-grid]');
+        const exceptionTable = wizard.querySelector('[data-exception-table]');
+        const exceptionEmpty = wizard.querySelector('[data-exception-empty]');
+        const wizardDefaultTime = wizard.querySelector('[data-wizard-default-time]');
+        const wizardDefaultAddress = wizard.querySelector('[data-wizard-default-address]');
+        const exceptionDateInput = wizard.querySelector('[data-exception-date]');
+        const exceptionAddButton = wizard.querySelector('[data-exception-add]');
+
+        const mainForm = openButtons[0].closest('form');
+        const mainDefaultTime = mainForm ? mainForm.querySelector('input[name="default_time"]') : null;
+        const mainDefaultAddress = mainForm ? mainForm.querySelector('input[name="default_address_raw"]') : null;
+        const mainExceptions = mainForm ? mainForm.querySelector('[data-commute-exceptions]') : null;
+
+        const exceptions = new Map(); // window_date -> {is_skipped,force_on,time_override,address_override_raw}
+
+        const pad = (n) => String(n).padStart(2, '0');
+        const fmtDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+        const weekdayShort = (d) => {
+            // Russia: week starts on Monday.
+            const map = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            const idx = (d.getDay() + 6) % 7; // Mon=0 ... Sun=6
+            return map[idx];
+        };
+
+        const isSelectedByWeekday = (date) => {
+            if (!mainForm) return true;
+            const checkboxes = Array.from(mainForm.querySelectorAll('input[name="days[]"]'));
+            const selected = new Set(checkboxes.filter((c) => c.checked).map((c) => Number(c.value)));
+            const iso = date.getDay() === 0 ? 7 : date.getDay(); // 1..7
+            return selected.has(iso);
+        };
+
+        const ensureGrid = () => {
+            if (!grid) return;
+            grid.innerHTML = '';
+            const now = new Date();
+            const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+            // Align the first date to the correct weekday column (Mon..Sun).
+            const startIdx = (start.getDay() + 6) % 7; // Mon=0 ... Sun=6
+            for (let i = 0; i < startIdx; i++) {
+                const blank = document.createElement('div');
+                blank.className = 'calendar-day calendar-day--blank';
+                blank.setAttribute('aria-hidden', 'true');
+                grid.appendChild(blank);
+            }
+
+            for (let i = 0; i < 28; i++) {
+                const d = new Date(start);
+                d.setDate(start.getDate() + i);
+                const windowDate = fmtDate(d);
+                const ex = exceptions.get(windowDate);
+                const baseOn = isSelectedByWeekday(d);
+                const selected = (() => {
+                    if (!ex) return baseOn;
+                    if (ex.force_on) return true;
+                    if (ex.is_skipped) return false;
+                    return baseOn || !!ex.time_override || !!ex.address_override_raw;
+                })();
+
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = `calendar-day${selected ? '' : ' is-off'}`;
+                card.dataset.windowDate = windowDate;
+
+                const dateEl = document.createElement('div');
+                dateEl.className = 'calendar-day__date';
+                dateEl.textContent = `${pad(d.getDate())}.${pad(d.getMonth() + 1)} (${weekdayShort(d)})`;
+
+                const meta = document.createElement('div');
+                meta.className = 'calendar-day__meta';
+                meta.textContent = (() => {
+                    if (selected) {
+                        if (!baseOn && ex && ex.force_on) return 'Едем';
+                        if (ex && (ex.time_override || ex.address_override_raw)) return 'Едем (правка)';
+                        return 'Едем';
+                    }
+                    if (baseOn && ex && ex.is_skipped) return 'Отмена';
+                    return 'Нет';
+                })();
+
+                card.appendChild(dateEl);
+                card.appendChild(meta);
+
+                card.addEventListener('click', () => {
+                    const current = exceptions.get(windowDate);
+                    if (baseOn) {
+                        // Base schedule has a ride: click toggles "cancel ride".
+                        if (current && current.is_skipped) {
+                            exceptions.delete(windowDate);
+                        } else {
+                            exceptions.set(windowDate, {
+                                is_skipped: true,
+                                force_on: false,
+                                time_override: '',
+                                address_override_raw: '',
+                            });
+                        }
+                    } else {
+                        // Base schedule has no ride: click toggles "add ride".
+                        if (current && current.force_on) {
+                            exceptions.delete(windowDate);
+                        } else {
+                            const defaultTime = (wizardDefaultTime && wizardDefaultTime.value) || (mainDefaultTime && mainDefaultTime.value) || '23:00';
+                            exceptions.set(windowDate, {
+                                is_skipped: false,
+                                force_on: true,
+                                time_override: (current && current.time_override) || defaultTime,
+                                address_override_raw: (current && current.address_override_raw) || '',
+                            });
+                        }
+                    }
+                    ensureGrid();
+                    renderExceptions();
+                });
+
+                grid.appendChild(card);
+            }
+        };
+
+        const renderExceptions = () => {
+            if (!exceptionTable) return;
+            Array.from(exceptionTable.querySelectorAll('.exception-row')).forEach((r) => r.remove());
+
+            const meaningful = Array.from(exceptions.entries())
+                .map(([wd, ex]) => ({ wd, ex }))
+                .filter(({ ex }) => ex && (ex.is_skipped || ex.force_on || ex.time_override || ex.address_override_raw))
+                .sort((a, b) => a.wd.localeCompare(b.wd));
+
+            if (exceptionEmpty) {
+                exceptionEmpty.style.display = meaningful.length ? 'none' : 'block';
+            }
+
+            meaningful.forEach(({ wd, ex }) => {
+                const row = document.createElement('div');
+                row.className = 'exception-row';
+
+                const c1 = document.createElement('div');
+                c1.innerHTML = `<strong>${wd}</strong>`;
+
+                const c2 = document.createElement('div');
+                const skipLabel = document.createElement('label');
+                skipLabel.className = 'weekday-pill';
+                const skip = document.createElement('input');
+                skip.type = 'checkbox';
+                skip.checked = !!ex.is_skipped;
+                const skipText = document.createElement('span');
+                skipText.textContent = 'Отменить';
+                skip.addEventListener('change', () => {
+                    exceptions.set(wd, { ...ex, is_skipped: skip.checked, force_on: skip.checked ? false : ex.force_on });
+                    ensureGrid();
+                    renderExceptions();
+                });
+                skipLabel.appendChild(skip);
+                skipLabel.appendChild(skipText);
+                c2.appendChild(skipLabel);
+
+                const c3 = document.createElement('div');
+                const time = document.createElement('input');
+                time.type = 'time';
+                time.className = 'input';
+                time.value = ex.time_override || (wizardDefaultTime ? wizardDefaultTime.value : '');
+                time.disabled = !!ex.is_skipped;
+                time.addEventListener('change', () => {
+                    const val = time.value || '';
+                    exceptions.set(wd, { ...ex, time_override: val });
+                });
+                c3.appendChild(time);
+
+                const c4 = document.createElement('div');
+                const remove = document.createElement('button');
+                remove.type = 'button';
+                remove.className = 'button-ghost';
+                remove.textContent = 'Удалить';
+                remove.addEventListener('click', () => {
+                    exceptions.delete(wd);
+                    ensureGrid();
+                    renderExceptions();
+                });
+                c4.appendChild(remove);
+
+                row.appendChild(c1);
+                row.appendChild(c2);
+                row.appendChild(c3);
+                row.appendChild(c4);
+
+                exceptionTable.appendChild(row);
+            });
+        };
+
+        const setStep = (n) => {
+            panes.forEach((p) => {
+                p.hidden = String(p.dataset.step) !== String(n);
+            });
+            indicators.forEach((i) => {
+                i.classList.toggle('is-active', i.getAttribute('data-step-indicator') === String(n));
+            });
+            if (backBtn) backBtn.disabled = n === 1;
+            if (nextBtn) nextBtn.hidden = n === 3;
+            if (applyBtn) applyBtn.hidden = n !== 3;
+        };
+
+        let step = 1;
+
+        const open = () => {
+            modal.classList.add('is-open');
+            step = 1;
+            setStep(step);
+            ensureGrid();
+            renderExceptions();
+        };
+
+        const close = () => modal.classList.remove('is-open');
+
+        openButtons.forEach((btn) => btn.addEventListener('click', open));
+        if (closeBtn) closeBtn.addEventListener('click', close);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) close();
+        });
+
+        if (backBtn) backBtn.addEventListener('click', () => {
+            step = Math.max(1, step - 1);
+            setStep(step);
+        });
+
+        if (nextBtn) nextBtn.addEventListener('click', () => {
+            step = Math.min(3, step + 1);
+            setStep(step);
+            if (step === 3) renderExceptions();
+        });
+
+        if (applyBtn) applyBtn.addEventListener('click', () => {
+            if (mainDefaultTime && wizardDefaultTime) mainDefaultTime.value = wizardDefaultTime.value;
+            if (mainDefaultAddress && wizardDefaultAddress) mainDefaultAddress.value = wizardDefaultAddress.value;
+            if (mainExceptions) {
+                const payload = Array.from(exceptions.entries())
+                    .map(([window_date, ex]) => ({
+                        window_date,
+                        is_skipped: !!ex.is_skipped,
+                        time_override: ex.time_override || null,
+                        address_override_raw: ex.address_override_raw || null,
+                    }))
+                    .filter((row) => row.is_skipped || row.time_override || row.address_override_raw);
+                mainExceptions.value = payload.length ? JSON.stringify(payload) : '';
+            }
+            close();
+        });
+
+        if (exceptionAddButton && exceptionDateInput) {
+            exceptionAddButton.addEventListener('click', () => {
+                const wd = String(exceptionDateInput.value || '').trim();
+                if (!wd) return;
+                const current = exceptions.get(wd);
+                const next = current || {
+                    is_skipped: false,
+                    force_on: true,
+                    time_override: (wizardDefaultTime && wizardDefaultTime.value) || '',
+                    address_override_raw: '',
+                };
+                exceptions.set(wd, next);
+                ensureGrid();
+                renderExceptions();
+            });
+        }
+    };
+
+    safe('bindTodayRange', () => bindTodayRange());
+    safe('bindBulkSelectionCounter', () => bindBulkSelectionCounter());
+    safe('bindCommuteWizard', () => bindCommuteWizard());
 
     document.querySelectorAll('[data-reveal]').forEach((element, index) => {
         window.setTimeout(() => {
@@ -184,7 +513,7 @@
         }, index * 60);
     });
 
-    bindCopyButtons();
+    safe('bindCopyButtons', () => bindCopyButtons());
 
     const qrModal = document.querySelector('[data-qr-modal]');
     const qrPreview = document.querySelector('[data-qr-preview]');
@@ -460,12 +789,14 @@
         document.querySelectorAll('[data-reveal]').forEach((element) => {
             element.classList.add('is-visible');
         });
-        bindCopyButtons();
-        bindTodayRange();
-        bindDateInputs();
-        bindPasswordToggles();
-        bindPasswordToggleAll();
-        bindApproveScopeButtons();
+        safe('bindCopyButtons', () => bindCopyButtons());
+        safe('bindTodayRange', () => bindTodayRange());
+        safe('bindDateInputs', () => bindDateInputs());
+        safe('bindPasswordToggles', () => bindPasswordToggles());
+        safe('bindPasswordToggleAll', () => bindPasswordToggleAll());
+        safe('bindApproveScopeButtons', () => bindApproveScopeButtons());
+        safe('bindBulkSelectionCounter', () => bindBulkSelectionCounter());
+        safe('bindCommuteWizard', () => bindCommuteWizard());
     };
 
     const fetchHtml = async (url, options = {}) => {

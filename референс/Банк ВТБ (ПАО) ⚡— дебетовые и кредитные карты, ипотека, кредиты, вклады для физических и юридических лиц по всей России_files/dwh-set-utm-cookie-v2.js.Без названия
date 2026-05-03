@@ -1,0 +1,282 @@
+'use strict';
+(function () {
+    var date = function (addHour) {
+        if (addHour === undefined) {
+            addHour = 0;
+        }
+        var additional = addHour == 0 ? 0 : 3600 * (addHour * 1000);
+        return new Date(new Date().getTime() + additional);
+    };
+
+    var sleep = function (ms) {
+        ms += new Date().getTime();
+        while (new Date() < ms) { }
+    }
+
+
+    var domain4cookie = function () {
+        var _domain = {
+            'first': (document.location.hostname).split('.').reverse()[0],
+            'second': (document.location.hostname).split('.').reverse()[1]
+        }
+
+        return (_domain['second'] == undefined) ? _domain['first'] : "." + _domain['second'] + "." + _domain['first'];
+    };
+
+    var pass = {
+        isExistUTM: { //UTM-метки заданы?
+            yes: {
+                isExistClient_source: { //Cookie client_source создан?
+                    yes: {
+                        isExist_ignore_: { // Игнорируемые источники? (есть _ignore_ в метке?)
+                            yes: false,
+                            no: false
+                        }
+                    },
+                    no: false
+                }
+            },
+            no: {
+                isExistClient_source: { //Cookie client_source создана?
+                    yes: false, //Оставляем старые значения меток
+                    no: {
+                        referrerIsEmpty: { //Реферер пустой?
+                            yes: false, //Создается новая cookies со значениями: utm_source = direct utm_medium = none utm_campaign = (not set) utm_term = (not set) utm_content = (not set)
+                            no: {
+                                isSearchEngine: { // Имя хоста относиться к поисковым сисетмам?
+                                    yes: false,
+                                    no: false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+    };
+
+    //Функция чтения GET параметров URI
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    };
+
+    /// Boolean
+    var isExistUtmFromGet = function () {
+        return (getParameterByName('utm_source') != null || getParameterByName('utm_medium') != null || getParameterByName('utm_campaign') != null)
+    };
+
+    var getCookie = function (name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length > 1) return parts.pop().split(";").shift();
+    };
+
+    var delete_cookie = function (name) {
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
+
+    var getClient_source = function () {
+        var _client_source = decodeURIComponent(getCookie('client_source'));
+        //преобразуем строку в ""читабельную""
+        return JSON.parse(decodeURIComponent(_client_source));
+    };
+
+    var isExistClient_source = function () {
+        return (getCookie('client_source') != null)
+    };
+
+    var isExistReferrer = function () {
+        return (document.referrer != '');
+    };
+
+    var isExist_ignore_ = function () {
+        return (getParameterByName('utm_source').indexOf('_ignore_') > -1);
+    };
+
+    var getReferrerName = function () {
+        return document.referrer.split("/")[2];
+    }
+
+    var isSearchEngine = function () {
+        var _flag = false;
+        var se_arr = ['yandex', 'ya.ru', 'google', 'go.mail.ru', 'yahoo.com', 'bing.com', 'rambler.ru'];
+
+        if (isExistReferrer()) {
+            var _referrer = getReferrerName();
+
+            se_arr.forEach(function (i) {
+                if (_referrer.indexOf(i) > -1) {
+                    _flag = true;
+                }
+            });
+        }
+
+        return _flag;
+    };
+
+    var createClient_source = function (_utm_source, _utm_medium, _utm_campaign, _utm_term, _utm_content) {
+        _utm_term = encodeURIComponent(_utm_term) || '(not set)';
+        _utm_content = _utm_content || '(not set)';
+
+        if (getCookie('_ga') == undefined) {
+            sleep(2000);
+        }
+
+        var _ga = getCookie('_ga') != undefined ? getCookie('_ga') : '';
+
+        //if(isExistClient_source())
+        //delete_cookie('client_source');
+        var client_source = {};
+        client_source = [{
+            "utmSource": _utm_source,
+            "utmMedium": _utm_medium,
+            "utmCampaign": _utm_campaign,
+            "utmTerm": _utm_term,
+            "utmContent": _utm_content,
+            "utmGa": _ga,
+            "actionId": ""
+        }];
+
+        document.cookie = "client_source=" + (JSON.stringify(client_source[0])) + "; secure; domain=" + domain4cookie() + ";path=/; expires=" + date(722).toUTCString();
+        console.log("client_source=" + (JSON.stringify(client_source[0])) + "; secure; domain=" + domain4cookie() + ";path=/; expires=" + date(722).toUTCString());
+
+        createUtm(_utm_source, _utm_medium, _utm_campaign, _utm_term, _utm_content);
+
+    };
+
+    var createUtm = function (_utm_source, _utm_medium, _utm_campaign, _utm_term, _utm_content) {
+        var cookieParam = "; secure; domain=" + domain4cookie() + ";path=/; expires=" + date(722).toUTCString();
+
+        document.cookie = "utm_source=" + _utm_source + cookieParam;
+        document.cookie = "utm_medium=" + _utm_medium + cookieParam;
+        document.cookie = "utm_campaign=" + _utm_campaign + cookieParam;
+        document.cookie = "utm_term=" + _utm_term + cookieParam;
+        document.cookie = "utm_content=" + _utm_content + cookieParam;
+    }
+
+    // Описываем кейсы
+    if (isExistUtmFromGet() && isExistClient_source() && isExist_ignore_())
+        pass.isExistUTM.yes.isExistClient_source.yes.isExist_ignore_.yes = true;
+
+    if (isExistUtmFromGet() && isExistClient_source() && !isExist_ignore_())
+        pass.isExistUTM.yes.isExistClient_source.yes.isExist_ignore_.no = true;
+
+    if (isExistUtmFromGet() && !isExistClient_source())
+        pass.isExistUTM.yes.isExistClient_source.no = true;
+
+    if (!isExistUtmFromGet() && isExistClient_source())
+        pass.isExistUTM.no.isExistClient_source.yes = true;
+
+    if (!isExistUtmFromGet() && !isExistClient_source() && !isExistReferrer())
+        pass.isExistUTM.no.isExistClient_source.no.referrerIsEmpty.yes = true;
+
+    if (!isExistUtmFromGet() && !isExistClient_source() && isExistReferrer() && isSearchEngine())
+        pass.isExistUTM.no.isExistClient_source.no.referrerIsEmpty.no.isSearchEngine.yes = true;
+
+    if (!isExistUtmFromGet() && !isExistClient_source() && isExistReferrer() && !isSearchEngine())
+        pass.isExistUTM.no.isExistClient_source.no.referrerIsEmpty.no.isSearchEngine.no = true;
+
+    //Обрабатываем сценарии
+
+    //Берутся старые значения utm-меток, к значению метки utm_source добавляется префикс {pref}_
+    if (pass.isExistUTM.yes.isExistClient_source.yes.isExist_ignore_.yes) {
+        //console.log('pass.isExistUTM.yes.isExistClient_source.yes.isExist_ignore_.yes');
+
+        var _utmSource = getParameterByName('utm_source').split('_ignore_')[0] + '_' + getClient_source().utmSource;
+        var _utmMedium = getClient_source().utmMedium;
+        var _utmCampaign = getClient_source().utmCampaign;
+        var _utmTerm = getClient_source().utmTerm;
+        var _utmContent = getClient_source().utmContent;
+
+        createClient_source(_utmSource, _utmMedium, _utmCampaign, _utmTerm, _utmContent);
+    }
+
+    //Перезаписываются значения исходя из новых значений параметров utm-меток
+    if (pass.isExistUTM.yes.isExistClient_source.yes.isExist_ignore_.no) {
+        //console.log('pass.isExistUTM.yes.isExistClient_source.yes.isExist_ignore_.no');
+
+        var _utmSource = getParameterByName('utm_source');
+        var _utmMedium = getParameterByName('utm_medium');
+        var _utmCampaign = getParameterByName('utm_campaign');
+        var _utmTerm = getParameterByName('utm_term');
+        var _utmContent = getParameterByName('utm_content');
+
+        createClient_source(_utmSource, _utmMedium, _utmCampaign, _utmTerm, _utmContent);
+    }
+
+    if (pass.isExistUTM.yes.isExistClient_source.no) {
+
+        //console.log('pass.isExistUTM.yes.isExistClient_source.no');
+
+        var _utmSource = getParameterByName('utm_source');
+        var _utmMedium = getParameterByName('utm_medium');
+        var _utmCampaign = getParameterByName('utm_campaign');
+        var _utmTerm = getParameterByName('utm_term');
+        var _utmContent = getParameterByName('utm_content');
+
+        createClient_source(_utmSource, _utmMedium, _utmCampaign, _utmTerm, _utmContent);
+    }
+
+    //Оставляем старые значения меток
+    if (pass.isExistUTM.no.isExistClient_source.yes) {
+        // Оставляем старые значения меток (ничего не делаем)
+        //console.log('pass.isExistUTM.no.isExistClient_source.yes - ничего');
+    }
+
+    //Создается новая cookies со значениями: utm_source = direct
+    //utm_medium = none
+    //utm_campaign = (not set)
+    //utm_term = (not set)
+    //utm_content = (not set)
+    if (pass.isExistUTM.no.isExistClient_source.no.referrerIsEmpty.yes) {
+        //console.log('pass.isExistUTM.no.isExistClient_source.no.referrerIsEmpty.yes');
+
+        var _utmSource = 'direct_';
+        var _utmMedium = 'none';
+        var _utmCampaign = '(not set)';
+        var _utmTerm = '(not set)';
+        var _utmContent = '(not set)';
+        createClient_source(_utmSource, _utmMedium, _utmCampaign, _utmTerm, _utmContent);
+    }
+
+    //Создается новая cookies со значениями:
+    // utm_source = {referer host name}
+    // utm_medium = organic
+    // utm_campaign = (not set)
+    // utm_term = (not set)
+    // utm_content = (not set)
+
+    if (pass.isExistUTM.no.isExistClient_source.no.referrerIsEmpty.no.isSearchEngine.yes) {
+        //console.log('pass.isExistUTM.no.isExistClient_source.no.referrerIsEmpty.no.isSearchEngine.yes');
+
+        var _utmSource = getReferrerName();
+        var _utmMedium = 'organic';
+        var _utmCampaign = '(not set)';
+        var _utmTerm = '(not set)';
+        var _utmContent = '(not set)';
+        createClient_source(_utmSource, _utmMedium, _utmCampaign, _utmTerm, _utmContent);
+    }
+
+    //Создается новая cookies со значениями:
+    // utm_source = {referer host name}
+    // utm_medium = referrer
+    // utm_campaign = (not set)
+    // utm_term = (not set)
+    // utm_content = (not set)
+    if (pass.isExistUTM.no.isExistClient_source.no.referrerIsEmpty.no.isSearchEngine.no) {
+        //console.log('pass.isExistUTM.no.isExistClient_source.no.referrerIsEmpty.no.isSearchEngine.no');
+
+        var _utmSource = getReferrerName();
+        var _utmMedium = 'referral';
+        var _utmCampaign = '(not set)';
+        var _utmTerm = '(not set)';
+        var _utmContent = '(not set)';
+        createClient_source(_utmSource, _utmMedium, _utmCampaign, _utmTerm, _utmContent);
+    }
+})();

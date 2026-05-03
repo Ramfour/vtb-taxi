@@ -8,7 +8,7 @@
             @csrf
             <label class="block">
                 <span class="mb-2 block text-sm font-medium text-slate-200">Табельный номер</span>
-                <input class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/60" type="text" name="employee_number" value="{{ old('employee_number') }}" placeholder="70320699" required autofocus>
+                <input class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/60" type="text" name="employee_number" value="{{ old('employee_number') }}" placeholder="71234567" required autofocus>
             </label>
             <label class="block">
                 <span class="mb-2 block text-sm font-medium text-slate-200">Пароль</span>

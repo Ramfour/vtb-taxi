@@ -25,6 +25,55 @@ services:
     restart: unless-stopped
     volumes:
       - ./:/var/www/html                  # тот же код
+    environment:
+      # Override production .env DB settings for local Docker runtime
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: "http://localhost:8080"
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: vtb_taxi
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+      REDIS_HOST: redis
+      # Avoid Windows bind-mount permission issues for file sessions on local Docker
+      SESSION_DRIVER: cookie
+      SESSION_DOMAIN: ""
+      SESSION_SECURE_COOKIE: "false"
+      CACHE_STORE: array
+    networks:
+      - vtb-taxi-network
+
+  # Laravel Scheduler (runs scheduled commands, e.g., planned requests generation at 12:00)
+  scheduler:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: vtb-taxi-scheduler
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+    command: ["php", "artisan", "schedule:work"]
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: "http://localhost:8080"
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: vtb_taxi
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+      REDIS_HOST: redis
+      SESSION_DRIVER: cookie
+      SESSION_DOMAIN: ""
+      SESSION_SECURE_COOKIE: "false"
+      CACHE_STORE: array
+      APP_TIMEZONE: "Asia/Novosibirsk"
+    depends_on:
+      - php
+      - mysql
     networks:
       - vtb-taxi-network
 
