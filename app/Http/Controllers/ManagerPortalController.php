@@ -364,6 +364,7 @@ class ManagerPortalController extends Controller
     {
         $data = $request->validated();
         $addressChanged = $data['address_raw'] !== $finalRequest->address_raw;
+        $data['phone'] = $this->normalizePhone($data['phone'] ?? '');
 
         $oldValues = [
             'full_name' => $finalRequest->full_name,
@@ -594,6 +595,17 @@ class ManagerPortalController extends Controller
         return redirect()
             ->back()
             ->with('status', 'Приглашение удалено.');
+    }
+
+    private function normalizePhone(string $phone): string
+    {
+        $value = trim($phone);
+
+        if (str_starts_with($value, '+7')) {
+            return '8'.substr($value, 2);
+        }
+
+        return $value;
     }
 
     private function isNotAdmin(?\App\Models\User $user): bool

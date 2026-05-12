@@ -1,0 +1,164 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "full_name": "Иванов Александр Сергеевич",
+      "employee_number": "ТБ001",
+      "phone": "+79538241270",
+      "password": "telegram_auth",
+      "role": 3,
+      "is_active": 1,
+      "telegram_id": "951153588",
+      "do_not_disturb_until": null,
+      "remember_token": null,
+      "created_at": "2026-05-07 14:43:32",
+      "updated_at": "2026-05-08 02:46:19",
+      "deleted_at": null
+    },
+    {
+      "id": 2,
+      "full_name": "Петрова Мария Ивановна",
+      "employee_number": "ТБ002",
+      "phone": "+79527395759",
+      "password": "telegram_auth",
+      "role": 2,
+      "is_active": 1,
+      "telegram_id": "5520998404",
+      "do_not_disturb_until": null,
+      "remember_token": null,
+      "created_at": "2026-05-07 14:43:32",
+      "updated_at": "2026-05-08 02:48:38",
+      "deleted_at": null
+    },
+    {
+      "id": 3,
+      "full_name": "Сидоров Павел Викторович",
+      "employee_number": "ТБ003",
+      "phone": null,
+      "password": "telegram_auth",
+      "role": 1,
+      "is_active": 1,
+      "telegram_id": null,
+      "do_not_disturb_until": null,
+      "remember_token": null,
+      "created_at": "2026-05-07 14:43:32",
+      "updated_at": "2026-05-08 02:46:19",
+      "deleted_at": null
+    }
+  ],
+  "user_addresses": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "address": "Россия, Новосибирск, улица Фёдора Ивачёва, 20",
+      "created_at": "2026-05-07 14:43:32",
+      "updated_at": "2026-05-07 14:43:32"
+    },
+    {
+      "id": 2,
+      "user_id": 1,
+      "address": "Россия, Новосибирск, Красный проспект, 75",
+      "created_at": "2026-05-07 14:43:32",
+      "updated_at": "2026-05-08 02:46:19"
+    },
+    {
+      "id": 3,
+      "user_id": 2,
+      "address": "Россия, Новосибирск, Красный проспект, 75",
+      "created_at": "2026-05-08 02:47:46",
+      "updated_at": "2026-05-08 02:47:46"
+    },
+    {
+      "id": 4,
+      "user_id": 2,
+      "address": "Россия, Новосибирск, Красный проспект, 76",
+      "created_at": "2026-05-08 02:48:38",
+      "updated_at": "2026-05-08 02:48:38"
+    }
+  ],
+  "temp_requests": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "full_name": "Иванов Александр Сергеевич",
+      "phone": "+79538241270",
+      "date_time": "2026-04-06 23:12:00",
+      "address_raw": "Россия, Новосибирск, улица Фёдора Ивачёва, 20",
+      "address_norm": null,
+      "lat": null,
+      "lon": null,
+      "status": 2,
+      "reviewed_by": null,
+      "reviewed_at": "2026-04-06 02:47:32",
+      "manager_comment": null,
+      "rejection_reason": null,
+      "cancelled_at": null,
+      "created_at": "2026-04-06 02:47:32",
+      "updated_at": "2026-04-06 02:47:32",
+      "deleted_at": null
+    }
+  ],
+  "requests": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "temp_request_id": 1,
+      "approved_at": "2026-04-06 02:47:32",
+      "full_name": "Иванов Александр Сергеевич",
+      "phone": "+79538241270",
+      "date_time": "2026-04-06 23:12:00",
+      "address_raw": "Россия, Новосибирск, улица Фёдора Ивачёва, 20",
+      "address_norm": null,
+      "lat": null,
+      "lon": null,
+      "status": 2,
+      "approved_by": null,
+      "manager_comment": null,
+      "rejection_reason": null,
+      "cancelled_at": null,
+      "updated_at": "2026-05-07 14:43:32",
+      "deleted_at": null,
+      "exported_at": null,
+      "created_at": "2026-05-07 14:43:32"
+    }
+  ],
+  "notifications": [],
+  "audit_logs": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "action": "temp_request_created",
+      "entity_type": "TempRequest",
+      "entity_id": 1,
+      "old_values": null,
+      "new_values": {
+        "phone": "+79538241270",
+        "date_time": "2026-04-06 23:12:00",
+        "full_name": "Иванов Александр Сергеевич",
+        "address_raw": "Россия, Новосибирск, улица Фёдора Ивачёва, 20"
+      },
+      "ip_address": "telegram_bot",
+      "user_agent": "Telegram Bot",
+      "created_at": "2026-05-07 14:43:32"
+    },
+    {
+      "id": 2,
+      "user_id": null,
+      "action": "final_request_created",
+      "entity_type": "Request",
+      "entity_id": 1,
+      "old_values": null,
+      "new_values": {
+        "phone": "+79538241270",
+        "date_time": "2026-04-06 23:12:00",
+        "full_name": "Иванов Александр Сергеевич",
+        "address_raw": "Россия, Новосибирск, улица Фёдора Ивачёва, 20",
+        "temp_request_id": 1
+      },
+      "ip_address": "telegram_bot",
+      "user_agent": "Telegram Bot",
+      "created_at": "2026-05-07 14:43:32"
+    }
+  ],
+  "invitations": []
+}

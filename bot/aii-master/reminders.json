@@ -1,0 +1,14 @@
+{
+  "ТБ001": {
+    "time": "17:30",
+    "telegram_id": "951153588",
+    "active": true,
+    "schedule_type": "custom",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu"
+    ]
+  }
+}

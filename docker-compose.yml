@@ -117,9 +117,30 @@ services:
     networks:
       - vtb-taxi-network
 
+  # Telegram Bot (Python/aiogram) — работает через Laravel API
+  bot:
+    build:
+      context: .
+      dockerfile: docker/bot/Dockerfile
+    container_name: vtb-taxi-bot
+    restart: unless-stopped
+    env_file:
+      - ./bot/aii-master/.env
+    environment:
+      LARAVEL_API_URL: "http://webserver"
+      WEBAPP_HOST: "0.0.0.0"
+      WEBAPP_PORT: "8088"
+    volumes:
+      - bot_data:/app
+    depends_on:
+      - webserver
+    networks:
+      - vtb-taxi-network
+
 networks:
   vtb-taxi-network:
     driver: bridge
 
 volumes:
   db_data:
+  bot_data:

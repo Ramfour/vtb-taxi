@@ -6,6 +6,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\EmployeePortalController;
 use App\Http\Controllers\EmployeeAddressController;
 use App\Http\Controllers\EmployeeCommuteScheduleController;
+use App\Http\Controllers\DebugController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagerInvitationController;
 use App\Http\Controllers\ManagerPortalController;
@@ -59,5 +60,9 @@ Route::middleware('guest')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/audit', [ManagerPortalController::class, 'audit'])->name('admin.audit.index');
         Route::get('/admin/audit/export', [ManagerPortalController::class, 'exportAuditCsv'])->name('admin.audit.export');
+        Route::get('/admin/debug', [DebugController::class, 'index'])->name('admin.debug.index');
+        Route::post('/admin/debug/employees', [DebugController::class, 'generateEmployees'])->name('admin.debug.generate-employees');
+        Route::post('/admin/debug/requests', [DebugController::class, 'generateRequests'])->name('admin.debug.generate-requests');
+        Route::post('/admin/debug/clear-requests', [DebugController::class, 'clearTempRequests'])->name('admin.debug.clear-requests');
     });
 });

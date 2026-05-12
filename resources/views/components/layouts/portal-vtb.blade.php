@@ -99,6 +99,7 @@
                             <a href="{{ route('manager.employees.index') }}" class="{{ $currentRoute === 'manager.employees.index' ? 'is-active' : '' }}">Сотрудники</a>
                             @if ($currentUser->role->name === 'Admin')
                                 <a href="{{ route('admin.audit.index') }}" class="{{ $currentRoute === 'admin.audit.index' ? 'is-active' : '' }}">Аудит</a>
+                                <a href="{{ route('admin.debug.index') }}" class="{{ $currentRoute === 'admin.debug.index' ? 'is-active' : '' }}">Отладка</a>
                             @endif
                         @endif
                     @endif
