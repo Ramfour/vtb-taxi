@@ -272,7 +272,7 @@ class RequestWorkflowService
                 'full_name' => $this->formatFullNameForExport($request->full_name),
                 'address' => $this->formatAddressForExport($request->address_norm ?? $request->address_raw),
                 'address_raw' => $request->address_raw ?? '',
-                'phone' => $request->phone,
+                'phone' => $this->normalizeEmployeePhone($request->phone ?? ''),
                 'is_outside_night' => $isOutsideNight,
             ];
         });

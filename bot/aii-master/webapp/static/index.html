@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Корпоративное такси</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>Корпоративное такси</h1>
+          <p id="subtitle">Загрузка...</p>
+        </div>
+        <button class="icon-button" id="refreshBtn" type="button" title="Обновить">↻</button>
+      </header>
+
+      <section id="status" class="status hidden"></section>
+      <section id="content"></section>
+    </main>
+
+    <script src="/assets/app.js"></script>
+  </body>
+</html>

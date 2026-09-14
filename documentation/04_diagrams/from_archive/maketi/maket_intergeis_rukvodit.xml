@@ -1,0 +1,106 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
+  <diagram id="manager_ui_mockup" name="UI Mockup — Руководитель">
+    <mxGraphModel dx="1209" dy="719" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="canvas" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#D0D0D0;fillColor=#FFFFFF;" value="" vertex="1">
+          <mxGeometry height="660" width="890" x="230" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="header" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#1F2937;fillColor=#111827;" value="" vertex="1">
+          <mxGeometry height="60" width="890" x="230" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="header_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontColor=#FFFFFF;" value="Корпоративное такси (Портал руководителя)" vertex="1">
+          <mxGeometry height="40" width="520" x="230" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header_user" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#E5E7EB;" value="Пользователь: Руководитель&#xa;Выход" vertex="1">
+          <mxGeometry height="44" width="220" x="880" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sidebar" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#F9FAFB;" value="" vertex="1">
+          <mxGeometry height="596" width="220" x="230" y="84" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#111827;fontStyle=1;" value="Навигация" vertex="1">
+          <mxGeometry height="24" width="180" x="250" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_queue" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2563EB;fillColor=#DBEAFE;align=left;verticalAlign=middle;fontSize=12;fontColor=#1E3A8A;" value="Очередь (temp_requests)" vertex="1">
+          <mxGeometry height="34" width="180" x="250" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_final" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#FFFFFF;align=left;verticalAlign=middle;fontSize=12;fontColor=#111827;" value="Финальный список (requests)" vertex="1">
+          <mxGeometry height="34" width="180" x="250" y="172" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_export" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#FFFFFF;align=left;verticalAlign=middle;fontSize=12;fontColor=#111827;" value="Экспорт CSV" vertex="1">
+          <mxGeometry height="34" width="180" x="250" y="214" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_reports" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#FFFFFF;align=left;verticalAlign=middle;fontSize=12;fontColor=#111827;" value="Аудит (если доступен)" vertex="1">
+          <mxGeometry height="34" width="180" x="250" y="256" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_users" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#FFFFFF;align=left;verticalAlign=middle;fontSize=12;fontColor=#6B7280;" value="Сотрудники/руководители (admin)" vertex="1">
+          <mxGeometry height="34" width="180" x="250" y="298" as="geometry" />
+        </mxCell>
+        <mxCell id="main" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#FFFFFF;" value="" vertex="1">
+          <mxGeometry height="560" width="670" x="450" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="main_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=18;fontColor=#111827;fontStyle=1;" value="Очередь заявок на согласовании" vertex="1">
+          <mxGeometry height="28" width="540" x="455" y="92" as="geometry" />
+        </mxCell>
+        <mxCell id="filters_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#F9FAFB;" value="" vertex="1">
+          <mxGeometry height="90" width="370" x="450" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="filter_from" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#D1D5DB;fillColor=#FFFFFF;align=left;verticalAlign=middle;fontSize=12;" value="Дата/время с" vertex="1">
+          <mxGeometry height="28" width="160" x="470" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="filter_to" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#D1D5DB;fillColor=#FFFFFF;align=left;verticalAlign=middle;fontSize=12;" value="Дата/время по" vertex="1">
+          <mxGeometry height="28" width="160" x="645" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="filter_search" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#D1D5DB;fillColor=#FFFFFF;align=left;verticalAlign=middle;fontSize=12;" value="Поиск: табельный/ФИО/телефон" vertex="1">
+          <mxGeometry height="28" width="135" x="470" y="186" as="geometry" />
+        </mxCell>
+        <mxCell id="filter_apply" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#1D4ED8;fillColor=#2563EB;align=center;verticalAlign=middle;fontSize=12;fontColor=#FFFFFF;" value="Применить" vertex="1">
+          <mxGeometry height="28" width="90" x="615" y="186" as="geometry" />
+        </mxCell>
+        <mxCell id="filter_reset" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#D1D5DB;fillColor=#FFFFFF;align=center;verticalAlign=middle;fontSize=12;fontColor=#111827;" value="Сброс" vertex="1">
+          <mxGeometry height="28" width="90" x="715" y="186" as="geometry" />
+        </mxCell>
+        <mxCell id="bulk_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#FFFFFF;" value="" vertex="1">
+          <mxGeometry height="70" width="290" x="830" y="129" as="geometry" />
+        </mxCell>
+        <mxCell id="bulk_approve" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#047857;fillColor=#10B981;align=center;verticalAlign=middle;fontSize=12;fontColor=#FFFFFF;" value="Одобрить выбранные" vertex="1">
+          <mxGeometry height="28" width="260" x="845" y="136" as="geometry" />
+        </mxCell>
+        <mxCell id="bulk_reject" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#B91C1C;fillColor=#EF4444;align=center;verticalAlign=middle;fontSize=12;fontColor=#FFFFFF;" value="Отклонить выбранные" vertex="1">
+          <mxGeometry height="28" width="260" x="845" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="table_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#FFFFFF;" value="" vertex="1">
+          <mxGeometry height="340" width="310" x="510" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="table_header" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#111827;fontStyle=1;" value="Список заявок (таблица)" vertex="1">
+          <mxGeometry height="20" width="300" x="510" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="table_row1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#FFFFFF;align=left;verticalAlign=top;fontSize=11;fontColor=#6B7280;" value="... строки заявок ..." vertex="1">
+          <mxGeometry height="308" width="275" x="530" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="preview_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#E5E7EB;fillColor=#FFFFFF;" value="" vertex="1">
+          <mxGeometry height="440" width="290" x="830" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="preview_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#111827;fontStyle=1;" value="Предпросмотр заявки" vertex="1">
+          <mxGeometry height="20" width="260" x="845" y="238" as="geometry" />
+        </mxCell>
+        <mxCell id="preview_fields" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#D1D5DB;fillColor=#F9FAFB;align=center;verticalAlign=top;fontSize=12;fontColor=#111827;" value="ID: 123&lt;br&gt;Сотрудник: Иванов И.И.&lt;br&gt;Телефон: +7...&lt;br&gt;Адрес: ...&lt;br&gt;Дата/время: ...&lt;br&gt;Статус: Pending&lt;br&gt;&lt;br&gt;Комментарий руководителя:" vertex="1">
+          <mxGeometry height="204" width="255" x="850" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="preview_comment" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#D1D5DB;fillColor=#FFFFFF;align=left;verticalAlign=top;fontSize=12;fontColor=#6B7280;" value="(поле ввода текста)" vertex="1">
+          <mxGeometry height="90" width="260" x="845" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="btn_approve" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#047857;fillColor=#10B981;align=center;verticalAlign=middle;fontSize=12;fontColor=#FFFFFF;" value="Одобрить" vertex="1">
+          <mxGeometry height="34" width="125" x="845" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="btn_reject" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#B91C1C;fillColor=#EF4444;align=center;verticalAlign=middle;fontSize=12;fontColor=#FFFFFF;" value="Отклонить" vertex="1">
+          <mxGeometry height="34" width="125" x="980" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="btn_export" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#374151;fillColor=#111827;align=center;verticalAlign=middle;fontSize=12;fontColor=#FFFFFF;" value="Сформировать CSV" vertex="1">
+          <mxGeometry height="34" width="260" x="845" y="630" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

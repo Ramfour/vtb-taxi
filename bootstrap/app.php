@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\BotAuth;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\ResolveActingUser;
 use Illuminate\Foundation\Application;
@@ -16,7 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'resolve.actor' => ResolveActingUser::class,
-            'role' => EnsureUserHasRole::class,
+            'role'          => EnsureUserHasRole::class,
+            'bot.auth'      => BotAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

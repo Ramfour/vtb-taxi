@@ -1,58 +1,218 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Корпоративное такси — ВТБ Новосибирск
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Система автоматизации заказа корпоративного такси для сотрудников отдела дистанционного клиентского обслуживания ПАО «ВТБ» (г. Новосибирск).
 
-## About Laravel
+Дипломная работа. Веб-часть (PHP/Laravel + фронтенд) и аналитика — авторская разработка. Telegram-бот (`bot/`) — отдельный сервис, разработан коллегой.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Что делает система
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Сотрудники подают заявки на корпоративное такси через веб-портал или Telegram-бот. Руководитель согласует заявки, администратор управляет пользователями и выгружает данные для перевозчика в CSV.
 
-## Learning Laravel
+**Роли:**
+- **Employee (Сотрудник)** — создаёт и отменяет свои заявки
+- **Manager (Руководитель)** — согласует/отклоняет заявки, переносит одобренные в финальный слой, выгружает CSV
+- **Admin (Администратор)** — все возможности руководителя + управление пользователями, приглашениями, аудит
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Архитектура
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
+[Браузер]        → HTTPS → [Laravel (PHP)]  → [MySQL]
+[Telegram-бот]   → HTTPS → [Laravel API]    → [MySQL]
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+- **Модульный монолит** на Laravel 13.x
+- **Двухслойная обработка заявок**: буфер (`temp_requests`) → финальный слой (`requests`)
+- **Единая БД** для обоих интерфейсов — бот работает через HTTP API, не напрямую с MySQL
+- **Аудит** всех значимых действий в `audit_logs`
+- **Авто-очистка** старых данных через Laravel Scheduler (`php artisan taxi:cleanup`)
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Стек технологий
 
-## Code of Conduct
+| Компонент | Технологии |
+|---|---|
+| Backend | PHP 8.3+, Laravel 13.x, Eloquent ORM |
+| Frontend | Blade, Tailwind CSS v4, Vite |
+| База данных | MySQL 8.4 |
+| Telegram-бот | Python 3.11+, aiogram 3.x, httpx |
+| Инфраструктура | Docker, Nginx, Laravel Scheduler |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Структура репозитория
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+/
+├── app/                    # PHP-код: контроллеры, модели, сервисы
+│   ├── Http/               # Контроллеры и middleware
+│   ├── Models/             # Eloquent-модели
+│   └── Services/           # RequestWorkflowService, AuditLogger
+├── bot/aii-master/         # Telegram-бот (Python/aiogram) — отдельный сервис
+├── config/                 # Конфигурация Laravel (taxi.php и др.)
+├── database/               # Миграции и сидеры
+├── documentation/          # Техническая документация и материалы диплома
+├── docker/                 # Dockerfile-ы для nginx, php-fpm, бота
+├── public/                 # Точка входа (index.php), собранные ассеты
+├── resources/              # Blade-шаблоны, CSS, JS (исходники)
+├── routes/                 # web.php, api.php, console.php
+├── docker-compose.yml      # Оркестрация для локальной разработки
+└── .env.example            # Шаблон переменных окружения
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Быстрый старт (Docker)
+
+### 1. Клонировать и настроить окружение
+
+```bash
+git clone <url>
+cd vtb-taxi.local
+
+# Laravel
+cp .env.example .env
+
+# Бот
+cp bot/aii-master/.env.example bot/aii-master/.env
+```
+
+### 2. Заполнить `.env`
+
+```env
+DB_PASSWORD=ваш_пароль
+
+# Генерируется один раз после шага 3:
+BOT_API_SECRET=
+```
+
+Заполнить `bot/aii-master/.env`:
+
+```env
+BOT_TOKEN=токен_из_BotFather
+BOT_API_SECRET=тот_же_секрет_что_в_laravel
+ADMIN_IDS=ваш_telegram_id
+```
+
+### 3. Собрать и запустить
+
+```bash
+docker compose up -d --build
+
+# Миграции (один раз)
+docker compose exec php php artisan migrate --force
+
+# Сгенерировать APP_KEY
+docker compose exec php php artisan key:generate
+
+# Сгенерировать BOT_API_SECRET и вставить в оба .env
+docker compose run --rm php php artisan tinker --execute="echo Str::random(64);"
+```
+
+### 4. Проверить
+
+```bash
+docker compose ps
+# Все сервисы должны быть Up
+
+docker compose logs -f bot
+# Должна быть строка: "Laravel API mode: http://webserver — JSON fallback disabled."
+```
+
+Веб-интерфейс доступен на `http://localhost` (или настроенном домене).
+
+---
+
+## Запуск без Docker (shared/VPS хостинг)
+
+```bash
+composer install --no-dev --optimize-autoloader
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --force
+npm ci && npm run build
+```
+
+Настроить cron для планировщика (раз в минуту):
+
+```
+* * * * * cd /path/to/project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+Бот запускается отдельно:
+
+```bash
+cd bot/aii-master
+pip install -r requirements.txt
+python bot.py
+```
+
+В `.env` бота указать внешний URL Laravel:
+
+```env
+LARAVEL_API_URL=https://vtb-taxi.ru
+```
+
+---
+
+## Интеграция бота с Laravel
+
+Бот обращается к Laravel через REST API (`/api/bot/*`). Каждый запрос содержит:
+- `X-Bot-Token` — общий секрет (`BOT_API_SECRET`)
+- `X-Telegram-Id` — Telegram ID пользователя
+
+Laravel выполняет всю бизнес-логику и пишет в MySQL. Бот не имеет собственной базы данных.
+
+Подробнее: [`documentation/02_technical_docs/07_bot_api_integration.md`](documentation/02_technical_docs/07_bot_api_integration.md)
+
+---
+
+## Переменные окружения
+
+| Переменная | Описание |
+|---|---|
+| `APP_KEY` | Ключ шифрования Laravel (генерируется `artisan key:generate`) |
+| `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` | Подключение к MySQL |
+| `BOT_API_SECRET` | Общий секрет для аутентификации запросов от бота |
+| `TAXI_TEMP_SOFT_DELETED_DAYS` | Хранение удалённых буферных заявок (дней, по умолчанию 7) |
+| `TAXI_AUDIT_DAYS` | Хранение записей аудита (дней, по умолчанию 90) |
+
+Полный список — в `.env.example`.
+
+---
+
+## Документация
+
+Техническая документация находится в папке [`documentation/`](documentation/):
+
+- [`02_technical_docs/01_architecture.md`](documentation/02_technical_docs/01_architecture.md) — архитектура системы
+- [`02_technical_docs/02_database.md`](documentation/02_technical_docs/02_database.md) — структура базы данных
+- [`02_technical_docs/03_tech_stack.md`](documentation/02_technical_docs/03_tech_stack.md) — стек технологий
+- [`02_technical_docs/07_bot_api_integration.md`](documentation/02_technical_docs/07_bot_api_integration.md) — интеграция бота
+- [`02_technical_docs/05_security.md`](documentation/02_technical_docs/05_security.md) — безопасность
+
+---
+
+## Что попадает в продакшн-репозиторий
+
+В репозиторий включается:
+
+- Весь PHP/Laravel код (`app/`, `config/`, `database/`, `routes/`, `resources/`, `public/`)
+- Бот (`bot/aii-master/`) — весь исходный код Python
+- Docker-файлы и конфиги (`docker/`, `docker-compose.yml`)
+- Документация (`documentation/`)
+- Шаблоны окружения (`.env.example`, `bot/aii-master/.env.example`)
+
+**Не попадает в репозиторий** (исключено через `.gitignore`):
+
+- `.env` — секреты и ключи
+- `vendor/`, `node_modules/` — зависимости (устанавливаются на месте)
+- `public/build/` — собранные ассеты (собираются на месте)
+- `storage/logs/`, `storage/app/` — рантайм-данные
+- `*.sql`, `*.dump` — дампы базы данных
+- `bot/aii-master/.venv/`, `bot/aii-master/__pycache__/` — Python-окружение и кеш
+- `site/`, `sql/` — локальные снапшоты с хостинга

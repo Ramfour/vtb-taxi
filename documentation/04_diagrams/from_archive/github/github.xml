@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36" version="28.2.8">
+  <diagram name="Компонентная диаграмма GitHub Workflow" id="WCXjsb0WvJ-0s_3rWWz5">
+    <mxGraphModel dx="1042" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Vw86Ua39bOn2UztemX90-1" value="GitHub Repository" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="310" width="350" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-2" value="Branch Management" style="shape=component;whiteSpace=wrap;html=1;" vertex="1" parent="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry x="40" y="40" width="270" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-3" value="&lt;b&gt;main&lt;/b&gt;&lt;br&gt;(production)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry x="40" y="140" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-4" value="&lt;b&gt;develop&lt;/b&gt;&lt;br&gt;(integration)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry x="40" y="200" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-5" value="&lt;b&gt;feature/*&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry x="40" y="260" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-6" value="Branch Protection" style="shape=component;whiteSpace=wrap;html=1;" vertex="1" parent="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry x="60" y="395" width="270" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-7" value="GitHub Actions" style="shape=component;whiteSpace=wrap;html=1;" vertex="1" parent="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry y="510" width="270" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-8" value="commit()" style="shape=port;whiteSpace=wrap;html=1;size=6;perimeter=portPerimeter;align=center;verticalAlign=middle;spacingTop=-2;" vertex="1" parent="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry x="330" y="315" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-9" value="createPR()" style="shape=port;whiteSpace=wrap;html=1;size=6;perimeter=portPerimeter;align=center;verticalAlign=middle;spacingTop=-2;" vertex="1" parent="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry x="330" y="375" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-10" value="merge()" style="shape=port;whiteSpace=wrap;html=1;size=6;perimeter=portPerimeter;align=center;verticalAlign=middle;spacingTop=-2;" vertex="1" parent="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry x="330" y="435" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-11" value="Developer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="490" width="60" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-12" value="Code Review System" style="shape=component;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="390" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-13" value="CI/CD Pipeline" style="shape=component;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="510" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-14" value="Quality Gates" style="shape=component;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="760" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-15" value="" style="shape=interface;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;arcSize=50;strokeWidth=1;fontSize=12;spacingTop=-6;" vertex="1" parent="1">
+          <mxGeometry x="510" y="555" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-18" value="«use»" style="endArrow=open;dashed=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-11" target="Vw86Ua39bOn2UztemX90-15">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="510" as="sourcePoint" />
+            <mxPoint x="530" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-19" value="" style="endArrow=open;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-15" target="Vw86Ua39bOn2UztemX90-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="550" y="525" as="sourcePoint" />
+            <mxPoint x="640" y="525" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-20" value="«delegate»" style="endArrow=open;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-1" target="Vw86Ua39bOn2UztemX90-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="990" y="430" as="sourcePoint" />
+            <mxPoint x="1040" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-21" value="«delegate»" style="endArrow=open;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-1" target="Vw86Ua39bOn2UztemX90-13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="990" y="550" as="sourcePoint" />
+            <mxPoint x="1040" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-22" value="«delegate»" style="endArrow=open;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Vw86Ua39bOn2UztemX90-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1000" y="760" as="sourcePoint" />
+            <mxPoint x="1040" y="670" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-23" value="" style="endArrow=open;html=1;rounded=0;exitX=0;exitY=0.7;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-2" target="Vw86Ua39bOn2UztemX90-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="775" y="350" as="sourcePoint" />
+            <mxPoint x="775" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-24" value="" style="endArrow=open;html=1;rounded=0;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-2" target="Vw86Ua39bOn2UztemX90-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="775" y="350" as="sourcePoint" />
+            <mxPoint x="775" y="410" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="660" y="374" />
+              <mxPoint x="660" y="500" />
+              <mxPoint x="740" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-25" value="" style="endArrow=open;html=1;rounded=0;exitX=0.058;exitY=0.015;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-2" target="Vw86Ua39bOn2UztemX90-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="775" y="350" as="sourcePoint" />
+            <mxPoint x="775" y="470" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="650" y="351" />
+              <mxPoint x="650" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-26" value="«dependency»" style="endArrow=open;dashed=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.873;entryY=0.028;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;entryPerimeter=0;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-3" target="Vw86Ua39bOn2UztemX90-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="370" as="sourcePoint" />
+            <mxPoint x="740" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-27" value="«dependency»" style="endArrow=open;dashed=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-4" target="Vw86Ua39bOn2UztemX90-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="410" as="sourcePoint" />
+            <mxPoint x="740" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-28" value="«dependency»" style="endArrow=open;dashed=1;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.138;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Vw86Ua39bOn2UztemX90-5" target="Vw86Ua39bOn2UztemX90-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="470" as="sourcePoint" />
+            <mxPoint x="740" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-29" value="&lt;b&gt;UML Component Diagram&lt;/b&gt;&lt;br&gt;GitHub Workflow Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="290" y="240" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-30" value="&lt;h3 style=&quot;font: 700 20px / 30px quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, Oxygen, Ubuntu, Cantarell, &amp;quot;Open Sans&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; margin: 32px 0px 16px; color: rgb(15, 17, 21); letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;strong style=&quot;font-weight: inherit;&quot;&gt;&lt;span&gt;Компоненты&lt;/span&gt;&lt;/strong&gt;&lt;span&gt;:&lt;/span&gt;&lt;/h3&gt;&lt;ul style=&quot;margin: 16px 0px; padding-left: 18px; color: rgb(15, 17, 21); font-family: quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, Oxygen, Ubuntu, Cantarell, &amp;quot;Open Sans&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;li&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;code style=&quot;box-sizing: border-box; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: 100%; line-height: 22px; font-optical-sizing: auto; font-size-adjust: none; font-kerning: auto; font-feature-settings: normal; font-variation-settings: normal; font-family: Menlo, Monaco, Consolas, &amp;quot;Cascadia Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;JetBrains Mono&amp;quot;, &amp;quot;Fira Code&amp;quot;, Cousine, &amp;quot;Roboto Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, Courier, sans-serif, system-ui; background-color: rgb(235, 238, 242); border-radius: 6px; align-items: center; padding: 0px 5px; display: inline-flex; font-size: 0.875em !important;&quot;&gt;GitHub Repository&lt;/code&gt;&lt;span&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;- основной компонент&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;margin-top: 6px;&quot;&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;code style=&quot;box-sizing: border-box; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: 100%; line-height: 22px; font-optical-sizing: auto; font-size-adjust: none; font-kerning: auto; font-feature-settings: normal; font-variation-settings: normal; font-family: Menlo, Monaco, Consolas, &amp;quot;Cascadia Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;JetBrains Mono&amp;quot;, &amp;quot;Fira Code&amp;quot;, Cousine, &amp;quot;Roboto Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, Courier, sans-serif, system-ui; background-color: rgb(235, 238, 242); border-radius: 6px; align-items: center; padding: 0px 5px; display: inline-flex; font-size: 0.875em !important;&quot;&gt;Branch Management&lt;/code&gt;&lt;span&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;- управление ветками&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;margin-top: 6px;&quot;&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;code style=&quot;box-sizing: border-box; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: 100%; line-height: 22px; font-optical-sizing: auto; font-size-adjust: none; font-kerning: auto; font-feature-settings: normal; font-variation-settings: normal; font-family: Menlo, Monaco, Consolas, &amp;quot;Cascadia Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;JetBrains Mono&amp;quot;, &amp;quot;Fira Code&amp;quot;, Cousine, &amp;quot;Roboto Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, Courier, sans-serif, system-ui; background-color: rgb(235, 238, 242); border-radius: 6px; align-items: center; padding: 0px 5px; display: inline-flex; font-size: 0.875em !important;&quot;&gt;Branch Protection&lt;/code&gt;&lt;span&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;- правила защиты&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;margin-top: 6px;&quot;&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;code style=&quot;box-sizing: border-box; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: 100%; line-height: 22px; font-optical-sizing: auto; font-size-adjust: none; font-kerning: auto; font-feature-settings: normal; font-variation-settings: normal; font-family: Menlo, Monaco, Consolas, &amp;quot;Cascadia Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;JetBrains Mono&amp;quot;, &amp;quot;Fira Code&amp;quot;, Cousine, &amp;quot;Roboto Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, Courier, sans-serif, system-ui; background-color: rgb(235, 238, 242); border-radius: 6px; align-items: center; padding: 0px 5px; display: inline-flex; font-size: 0.875em !important;&quot;&gt;GitHub Actions&lt;/code&gt;&lt;span&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;- автоматизация&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;margin-top: 6px;&quot;&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span&gt;Внешние системы: Code Review, CI/CD, Quality Gates&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="690" width="430" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-31" value="&lt;h3 style=&quot;font: 700 20px / 30px quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, Oxygen, Ubuntu, Cantarell, &amp;quot;Open Sans&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; margin: 32px 0px 16px; color: rgb(15, 17, 21); letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;strong style=&quot;font-weight: inherit;&quot;&gt;&lt;span&gt;Интерфейсы&lt;/span&gt;&lt;/strong&gt;&lt;span&gt;:&lt;/span&gt;&lt;/h3&gt;&lt;ul style=&quot;margin: 16px 0px; padding-left: 18px; color: rgb(15, 17, 21); font-family: quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, Oxygen, Ubuntu, Cantarell, &amp;quot;Open Sans&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;li&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span&gt;Круги на границе компонента&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;margin-top: 6px;&quot;&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span&gt;Порти (ports) с методами:&lt;span&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;code style=&quot;box-sizing: border-box; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: 100%; line-height: 22px; font-optical-sizing: auto; font-size-adjust: none; font-kerning: auto; font-feature-settings: normal; font-variation-settings: normal; font-family: Menlo, Monaco, Consolas, &amp;quot;Cascadia Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;JetBrains Mono&amp;quot;, &amp;quot;Fira Code&amp;quot;, Cousine, &amp;quot;Roboto Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, Courier, sans-serif, system-ui; background-color: rgb(235, 238, 242); border-radius: 6px; align-items: center; padding: 0px 5px; display: inline-flex; font-size: 0.875em !important;&quot;&gt;commit()&lt;/code&gt;&lt;span&gt;,&lt;span&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;code style=&quot;box-sizing: border-box; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: 100%; line-height: 22px; font-optical-sizing: auto; font-size-adjust: none; font-kerning: auto; font-feature-settings: normal; font-variation-settings: normal; font-family: Menlo, Monaco, Consolas, &amp;quot;Cascadia Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;JetBrains Mono&amp;quot;, &amp;quot;Fira Code&amp;quot;, Cousine, &amp;quot;Roboto Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, Courier, sans-serif, system-ui; background-color: rgb(235, 238, 242); border-radius: 6px; align-items: center; padding: 0px 5px; display: inline-flex; font-size: 0.875em !important;&quot;&gt;createPR()&lt;/code&gt;&lt;span&gt;,&lt;span&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;code style=&quot;box-sizing: border-box; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: 100%; line-height: 22px; font-optical-sizing: auto; font-size-adjust: none; font-kerning: auto; font-feature-settings: normal; font-variation-settings: normal; font-family: Menlo, Monaco, Consolas, &amp;quot;Cascadia Mono&amp;quot;, &amp;quot;Ubuntu Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;JetBrains Mono&amp;quot;, &amp;quot;Fira Code&amp;quot;, Cousine, &amp;quot;Roboto Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, Courier, sans-serif, system-ui; background-color: rgb(235, 238, 242); border-radius: 6px; align-items: center; padding: 0px 5px; display: inline-flex; font-size: 0.875em !important;&quot;&gt;merge()&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="930" width="480" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw86Ua39bOn2UztemX90-32" value="&lt;h3 style=&quot;font: 700 20px / 30px quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, Oxygen, Ubuntu, Cantarell, &amp;quot;Open Sans&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; margin: 32px 0px 16px; color: rgb(15, 17, 21); letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;strong style=&quot;font-weight: inherit;&quot;&gt;&lt;span&gt;Связи&lt;/span&gt;&lt;/strong&gt;&lt;span&gt;:&lt;/span&gt;&lt;/h3&gt;&lt;ul style=&quot;margin: 16px 0px; padding-left: 18px; color: rgb(15, 17, 21); font-family: quote-cjk-patch, Inter, system-ui, -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, Oxygen, Ubuntu, Cantarell, &amp;quot;Open Sans&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;li&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;strong style=&quot;font-weight: 600;&quot;&gt;&lt;span&gt;«use»&lt;/span&gt;&lt;/strong&gt;&lt;span&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;- использование интерфейсов&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;margin-top: 6px;&quot;&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;strong style=&quot;font-weight: 600;&quot;&gt;&lt;span&gt;«delegate»&lt;/span&gt;&lt;/strong&gt;&lt;span&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;- делегирование ответственности&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;margin-top: 6px;&quot;&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;strong style=&quot;font-weight: 600;&quot;&gt;&lt;span&gt;«dependency»&lt;/span&gt;&lt;/strong&gt;&lt;span&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;- зависимости между компонентами&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;margin-top: 6px;&quot;&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span&gt;Сплошные линии - ассоциации&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;margin-top: 6px;&quot;&gt;&lt;p class=&quot;ds-markdown-paragraph&quot; style=&quot;margin-top: 0px !important; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span&gt;Пунктирные линии - зависимости&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="920" width="430" height="190" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

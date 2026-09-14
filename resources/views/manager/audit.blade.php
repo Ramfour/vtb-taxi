@@ -22,7 +22,6 @@
     subheading="История ключевых операций в системе: заявки, пользователи, приглашения, выгрузки."
     :current-user="$currentUser"
 >
-    <div>
     <section class="panel panel--compact" data-reveal>
         <div class="panel-header panel-header--tight">
             <div>
@@ -32,51 +31,59 @@
             </div>
         </div>
 
-        <form method="GET" action="{{ route('admin.audit.index') }}" class="form-grid">
-            <div class="form-grid-two">
-                <div class="field">
-                    <label for="audit_search">Поиск (ФИО, табельный, действие)</label>
-                    <input id="audit_search" class="input" type="text" name="q" value="{{ $search }}" placeholder="Например: одобрено, Иванов, 70320699">
-                </div>
-                <div class="field">
-                    <label for="audit_action">Действие</label>
-                    <select id="audit_action" class="select" name="action">
-                        <option value="">Все действия</option>
-                        @foreach ($actions as $actionItem)
-                            <option value="{{ $actionItem['value'] }}" @selected($actionFilter === $actionItem['value'])>{{ $actionItem['label'] }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-grid-two">
-                <div class="field">
-                    <label for="audit_entity">Сущность</label>
-                    <select id="audit_entity" class="select" name="entity">
-                        <option value="">Все сущности</option>
-                        @foreach ($entities as $entityItem)
-                            <option value="{{ $entityItem }}" @selected($entityFilter === $entityItem)>{{ $entityItem }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="field">
-                    <label>Период</label>
-                    <div class="form-grid-two">
-                        <input class="input" type="datetime-local" name="from" value="{{ $from }}">
-                        <input class="input" type="datetime-local" name="to" value="{{ $to }}">
+        <div class="audit-filters" data-reveal>
+            <form method="GET" action="{{ route('admin.audit.index') }}" class="form-grid form-grid--tight">
+                <div class="form-grid-two">
+                    <div class="field">
+                        <label for="audit_search">Поиск</label>
+                        <input id="audit_search" class="input" type="text" name="q" value="{{ $search }}" placeholder="ФИО, табельный, действие (например: 71234567)">
+                    </div>
+                    <div class="field">
+                        <label for="audit_action">Действие</label>
+                        <select id="audit_action" class="select" name="action">
+                            <option value="">Все</option>
+                            @foreach ($actions as $actionItem)
+                                <option value="{{ $actionItem['value'] }}" @selected($actionFilter === $actionItem['value'])>{{ $actionItem['label'] }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-actions">
-                <button class="button" type="submit">Показать</button>
-                <a class="button-ghost" href="{{ route('admin.audit.index') }}">Сбросить фильтры</a>
-                <a class="button-secondary" href="{{ route('admin.audit.export', request()->query()) }}">Скачать CSV</a>
-            </div>
-        </form>
+                <details class="ops-disclosure ops-disclosure--section audit-advanced" @if($entityFilter || $from || $to) open @endif>
+                    <summary>Доп. фильтры</summary>
+                    <div class="disclosure-body">
+                        <div class="form-grid-two">
+                            <div class="field">
+                                <label for="audit_entity">Сущность</label>
+                                <select id="audit_entity" class="select" name="entity">
+                                    <option value="">Все</option>
+                                    @foreach ($entities as $entityItem)
+                                        <option value="{{ $entityItem }}" @selected($entityFilter === $entityItem)>{{ $entityItem }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Период</label>
+                                <div class="form-grid-two">
+                                    <input class="input" type="datetime-local" name="from" value="{{ $from }}">
+                                    <input class="input" type="datetime-local" name="to" value="{{ $to }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
 
-        <div class="audit-table">
-            <div class="audit-table__head">
+                <div class="form-actions">
+                    <button class="button" type="submit">Показать</button>
+                    <a class="button-ghost" href="{{ route('admin.audit.index') }}">Сбросить</a>
+                    <a class="button-secondary" href="{{ route('admin.audit.export', request()->query()) }}">CSV</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="audit-scroll" aria-label="Прокрутка журнала">
+            <div class="audit-table">
+            <div class="audit-table__head" role="row">
                 <span>Дата</span>
                 <span>Пользователь</span>
                 <span>Действие</span>
@@ -129,6 +136,7 @@
                     Записей аудита пока нет.
                 </div>
             @endforelse
+            </div>
         </div>
 
         @if ($logs->lastPage() > 1)
@@ -150,5 +158,4 @@
             </div>
         @endif
     </section>
-    </div>
 </x-layouts.portal-vtb>

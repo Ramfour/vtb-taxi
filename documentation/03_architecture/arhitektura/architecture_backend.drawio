@@ -1,0 +1,72 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
+  <diagram id="arch-backend" name="Backend">
+    <mxGraphModel dx="1209" dy="1619" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="http" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#3730a3;fontSize=12;" value="HTTP request&#xa;GET/POST" vertex="1">
+          <mxGeometry height="70" width="220" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="routes" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#334155;fontSize=12;" value="Routes&#xa;routes/web.php&#xa;routes/api.php" vertex="1">
+          <mxGeometry height="90" width="220" x="300" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="middleware" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#0e7490;fontSize=12;" value="Middleware&#xa;resolve.actor&#xa;role (EnsureUserHasRole)&#xa;CSRF/session/auth" vertex="1">
+          <mxGeometry height="110" width="260" x="560" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="controllers" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#9a3412;fontSize=12;" value="Controllers&#xa;Employee*&#xa;Manager*&#xa;Auth* / Account" vertex="1">
+          <mxGeometry height="110" width="260" x="860" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fefce8;strokeColor=#a16207;fontSize=12;" value="Service layer&#xa;RequestWorkflowService&#xa;AuditLogger" vertex="1">
+          <mxGeometry height="110" width="220" x="1160" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="models" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontSize=12;" value="Eloquent Models&#xa;User, TempRequest, Request&#xa;Invitation, AuditLog, Notification, UserAddress" vertex="1">
+          <mxGeometry height="110" width="520" x="860" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="db" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#6b21a8;fontSize=12;" value="MySQL&#xa;Tables + indexes + constraints&#xa;Migrations" vertex="1">
+          <mxGeometry height="100" width="260" x="860" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="storage" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#334155;fontSize=12;" value="Storage (filesystem)&#xa;sessions / logs / exports" vertex="1">
+          <mxGeometry height="100" width="240" x="1140" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="views" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#be185d;fontSize=12;" value="Views (Blade)&#xa;resources/views/...&#xa;theme CSS" vertex="1">
+          <mxGeometry height="110" width="480" x="750" y="-120" as="geometry" />
+        </mxCell>
+        <mxCell id="scheduler" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff1f2;strokeColor=#9f1239;fontSize=12;" value="Scheduler&#xa;routes/console.php&#xa;taxi:cleanup daily 03:30" vertex="1">
+          <mxGeometry height="100" width="480" x="320" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="e_http_routes" edge="1" parent="1" source="http" style="endArrow=block;html=1;strokeColor=#3730a3;" target="routes" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routes_mw" edge="1" parent="1" source="routes" style="endArrow=block;html=1;strokeColor=#334155;" target="middleware" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_mw_ctrl" edge="1" parent="1" source="middleware" style="endArrow=block;html=1;strokeColor=#0e7490;" target="controllers" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ctrl_srv" edge="1" parent="1" source="controllers" style="endArrow=block;html=1;strokeColor=#9a3412;" target="service" value="calls">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_srv_models" edge="1" parent="1" source="service" style="endArrow=block;html=1;strokeColor=#a16207;" target="models" value="read/write">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_models_db" edge="1" parent="1" source="models" style="endArrow=block;html=1;strokeColor=#6b21a8;" target="db" value="SQL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_models_storage" edge="1" parent="1" source="models" style="endArrow=block;html=1;strokeColor=#334155;dashed=1;" target="storage" value="exports/logs/sessions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ctrl_views" edge="1" parent="1" source="controllers" style="endArrow=block;html=1;strokeColor=#be185d;" target="views" value="render">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sched_srv" edge="1" parent="1" source="scheduler" style="endArrow=block;html=1;strokeColor=#9f1239;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="service" value="artisan">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="980" y="250" />
+              <mxPoint x="980" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

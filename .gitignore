@@ -1,8 +1,13 @@
 *.log
+*.wav
+*.mp3
+*.mp4
+*.avi
 .DS_Store
 .env
 .env.*
 !.env.example
+!bot/aii-master/.env.example
 .env.backup
 .env.production
 .phpactor.json
@@ -13,6 +18,7 @@
 /.phpunit.cache
 /.vscode
 /.zed
+bot/aii-master/.idea/
 /auth.json
 /node_modules
 /public/build
@@ -32,7 +38,9 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
-_about
+
+# IDE workspace files
+*.code-workspace
 
 # Local overrides & secrets
 docker-compose.override.yml
@@ -53,3 +61,38 @@ docker-compose.override.yml
 # Cache artifacts
 /bootstrap/cache/**
 !/bootstrap/cache/.gitignore
+
+# Local exports/snapshots (from hosting panels, etc.)
+/site/
+/sql/
+/_about/
+/_about/site_snapshot/
+/_about/site_import_backup_*/
+/_about/.$*.bkp
+
+# Reference materials (downloaded pages, binary assets)
+/референс/
+
+# Artifacts
+tail
+
+# Local hosting panel data
+/vtb-taxi.ru/
+/.osp/
+/C/
+
+# Bot runtime data (JSON fallback storage — not needed in prod)
+bot/aii-master/employees.json
+bot/aii-master/users.json
+bot/aii-master/contacts.json
+bot/aii-master/orders.json
+bot/aii-master/reminders.json
+bot/aii-master/managers.json
+bot/aii-master/employee_roles.json
+bot/aii-master/database.json
+bot/aii-master/orders_export_*.json
+bot/aii-master/__pycache__/
+bot/aii-master/**/__pycache__/
+bot/aii-master/*.pyc
+bot/aii-master/.venv/
+bot/aii-master/venv/

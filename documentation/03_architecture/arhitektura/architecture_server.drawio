@@ -1,0 +1,70 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
+  <diagram id="arch-server" name="Server">
+    <mxGraphModel dx="1028" dy="611" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="client" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#3730a3;fontSize=12;" value="Клиенты&#xa;браузер / мобильный" vertex="1">
+          <mxGeometry height="80" width="220" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dns" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#334155;fontSize=12;" value="DNS&#xa;A/AAAA, CNAME&#xa;vtb-taxi.ru + www" vertex="1">
+          <mxGeometry height="80" width="240" x="300" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tls" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#0e7490;fontSize=12;" value="TLS termination&#xa;Let&#39;s Encrypt&#xa;(domain + www)" vertex="1">
+          <mxGeometry height="80" width="240" x="580" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="web" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#9a3412;fontSize=12;" value="Web server&#xa;nginx/Apache&#xa;FastCGI" vertex="1">
+          <mxGeometry height="80" width="220" x="860" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="phpfpm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;" value="PHP runtime&#xa;PHP-FPM/CGI&#xa;PHP 8.3" vertex="1">
+          <mxGeometry height="80" width="220" x="1120" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="appdir" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fefce8;strokeColor=#a16207;fontSize=12;" value="Файлы приложения&#xa;/var/www/.../vtb-taxi.ru&#xa;public/ = docroot" vertex="1">
+          <mxGeometry height="90" width="480" x="860" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="storage" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#334155;fontSize=12;" value="storage/&#xa;framework/sessions&#xa;logs/laravel.log&#xa;app/... (exports)" vertex="1">
+          <mxGeometry height="120" width="230" x="860" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="db" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#6b21a8;fontSize=12;" value="MySQL&#xa;u..._vtb_corporate_taxi&#xa;таблицы: users, temp_requests, requests..." vertex="1">
+          <mxGeometry height="120" width="230" x="1110" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="cron" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#be185d;fontSize=12;" value="Cron (панель хостинга)&#xa;каждую минуту:&#xa;artisan schedule:run" vertex="1">
+          <mxGeometry height="100" width="260" x="230" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="scheduler" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontSize=12;" value="Laravel Scheduler&#xa;daily 03:30: taxi:cleanup" vertex="1">
+          <mxGeometry height="100" width="260" x="530" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="backups" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff1f2;strokeColor=#9f1239;fontSize=12;" value="Бэкапы (рекомендация)&#xa;DB dump + storage exports&#xa;по расписанию" vertex="1">
+          <mxGeometry height="80" width="560" x="230" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="e_client_dns" edge="1" parent="1" source="client" style="endArrow=block;html=1;strokeColor=#3730a3;" target="dns" value="HTTPS">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dns_tls" edge="1" parent="1" source="dns" style="endArrow=block;html=1;strokeColor=#334155;" target="tls" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_tls_web" edge="1" parent="1" source="tls" style="endArrow=block;html=1;strokeColor=#0e7490;" target="web" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_web_php" edge="1" parent="1" source="web" style="endArrow=block;html=1;strokeColor=#9a3412;" target="phpfpm" value="FastCGI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_php_appdir" edge="1" parent="1" source="phpfpm" style="endArrow=block;html=1;strokeColor=#166534;" target="appdir" value="PHP entrypoint&#xa;public/index.php">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_app_storage" edge="1" parent="1" source="appdir" style="endArrow=block;html=1;strokeColor=#334155;" target="storage" value="read/write">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_app_db" edge="1" parent="1" source="appdir" style="endArrow=block;html=1;strokeColor=#6b21a8;" target="db" value="SQL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_cron_sched" edge="1" parent="1" source="cron" style="endArrow=block;html=1;strokeColor=#be185d;" target="scheduler" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sched_app" edge="1" parent="1" source="scheduler" style="endArrow=block;html=1;strokeColor=#047857;" target="appdir" value="calls artisan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

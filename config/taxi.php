@@ -3,6 +3,18 @@
 return [
     /*
     |--------------------------------------------------------------------------
+    | Bot API Secret
+    |--------------------------------------------------------------------------
+    |
+    | Shared secret between the Telegram bot and Laravel.
+    | The bot sends this value in the X-Bot-Token header.
+    | Generate a strong random string and set BOT_API_SECRET in .env.
+    |
+    */
+    'bot_api_secret' => env('BOT_API_SECRET', ''),
+
+    /*
+    |--------------------------------------------------------------------------
     | Retention Policy (days)
     |--------------------------------------------------------------------------
     |

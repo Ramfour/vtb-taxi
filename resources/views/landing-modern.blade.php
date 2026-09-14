@@ -6,111 +6,82 @@
 <x-layouts.portal-vtb
     title="VTB Taxi"
     heading="Цифровой контур заявок на корпоративное такси"
-    subheading="Система для ВТБ, в которой сотрудник отправляет заявку за минуты, а руководитель согласовывает поток без таблиц, хаоса и ручной пересборки."
+    subheading="Внутренняя рабочая система: заявки, очередь согласования, сотрудники, аудит, CSV-выгрузки."
 >
-    <section class="hero-grid">
-        <article class="hero-banner" data-reveal>
-            <span class="kicker">Корпоративный сервис</span>
-            <h2>Один интерфейс для сотрудника, руководителя и финальной диспетчеризации.</h2>
-            <p>
-                Уже работает вход по табельному номеру, приглашения для новых сотрудников, буфер согласования,
-                кабинет руководителя и жизненный цикл заявки от подачи до финализации.
-            </p>
-
-            <div class="metric-grid">
-                <div class="stat-card">
-                    <span class="stat-label">Сотрудники</span>
-                    <div class="stat-value">{{ $employeeCount }}</div>
-                    <div class="stat-note">Активные пользователи, оформляющие заявки.</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-label">Руководители</span>
-                    <div class="stat-value">{{ $managerCount }}</div>
-                    <div class="stat-note">Согласуют заявки и управляют доступом.</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-label">Выгрузка</span>
-                    <div class="stat-value">CSV</div>
-                    <div class="stat-note">Финальные заявки выгружаются для перевозчика.</div>
-                </div>
-            </div>
-
-            <div class="hero-actions" style="margin-top: 26px;">
-                <a href="{{ route('login') }}" class="button">Войти в систему</a>
-                <a href="#flow" class="button-secondary">Посмотреть сценарий</a>
-            </div>
-        </article>
-
-        <aside class="panel" data-reveal>
-            <div class="panel-header">
+    <section class="page-stack">
+        <section class="panel panel--compact" data-reveal>
+            <div class="panel-header panel-header--tight">
                 <div>
-                    <span class="kicker">Что уже есть</span>
-                    <h2>Рабочий контур для руководителя</h2>
+                    <span class="kicker">Быстрый старт</span>
+                    <h2>Что делать в первую очередь</h2>
+                    <p>Главная цель системы: быстро создавать заявки и так же быстро обрабатывать очередь согласования.</p>
                 </div>
             </div>
 
-            <div class="feature-list">
-                <div class="feature-item">
-                    <strong>Вход по табельному номеру</strong>
-                    <p>Логин строится на VTB employee number, без лишних аккаунтов и дублирования профилей.</p>
+            <div class="ops-kpi-strip ops-kpi-strip--stack" aria-label="Короткая сводка">
+                <span class="ops-badge">Сотрудники: {{ $employeeCount }}</span>
+                <span class="ops-badge">Руководители: {{ $managerCount }}</span>
+                <span class="ops-badge ops-badge--approved">Экспорт: CSV</span>
+            </div>
+
+            <div class="ops-rulelist" aria-label="Сценарий работы">
+                <div class="ops-rule">
+                    <strong>Сотрудник</strong>
+                    <span>Создаёт заявку в разделе «Мои заявки» и отслеживает статус.</span>
                 </div>
-                <div class="feature-item">
-                    <strong>Приглашения сотрудников</strong>
-                    <p>Руководитель создаёт одноразовую ссылку, а сотрудник сам завершает регистрацию и задаёт пароль.</p>
+                <div class="ops-rule">
+                    <strong>Руководитель</strong>
+                    <span>Обрабатывает очередь (массово/выборочно), финализирует и выгружает CSV.</span>
                 </div>
-                <div class="feature-item">
-                    <strong>Буфер согласования</strong>
-                    <p>Все новые заявки проходят через временный слой, прежде чем попасть в финальную выборку.</p>
+                <div class="ops-rule">
+                    <strong>Администратор</strong>
+                    <span>Смотрит аудит и управляет доступами.</span>
                 </div>
             </div>
-        </aside>
-    </section>
 
-    <section id="flow" class="dashboard-grid">
-        <article class="panel" data-reveal>
-            <div class="panel-header">
+            <div class="form-actions">
+                <a href="{{ route('login') }}" class="button">Войти</a>
+                <a href="{{ route('about') }}" class="button-ghost">О проекте</a>
+                <a href="{{ route('privacy') }}" class="button-ghost">Политика ПДн</a>
+            </div>
+        </section>
+
+        <section class="panel panel--compact" data-reveal>
+            <div class="panel-header panel-header--tight">
                 <div>
-                    <span class="kicker">Сценарий</span>
-                    <h2>Как движется заявка</h2>
-                    <p>Процесс уже разбит на этапы и хорошо масштабируется под будущие интеграции.</p>
+                    <span class="kicker">Разделы</span>
+                    <h2>Навигация отражает задачи</h2>
+                    <p>Без “витринных” блоков: только рабочие экраны и действия.</p>
                 </div>
             </div>
 
-            <div class="feature-list">
-                <div class="feature-item">
-                    <strong>1. Руководитель создаёт приглашение</strong>
-                    <p>Достаточно табельного номера. Система выпускает ссылку на активацию профиля.</p>
+            <div class="info-table info-table--scroll" role="table" aria-label="Разделы системы">
+                <div class="info-table__head" role="row">
+                    <span role="columnheader">Раздел</span>
+                    <span role="columnheader">Задача</span>
+                    <span role="columnheader">Ключевое действие</span>
                 </div>
-                <div class="feature-item">
-                    <strong>2. Сотрудник завершает регистрацию</strong>
-                    <p>Заполняет ФИО, телефон, адрес по умолчанию и пароль для входа в веб-интерфейс.</p>
+                <div class="info-row" role="row">
+                    <div role="cell"><strong>Мои заявки</strong></div>
+                    <div role="cell">Создать поездку и увидеть статус.</div>
+                    <div role="cell">Отправить / отменить (пока “На согласовании”).</div>
                 </div>
-                <div class="feature-item">
-                    <strong>3. Заявка уходит в буфер</strong>
-                    <p>Руководитель видит входящий поток, принимает решение и позже переводит заявки в финальный слой.</p>
+                <div class="info-row" role="row">
+                    <div role="cell"><strong>Панель руководителя</strong></div>
+                    <div role="cell">Проверить очередь и обработать поток.</div>
+                    <div role="cell">Массовое одобрение, перенос в финальные.</div>
                 </div>
-            </div>
-        </article>
-
-        <article class="panel" data-reveal>
-            <div class="panel-header">
-                <div>
-                    <span class="kicker">Доступ</span>
-                    <h2>Как получить вход в систему</h2>
-                    <p>Вход выполняется по табельному номеру и паролю. Если доступа ещё нет — руководитель отправит приглашение.</p>
+                <div class="info-row" role="row">
+                    <div role="cell"><strong>Сотрудники</strong></div>
+                    <div role="cell">Доступы и приглашения.</div>
+                    <div role="cell">Создать приглашение / удалить доступ.</div>
                 </div>
-            </div>
-
-            <div class="plain-list">
-                <div class="timeline-card">
-                    <strong>Приглашение от руководителя</strong>
-                    <p>Руководитель создаёт одноразовую ссылку, сотрудник завершает регистрацию и задаёт пароль.</p>
-                </div>
-                <div class="timeline-card">
-                    <strong>Вход по табельному номеру</strong>
-                    <p>После регистрации используйте табельный номер VTB и пароль для авторизации.</p>
+                <div class="info-row" role="row">
+                    <div role="cell"><strong>Аудит</strong></div>
+                    <div role="cell">Проверить, кто что сделал.</div>
+                    <div role="cell">Фильтры + экспорт журнала.</div>
                 </div>
             </div>
-        </article>
+        </section>
     </section>
 </x-layouts.portal-vtb>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+    <diagram name="BPMN - Обработка заявок такси" id="BPMN_Taxi_Processing">
+        <mxGraphModel dx="1666" dy="1054" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                
+                <!-- Пулы участников -->
+                <mxCell id="employee_pool" value="Сотрудник" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="120" width="180" height="600" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="bot_pool" value="Telegram-бот" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="240" y="120" width="200" height="600" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="manager_pool" value="Руководитель" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="460" y="120" width="200" height="600" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="api_pool" value="API геокодера" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="680" y="120" width="160" height="600" as="geometry"/>
+                </mxCell>
+                
+                <!-- Элементы в пуле Сотрудник -->
+                <mxCell id="start_event" value="Команда /neworder" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#90EE90;strokeColor=#006400;" vertex="1" parent="employee_pool">
+                    <mxGeometry x="60" y="60" width="60" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="fill_form" value="Заполнить форму заявки" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#000080;" vertex="1" parent="employee_pool">
+                    <mxGeometry x="30" y="150" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="confirm_address" value="Подтвердить адрес" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#000080;" vertex="1" parent="employee_pool">
+                    <mxGeometry x="30" y="250" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="receive_notification" value="Получить уведомление" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#000080;" vertex="1" parent="employee_pool">
+                    <mxGeometry x="30" y="450" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <!-- Элементы в пуле Бот -->
+                <mxCell id="validate_data" value="Валидация данных" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#98FB98;strokeColor=#006400;" vertex="1" parent="bot_pool">
+                    <mxGeometry x="40" y="150" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="send_to_geocode" value="Отправить на нормализацию" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#98FB98;strokeColor=#006400;" vertex="1" parent="bot_pool">
+                    <mxGeometry x="40" y="250" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="save_to_minitable" value="Сохранить в мини-таблицу" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#98FB98;strokeColor=#006400;" vertex="1" parent="bot_pool">
+                    <mxGeometry x="40" y="350" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="notify_manager" value="Уведомить руководителя" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFACD;strokeColor=#DAA520;" vertex="1" parent="bot_pool">
+                    <mxGeometry x="65" y="450" width="70" height="70" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="send_notification" value="Отправить уведомление" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#98FB98;strokeColor=#006400;" vertex="1" parent="bot_pool">
+                    <mxGeometry x="40" y="550" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <!-- Элементы в пуле API -->
+                <mxCell id="normalize_address" value="Нормализовать адрес" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#98FB98;strokeColor=#006400;" vertex="1" parent="api_pool">
+                    <mxGeometry x="20" y="250" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <!-- Элементы в пуле Руководитель -->
+                <mxCell id="review_requests" value="Проверить заявки" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#000080;" vertex="1" parent="manager_pool">
+                    <mxGeometry x="40" y="450" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="decision_gateway" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#F0E68C;strokeColor=#B8860B;" vertex="1" parent="manager_pool">
+                    <mxGeometry x="75" y="550" width="50" height="50" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="merge_db" value="Запустить слияние" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#98FB98;strokeColor=#006400;" vertex="1" parent="manager_pool">
+                    <mxGeometry x="40" y="650" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="download_report" value="Скачать отчет" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#000080;" vertex="1" parent="manager_pool">
+                    <mxGeometry x="40" y="750" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <!-- Связи между элементами -->
+                <mxCell id="conn1" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="start_event" target="fill_form">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="260" y="140" as="sourcePoint"/>
+                        <mxPoint x="310" y="90" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="conn2" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="fill_form" target="validate_data">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="150" y="180" as="sourcePoint"/>
+                        <mxPoint x="240" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="conn3" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="validate_data" target="send_to_geocode">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="240" y="210" as="sourcePoint"/>
+                        <mxPoint x="240" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="conn4" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="send_to_geocode" target="normalize_address">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="360" y="280" as="sourcePoint"/>
+                        <mxPoint x="460" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="conn5" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="normalize_address" target="confirm_address">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="280" as="sourcePoint"/>
+                        <mxPoint x="40" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Добавьте остальные связи по аналогии -->
+                
+                <!-- Легенда -->
+                <mxCell id="legend" value="&lt;b&gt;Легенда BPMN:&lt;/b&gt;&lt;br&gt;• Зеленый круг - Старт&lt;br&gt;• Голубой прямоугольник - Пользовательская задача&lt;br&gt;• Зеленый прямоугольник - Сервисная задача&lt;br&gt;• Желтый ромб - Шлюз решения&lt;br&gt;• Светло-желтый круг - Промежуточное событие" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="40" width="300" height="120" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

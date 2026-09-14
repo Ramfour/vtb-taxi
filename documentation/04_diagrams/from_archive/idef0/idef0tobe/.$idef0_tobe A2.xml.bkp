@@ -1,0 +1,227 @@
+<mxfile>
+    <diagram name="Декомпозиция A2 - Управление мини-таблицей и согласование" id="12345678-1234-1234-1234-123456789015">
+        <mxGraphModel dx="1426" dy="881" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageWidth="827" pageHeight="1169">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                
+                <!-- Основной блок A2 -->
+                <mxCell id="a2_main" value="&lt;b&gt;A2: Управление мини-таблицей и согласование&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="50" width="200" height="60" as="geometry"/>
+                </mxCell>
+                
+                <!-- Подпроцессы A2 -->
+                <mxCell id="a2_1" value="&lt;b&gt;A2.1: Просмотр мини-таблицы&lt;/b&gt;&lt;br&gt;• Отображение заявок, отсортированных по дате&lt;br&gt;• Автоматическое выделение ошибок (светло-красный фон)&lt;br&gt;• Фильтрация и навигация" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="150" width="220" height="100" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_2" value="&lt;b&gt;A2.2: Редактирование заявок&lt;/b&gt;&lt;br&gt;• Прямое редактирование в таблице&lt;br&gt;• Выпадающее меню нормализации адресов&lt;br&gt;• Сохранение изменений в реальном времени" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="150" width="220" height="100" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_3" value="&lt;b&gt;A2.3: Принятие решений&lt;/b&gt;&lt;br&gt;• Одобрение заявок&lt;br&gt;• Отклонение с возможностью указания причины&lt;br&gt;• Запрос корректных данных у сотрудника" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="550" y="150" width="220" height="100" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_4" value="&lt;b&gt;A2.4: Слияние с основной БД&lt;/b&gt;&lt;br&gt;• Полное слияние всей мини-таблицы&lt;br&gt;• Автоматическое очищение мини-таблицы&lt;br&gt;• Ручной запуск процесса" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="280" width="220" height="100" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_5" value="&lt;b&gt;A2.5: Автоматические уведомления&lt;/b&gt;&lt;br&gt;• Уведомления об изменении статуса&lt;br&gt;• Групповые уведомления (n новых заявок)&lt;br&gt;• Запросы на исправление данных" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="450" y="280" width="220" height="100" as="geometry"/>
+                </mxCell>
+                
+                <!-- Входы для A2 -->
+                <mxCell id="a2_input" value="Нормализованные заявки&lt;br&gt;из мини-таблицы (A1)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="180" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <!-- Выходы из A2 -->
+                <mxCell id="a2_output1" value="Согласованные заявки&lt;br&gt;в основную БД (A3)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="450" y="400" width="140" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_output2" value="Уведомления&lt;br&gt;сотрудникам" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="650" y="400" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_output3" value="Запросы на исправление&lt;br&gt;в A1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="400" width="120" height="60" as="geometry"/>
+                </mxCell>
+                
+                <!-- Управление для A2 -->
+                <mxCell id="a2_control1" value="Регламент согласования&lt;br&gt;• Правила одобрения/отклонения&lt;br&gt;• Политика работы с ошибками" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="700" y="50" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_control2" value="Бизнес-правила валидации&lt;br&gt;• Автоматическое выявление ошибок&lt;br&gt;• Проверка форматов и дублей" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="700" y="150" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Механизмы для A2 -->
+                <mxCell id="a2_mechanism1" value="Руководитель" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="500" width="90" height="30" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_mechanism2" value="Интерфейс руководителя" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="220" y="500" width="120" height="30" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_mechanism3" value="Backend и БД" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="370" y="500" width="100" height="30" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_mechanism4" value="API геокодера" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="500" y="500" width="100" height="30" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="a2_mechanism5" value="Telegram-бот" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="630" y="500" width="100" height="30" as="geometry"/>
+                </mxCell>
+                
+                <!-- Стрелки между подпроцессами -->
+                <mxCell id="arrow_a2_1_to_a2_2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_1" target="a2_2">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="270" y="200" as="sourcePoint"/>
+                        <mxPoint x="300" y="200" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_a2_2_to_a2_3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_2" target="a2_3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="520" y="200" as="sourcePoint"/>
+                        <mxPoint x="550" y="200" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_a2_3_to_a2_4" value="Одобренные заявки" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_3" target="a2_4">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="660" y="250" as="sourcePoint"/>
+                        <mxPoint x="420" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_a2_3_to_a2_5" value="Изменения статуса" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_3" target="a2_5">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="660" y="250" as="sourcePoint"/>
+                        <mxPoint x="500" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Стрелки от входов -->
+                <mxCell id="arrow_input_to_a2_1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_input" target="a2_1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="170" y="210" as="sourcePoint"/>
+                        <mxPoint x="50" y="210" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Стрелки к выходам -->
+                <mxCell id="arrow_a2_4_to_output1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_4" target="a2_output1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="310" y="380" as="sourcePoint"/>
+                        <mxPoint x="520" y="400" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_a2_5_to_output2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_5" target="a2_output2">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="560" y="380" as="sourcePoint"/>
+                        <mxPoint x="710" y="400" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_a2_3_to_output3" value="Запрос корректных данных" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="a2_3" target="a2_output3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="605" y="250" as="sourcePoint"/>
+                        <mxPoint x="110" y="400" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Стрелки управления -->
+                <mxCell id="arrow_control1_to_a2_3" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_control1" target="a2_3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="700" y="90" as="sourcePoint"/>
+                        <mxPoint x="770" y="200" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_control2_to_a2_1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_control2" target="a2_1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="700" y="190" as="sourcePoint"/>
+                        <mxPoint x="270" y="200" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Стрелки механизмов -->
+                <mxCell id="arrow_mech1_to_mech2" value="использует" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="a2_mechanism1" target="a2_mechanism2">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="145" y="500" as="sourcePoint"/>
+                        <mxPoint x="280" y="500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mech2_to_a2_1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_mechanism2" target="a2_1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="500" as="sourcePoint"/>
+                        <mxPoint x="160" y="250" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mech2_to_a2_2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_mechanism2" target="a2_2">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="500" as="sourcePoint"/>
+                        <mxPoint x="410" y="250" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mech2_to_a2_3" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_mechanism2" target="a2_3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="500" as="sourcePoint"/>
+                        <mxPoint x="660" y="250" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mech2_to_a2_4" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_mechanism2" target="a2_4">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="500" as="sourcePoint"/>
+                        <mxPoint x="310" y="380" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mech3_to_a2_1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_mechanism3" target="a2_1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="420" y="500" as="sourcePoint"/>
+                        <mxPoint x="160" y="250" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mech3_to_a2_4" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_mechanism3" target="a2_4">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="420" y="500" as="sourcePoint"/>
+                        <mxPoint x="310" y="380" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mech4_to_a2_2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_mechanism4" target="a2_2">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="550" y="500" as="sourcePoint"/>
+                        <mxPoint x="410" y="250" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mech5_to_a2_5" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="a2_mechanism5" target="a2_5">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="680" y="500" as="sourcePoint"/>
+                        <mxPoint x="560" y="380" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Легенда и описание -->
+                <mxCell id="description" value="&lt;b&gt;Декомпозиция A2 - Особенности:&lt;/b&gt;&lt;br&gt;• Прямое редактирование в таблице&lt;br&gt;• Выпадающее меню нормализации&lt;br&gt;• Автоматическое выделение ошибок&lt;br&gt;• Полное слияние всей таблицы&lt;br&gt;• Групповые уведомления&lt;br&gt;• Отклонение без обязательной причины" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="50" width="250" height="120" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

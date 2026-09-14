@@ -17,8 +17,8 @@
                 @csrf
                 <div class="field">
                     <label for="employee_number">Табельный номер</label>
-                    <input id="employee_number" class="input" type="text" name="employee_number" value="{{ old('employee_number') }}" placeholder="70320699" required autofocus>
-                    <small>Например: 70320699</small>
+                    <input id="employee_number" class="input" type="text" name="employee_number" value="{{ old('employee_number') }}" placeholder="71234567" required autofocus>
+                    <small>Например: 71234567</small>
                 </div>
 
                 <div class="field">

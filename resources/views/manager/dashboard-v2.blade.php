@@ -51,7 +51,7 @@
                     <div class="form-grid-two">
                         <div class="field">
                             <label for="employee_number">Табельный номер</label>
-                            <input id="employee_number" class="input" type="text" name="employee_number" placeholder="70320699" required>
+                            <input id="employee_number" class="input" type="text" name="employee_number" placeholder="71234567" required>
                         </div>
                         <div class="field">
                             <label for="expires_in_days">Срок действия, дней</label>

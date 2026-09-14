@@ -1,0 +1,49 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
+  <diagram id="arch-frameworks" name="Frameworks &amp; Tools">
+    <mxGraphModel dx="1082" dy="1543" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="laravel" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#9a3412;fontSize=12;" value="Laravel 13&#xa;Routing, Blade, Eloquent&#xa;Migrations, Scheduler" vertex="1">
+          <mxGeometry height="120" width="280" x="630" y="-130" as="geometry" />
+        </mxCell>
+        <mxCell id="php" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;" value="PHP 8.3&#xa;CLI + FPM/CGI" vertex="1">
+          <mxGeometry height="120" width="240" x="380" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mysql" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#6b21a8;fontSize=12;" value="MySQL&#xa;relational storage" vertex="1">
+          <mxGeometry height="120" width="220" x="660" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="nginx" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#0e7490;fontSize=12;" value="nginx/Apache&#xa;FastCGI" vertex="1">
+          <mxGeometry height="120" width="220" x="390" y="-130" as="geometry" />
+        </mxCell>
+        <mxCell id="vite" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#3730a3;fontSize=12;" value="Vite&#xa;build pipeline" vertex="1">
+          <mxGeometry height="90" width="200" x="100" y="-270" as="geometry" />
+        </mxCell>
+        <mxCell id="tailwind" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontSize=12;" value="Tailwind CSS v4&#xa;styling" vertex="1">
+          <mxGeometry height="90" width="220" x="370" y="-270" as="geometry" />
+        </mxCell>
+        <mxCell id="blade" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#be185d;fontSize=12;" value="Blade templates&#xa;server-rendered UI" vertex="1">
+          <mxGeometry height="90" width="260" x="650" y="-270" as="geometry" />
+        </mxCell>
+        <mxCell id="e_nginx_php" edge="1" parent="1" source="nginx" style="endArrow=block;html=1;strokeColor=#0e7490;" target="php" value="FastCGI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_php_laravel" edge="1" parent="1" source="php" style="endArrow=block;html=1;strokeColor=#166534;" target="laravel" value="runtime">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_laravel_mysql" edge="1" parent="1" source="laravel" style="endArrow=block;html=1;strokeColor=#6b21a8;" target="mysql" value="Eloquent/SQL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_vite_tailwind" edge="1" parent="1" source="vite" style="endArrow=block;html=1;strokeColor=#3730a3;" target="tailwind" value="bundles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_tailwind_blade" edge="1" parent="1" source="tailwind" style="endArrow=block;html=1;strokeColor=#047857;" target="blade" value="styles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_blade_laravel" edge="1" parent="1" source="blade" style="endArrow=block;html=1;strokeColor=#be185d;dashed=1;" target="laravel" value="rendered by">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
