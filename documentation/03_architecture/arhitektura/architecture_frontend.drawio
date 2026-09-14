@@ -1,0 +1,68 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
+  <diagram id="arch-frontend" name="Frontend">
+    <mxGraphModel dx="2771" dy="815" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="pages" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#3730a3;fontSize=12;" value="Pages (Blade)&#xa;resources/views/landing...&#xa;employee/dashboard...&#xa;manager/dashboard...&#xa;manager/audit...&#xa;manager/employees..." vertex="1">
+          <mxGeometry height="160" width="420" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="components" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#0e7490;fontSize=12;" value="UI components&#xa;layouts / partials&#xa;tables, forms, badges, modals" vertex="1">
+          <mxGeometry height="120" width="320" x="470" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="css" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#9a3412;fontSize=12;" value="Styles&#xa;Tailwind (build)&#xa;public/theme-vtb.css (custom)" vertex="1">
+          <mxGeometry height="120" width="260" x="860" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="js" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fefce8;strokeColor=#a16207;fontSize=12;" value="JS behavior (lightweight)&#xa;form UX, toggles, mobile fixes&#xa;CSRF token in forms" vertex="1">
+          <mxGeometry height="120" width="220" x="1160" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="vite" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontSize=12;" value="Build pipeline&#xa;Vite&#xa;Tailwind CSS v4&#xa;laravel-vite-plugin" vertex="1">
+          <mxGeometry height="110" width="520" x="860" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="assets" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#6b21a8;fontSize=12;" value="Output assets&#xa;public/build/manifest.json&#xa;hashed CSS/JS (prod)" vertex="1">
+          <mxGeometry height="90" width="520" x="860" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="browser" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#be185d;fontSize=12;" value="Browser runtime&#xa;layout + responsive CSS&#xa;cookies/sessions" vertex="1">
+          <mxGeometry height="170" width="780" x="-10" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pages_components" edge="1" parent="1" source="pages" style="endArrow=block;html=1;strokeColor=#3730a3;" target="components" value="uses">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_components_css" edge="1" parent="1" source="components" style="endArrow=block;html=1;strokeColor=#0e7490;" target="css" value="class/styles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_components_js" edge="1" parent="1" source="components" style="endArrow=block;html=1;strokeColor=#0e7490;dashed=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" target="js" value="behavior">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="50" />
+              <mxPoint x="1270" y="50" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_vite_assets" edge="1" parent="1" source="vite" style="endArrow=block;html=1;strokeColor=#047857;" target="assets" value="build">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_assets_browser" edge="1" parent="1" source="assets" style="endArrow=block;html=1;strokeColor=#6b21a8;" target="browser" value="load">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_css_browser" edge="1" parent="1" source="css" style="endArrow=block;html=1;strokeColor=#9a3412;edgeStyle=orthogonalEdgeStyle;entryX=0.875;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="browser" value="render">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="990" y="230" />
+              <mxPoint x="673" y="230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_js_browser" edge="1" parent="1" source="js" style="endArrow=block;html=1;strokeColor=#a16207;edgeStyle=orthogonalEdgeStyle;" value="run">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1270" y="260" />
+              <mxPoint x="710" y="260" />
+            </Array>
+            <mxPoint x="710" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

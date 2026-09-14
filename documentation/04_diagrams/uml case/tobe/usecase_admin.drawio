@@ -1,0 +1,64 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
+  <diagram id="uc-admin" name="Use Case - Admin">
+    <mxGraphModel dx="1028" dy="611" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="actor" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeColor=#334155;fillColor=#f8fafc;fontSize=12;" value="Администратор&#xa;(Admin)" vertex="1">
+          <mxGeometry height="100" width="50" x="80" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="boundary" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#0f172a;fillColor=none;fontSize=12;" value="" vertex="1">
+          <mxGeometry height="520" width="830" x="220" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_login" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#3730a3;fillColor=#eef2ff;fontSize=12;" value="Войти в систему" vertex="1">
+          <mxGeometry height="60" width="220" x="280" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_users" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#047857;fillColor=#ecfdf5;fontSize=12;" value="Просмотреть пользователей (сотрудники/руководители)" vertex="1">
+          <mxGeometry height="60" width="360" x="280" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_user_soft" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#be185d;fillColor=#fdf2f8;fontSize=12;" value="Отключить/soft-delete пользователя" vertex="1">
+          <mxGeometry height="60" width="320" x="300" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_user_force" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#9f1239;fillColor=#fff1f2;fontSize=12;" value="Force-delete пользователя" vertex="1">
+          <mxGeometry height="60" width="260" x="250" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_audit" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#6b21a8;fillColor=#faf5ff;fontSize=12;" value="Просмотреть аудит" vertex="1">
+          <mxGeometry height="60" width="240" x="720" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_audit_csv" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#0e7490;fillColor=#ecfeff;fontSize=12;" value="Скачать аудит CSV" vertex="1">
+          <mxGeometry height="60" width="240" x="750" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_queue" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#a16207;fillColor=#fefce8;fontSize=12;" value="Согласование заявок (как Manager)" vertex="1">
+          <mxGeometry height="60" width="300" x="720" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_export" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#334155;fillColor=#f1f5f9;fontSize=12;" value="Перенос + выгрузка CSV (как Manager)" vertex="1">
+          <mxGeometry height="60" width="320" x="700" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_login" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_users" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_user_soft" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_user_force" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_audit" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_audit_csv" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_queue" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_export" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

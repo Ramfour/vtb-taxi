@@ -1,0 +1,67 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36" version="28.2.8">
+  <diagram id="A0_TO_BE_IDEF0" name="A0_TO-BE_IDEF0">
+    <mxGraphModel dx="1226" dy="736" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-1" value="Декомпозиция A0 — подфункции (TO-BE)" style="text;html=1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="100" y="170" width="960" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-2" value="A1&#xa;Сбор изменений (приём от бота → staging)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="260" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-3" value="A2&#xa;Валидация и нормализация (формат, адрес, дедупlicaция)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="320" y="210" width="260" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-4" value="A3&#xa;Агрегация / Батчинг (группировка по отправке)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="600" y="210" width="260" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-5" value="A4&#xa;Формирование export.xlsx (по шаблону)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="880" y="210" width="260" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-6" value="A5&#xa;Уведомление руководителя + просмотр / подтверждение / редактирование" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="240" y="310" width="420" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-7" value="A6&#xa;Логирование и архивирование (snapshot export + журнал)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="680" y="310" width="340" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#000000;" edge="1" parent="1" source="5hqQMlFPu9N30kBrQRTY-2" target="5hqQMlFPu9N30kBrQRTY-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#000000;" edge="1" parent="1" source="5hqQMlFPu9N30kBrQRTY-3" target="5hqQMlFPu9N30kBrQRTY-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#000000;" edge="1" parent="1" source="5hqQMlFPu9N30kBrQRTY-4" target="5hqQMlFPu9N30kBrQRTY-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#000000;" edge="1" parent="1" source="5hqQMlFPu9N30kBrQRTY-5" target="5hqQMlFPu9N30kBrQRTY-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#000000;" edge="1" parent="1" source="5hqQMlFPu9N30kBrQRTY-5" target="5hqQMlFPu9N30kBrQRTY-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#000000;dashed=1;" edge="1" parent="1" source="5hqQMlFPu9N30kBrQRTY-6" target="5hqQMlFPu9N30kBrQRTY-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-14" value="Control: правила (макс дистанция, лимиты, расписание 3h)" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;opacity=80;" vertex="1" parent="1">
+          <mxGeometry x="740" y="170" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-15" value="Mech: Telegram-бот" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#e8f4fd;" vertex="1" parent="1">
+          <mxGeometry x="40" y="390" width="180" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-16" value="Mech: СУБД (staging/master)" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#e8f4fd;" vertex="1" parent="1">
+          <mxGeometry x="240" y="390" width="240" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-17" value="Mech: Сервис геокодирования (опционально)" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#e8f4fd;" vertex="1" parent="1">
+          <mxGeometry x="500" y="390" width="260" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-18" value="Mech: Веб-интерфейс руководителя / кнопка Export" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#e8f4fd;" vertex="1" parent="1">
+          <mxGeometry x="800" y="390" width="320" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="5hqQMlFPu9N30kBrQRTY-19" value="Примечание: по умолчанию система собирает и валидирует; export формируется по расписанию (батч) или по запросу руководителя. Авто-отправка — опция." style="text;html=1;align=left;verticalAlign=top;fontSize=11;opacity=70;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="450" width="980" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

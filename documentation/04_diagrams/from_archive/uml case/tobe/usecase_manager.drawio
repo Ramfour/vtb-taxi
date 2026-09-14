@@ -1,0 +1,52 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
+  <diagram id="uc-manager" name="Use Case - Manager">
+    <mxGraphModel dx="1028" dy="611" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="actor" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeColor=#334155;fillColor=#f8fafc;fontSize=12;" value="Руководитель&#xa;(Manager)" vertex="1">
+          <mxGeometry height="100" width="50" x="80" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="boundary" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#0f172a;fillColor=none;fontSize=12;" value="" vertex="1">
+          <mxGeometry height="350" width="320" x="220" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_login" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#3730a3;fillColor=#eef2ff;fontSize=12;" value="Войти в систему" vertex="1">
+          <mxGeometry height="60" width="120" x="230" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_queue" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#047857;fillColor=#ecfdf5;fontSize=12;" value="Просмотреть очередь заявок (Pending)" vertex="1">
+          <mxGeometry height="60" width="120" x="240" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_review" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#9a3412;fillColor=#fff7ed;fontSize=12;" value="Одобрить / отклонить заявку / заявки" vertex="1">
+          <mxGeometry height="60" width="130" x="220" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_finalize" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#6b21a8;fillColor=#faf5ff;fontSize=12;" value="Перенести одобренные в финальный слой (requests)" vertex="1">
+          <mxGeometry height="70" width="160" x="370" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_export" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#0e7490;fillColor=#ecfeff;fontSize=12;" value="Скачать CSV (по диапазону дат)" vertex="1">
+          <mxGeometry height="60" width="130" x="280" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_inv" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#334155;fillColor=#f1f5f9;fontSize=12;" value="Создать / удалить приглашение" vertex="1">
+          <mxGeometry height="60" width="120" x="350" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_login" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_queue" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_review" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_finalize" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_export" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="actor" style="endArrow=none;html=1;strokeColor=#334155;" target="uc_inv" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

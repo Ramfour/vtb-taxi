@@ -1,0 +1,138 @@
+<mxfile>
+    <diagram name="Контекстная диаграмма A0" id="12345678-1234-1234-1234-123456789012">
+        <mxGraphModel dx="1426" dy="881" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageWidth="827" pageHeight="1169">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                
+                <!-- Основной функциональный блок A0 -->
+                <mxCell id="a0_block" value="&lt;b&gt;A0: Автоматизированная система обработки заявок на такси&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="300" width="400" height="200" as="geometry"/>
+                </mxCell>
+                
+                <!-- Входы (слева) -->
+                <mxCell id="input1" value="Заявки от сотрудников через Telegram-бота" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="320" width="180" height="40" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="input2" value="Запросы на отмену (SOS) от сотрудников" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="380" width="180" height="40" as="geometry"/>
+                </mxCell>
+                
+                <!-- Выходы (справа) -->
+                <mxCell id="output1" value="Готовый Excel-файл для партнёра" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="750" y="320" width="180" height="40" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="output2" value="Уведомления о статусе заявок" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="750" y="380" width="180" height="40" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="output3" value="Подтверждение отправки заявки" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="750" y="440" width="180" height="40" as="geometry"/>
+                </mxCell>
+                
+                <!-- Управление (сверху) -->
+                <mxCell id="control1" value="Бизнес-правила валидации данных" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="150" width="300" height="40" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="control2" value="Регламент ручного согласования руководителем" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="200" width="300" height="40" as="geometry"/>
+                </mxCell>
+                
+                <!-- Механизмы (снизу) -->
+                <mxCell id="mechanism1" value="Telegram-бот (интерфейс сотрудника)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="150" y="550" width="200" height="40" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="mechanism2" value="Веб-интерфейс руководителя" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="400" y="550" width="200" height="40" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="mechanism3" value="Серверная часть (Backend) и БД" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="650" y="550" width="200" height="40" as="geometry"/>
+                </mxCell>
+                
+                <!-- Стрелки от входов -->
+                <mxCell id="arrow_input1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="input1" target="a0_block">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="240" y="340" as="sourcePoint"/>
+                        <mxPoint x="290" y="290" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_input2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="input2" target="a0_block">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="240" y="400" as="sourcePoint"/>
+                        <mxPoint x="290" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Стрелки к выходам -->
+                <mxCell id="arrow_output1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" source="a0_block" target="output1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="700" y="340" as="sourcePoint"/>
+                        <mxPoint x="750" y="290" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_output2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="a0_block" target="output2">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="700" y="400" as="sourcePoint"/>
+                        <mxPoint x="750" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_output3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" edge="1" parent="1" source="a0_block" target="output3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="700" y="460" as="sourcePoint"/>
+                        <mxPoint x="750" y="410" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Стрелки от управления -->
+                <mxCell id="arrow_control1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="control1" target="a0_block">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="500" y="190" as="sourcePoint"/>
+                        <mxPoint x="500" y="300" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_control2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="control2" target="a0_block">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="500" y="240" as="sourcePoint"/>
+                        <mxPoint x="500" y="300" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Стрелки от механизмов -->
+                <mxCell id="arrow_mechanism1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="mechanism1" target="a0_block">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="250" y="550" as="sourcePoint"/>
+                        <mxPoint x="350" y="500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mechanism2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="mechanism2" target="a0_block">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="500" y="550" as="sourcePoint"/>
+                        <mxPoint x="500" y="500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <mxCell id="arrow_mechanism3" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="mechanism3" target="a0_block">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="750" y="550" as="sourcePoint"/>
+                        <mxPoint x="650" y="500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Легенда -->
+                <mxCell id="legend" value="&lt;b&gt;Легенда:&lt;/b&gt;&lt;br&gt;◀ Входы (Inputs)&lt;br&gt;▶ Выходы (Outputs)&lt;br&gt;▼ Управление (Controls)&lt;br&gt;▲ Механизмы (Mechanisms)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="50" width="200" height="100" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

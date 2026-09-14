@@ -71,22 +71,26 @@ docker-compose.override.yml
 /_about/.$*.bkp
 
 # Reference materials (downloaded pages, binary assets)
-# /референс/  # temporarily included for colleague sync (private repo)
+/референс/
 
 # Artifacts
-# tail  # temporarily included for colleague sync
+tail
 
-# Bot runtime data — temporarily included for colleague sync (private repo, 2 people)
-# Uncomment when the repo becomes public or gets more contributors:
-# bot/aii-master/employees.json
-# bot/aii-master/users.json
-# bot/aii-master/contacts.json
-# bot/aii-master/orders.json
-# bot/aii-master/reminders.json
-# bot/aii-master/managers.json
-# bot/aii-master/employee_roles.json
-# bot/aii-master/database.json
-# bot/aii-master/orders_export_*.json
+# Local hosting panel data
+/vtb-taxi.ru/
+/.osp/
+/C/
+
+# Bot runtime data (JSON fallback storage — not needed in prod)
+bot/aii-master/employees.json
+bot/aii-master/users.json
+bot/aii-master/contacts.json
+bot/aii-master/orders.json
+bot/aii-master/reminders.json
+bot/aii-master/managers.json
+bot/aii-master/employee_roles.json
+bot/aii-master/database.json
+bot/aii-master/orders_export_*.json
 bot/aii-master/__pycache__/
 bot/aii-master/**/__pycache__/
 bot/aii-master/*.pyc

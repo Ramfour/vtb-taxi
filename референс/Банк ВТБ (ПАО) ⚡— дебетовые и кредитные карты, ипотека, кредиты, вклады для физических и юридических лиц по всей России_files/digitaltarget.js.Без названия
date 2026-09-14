@@ -1,9 +1,0 @@
-var adcm_config = {
-id: 7615
-};
-;(function(d,s) {
-function setScript() {
-const f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src='https://tag.digitaltarget.ru/adcm.js';f.parentNode.insertBefore(j,f);
-};
-setScript();
-})(document, "script");

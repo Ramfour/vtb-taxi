@@ -1,0 +1,149 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36" version="28.2.8">
+  <diagram name="Декомпозиция A3 - Экспорт подтвержденных поездок" id="12345678-1234-1234-1234-123456789017">
+    <mxGraphModel dx="2296" dy="2042" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a3_main" value="&lt;b&gt;A3: Экспорт подтвержденных поездок&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="390" y="-90" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_1" value="&lt;b&gt;A3.1: Накопление и фильтрация данных&lt;/b&gt;&lt;br&gt;• Прием заявок из A2&lt;br&gt;• Фильтрация по рабочему дню (6:00-5:59)&lt;br&gt;• Сортировка по дате и времени" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="40" y="130" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_2" value="&lt;b&gt;A3.2: Генерация CSV-файла&lt;/b&gt;&lt;br&gt;• Формирование по установленному формату&lt;br&gt;• Сортировка по дате и времени&lt;br&gt;• Пометка exported_at" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="304" y="170" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_3" value="&lt;b&gt;A3.3: Предоставление и скачивание&lt;/b&gt;&lt;br&gt;• Отображение предпросмотра&lt;br&gt;• Скачивание руководителем&lt;br&gt;• Подтверждение получения" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="570" y="190" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_4" value="&lt;b&gt;A3.4: Обработка ошибок выгрузки&lt;/b&gt;&lt;br&gt;• Выгрузка данных как текста&lt;br&gt;• Уведомление админу&lt;br&gt;• Логирование проблем" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="490" y="445" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_input" value="Согласованные заявки&lt;br&gt;из A2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="-120" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_output1" value="CSV-файл&lt;br&gt;для перевозчика" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="850" y="230" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_output2" value="Уведомления админу&lt;br&gt;об ошибках" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="750" y="485" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_control1" value="Формат CSV-файла&lt;br&gt;• Колонки: Номер, Дата+время,&lt;br&gt;ФИО, Адрес, Телефон" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="340" y="30" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_control2" value="Определение рабочего дня&lt;br&gt;• 6:00 - 5:59 следующего дня&lt;br&gt;• Напоминание в 10:00" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="60" y="10" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_control3" value="Процедура обработки&lt;br&gt;ошибок&lt;br&gt;• Выгрузка как текст&lt;br&gt;• Уведомление админу" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="560" y="335" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_mechanism1" value="Backend и БД&lt;div&gt;(&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Серверная логика)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="90" y="430" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_mechanism3" value="Интерфейс руководителя" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="760" y="350" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_service" value="&lt;b&gt;Сервис: Резервное копирование&lt;/b&gt;&lt;br&gt;• Автоматическое каждые 2 часа&lt;br&gt;• Хранение 24 часа&lt;br&gt;• Для всей БД" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="-60" y="280" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow_a3_1_to_a3_2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="a3_1" target="a3_2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="270" y="200" as="sourcePoint" />
+            <mxPoint x="320" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_a3_2_to_a3_3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="a3_2" target="a3_3" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="540" y="200" as="sourcePoint" />
+            <mxPoint x="590" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_a3_2_to_a3_4" value="Ошибка генерации" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;edgeStyle=orthogonalEdgeStyle;" parent="1" source="a3_2" target="a3_4" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="430" y="250" as="sourcePoint" />
+            <mxPoint x="430" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_input_to_a3_1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="a3_input" target="a3_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="170" y="210" as="sourcePoint" />
+            <mxPoint x="50" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_a3_3_to_output1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="a3_3" target="a3_output1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="250" as="sourcePoint" />
+            <mxPoint x="720" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_a3_4_to_output2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="a3_4" target="a3_output2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="430" y="380" as="sourcePoint" />
+            <mxPoint x="520" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_control1_to_a3_2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="a3_control1" target="a3_2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="90" as="sourcePoint" />
+            <mxPoint x="540" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_control2_to_a3_1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="a3_control2" target="a3_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="190" as="sourcePoint" />
+            <mxPoint x="270" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_control3_to_a3_4" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" parent="1" source="a3_control3" target="a3_4" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="290" as="sourcePoint" />
+            <mxPoint x="540" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_mech1_to_a3_1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="a3_mechanism1" target="a3_1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="200" y="450" as="sourcePoint" />
+            <mxPoint x="160" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_mech1_to_service" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="a3_mechanism1" target="a3_service" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="200" y="450" as="sourcePoint" />
+            <mxPoint x="150" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_mech2_to_a3_2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="a3_mechanism1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="364" y="315" as="sourcePoint" />
+            <mxPoint x="364" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_mech2_to_a3_4" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="a3_mechanism1" target="a3_4" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="414" y="330" as="sourcePoint" />
+            <mxPoint x="430" y="380" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="150" y="350" />
+              <mxPoint x="430" y="350" />
+              <mxPoint x="430" y="570" />
+              <mxPoint x="600" y="570" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow_mech3_to_a3_3" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="a3_mechanism3" target="a3_3" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="470" y="450" as="sourcePoint" />
+            <mxPoint x="700" y="250" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="310" />
+              <mxPoint x="680" y="310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend" value="&lt;br&gt;&lt;b&gt;Потоки данных:&lt;/b&gt;&lt;br&gt;• Отфильтрованные заявки&lt;br&gt;• CSV-файл&lt;br&gt;• Ошибки генерации" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="90" y="550" width="170" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

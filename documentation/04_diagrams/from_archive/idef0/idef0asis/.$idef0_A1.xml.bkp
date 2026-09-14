@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-10-12T00:00:00.000Z" version="20.0.1" type="device">
+  <diagram id="a0-decomposition" name="A0_AS-IS_Декомпозиция">
+    <mxGraphModel dx="1042" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Заголовок -->
+        <mxCell id="title" value="Декомпозиция A0 — Организация ручного заказа такси (AS-IS)" style="text;html=1;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="140" y="60" width="560" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- A1 -->
+        <mxCell id="A1" value="A1&#10;Получить и проверить изменения от сотрудников" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="60" y="240" width="160" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- A2 -->
+        <mxCell id="A2" value="A2&#10;Внести корректировки в таблицу заказов" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="260" y="240" width="160" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- A3 -->
+        <mxCell id="A3" value="A3&#10;Согласовать и оформить заказ такси" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="460" y="240" width="160" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- A4 -->
+        <mxCell id="A4" value="A4&#10;Контролировать исполнение и вносить изменения" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="660" y="240" width="160" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Вход -->
+        <mxCell id="input" value="Изменения и уточнения от сотрудников&#10;Исходная таблица заказов" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="10" y="270" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Выход -->
+        <mxCell id="output" value="Готовый Excel-файл для партнёра&#10;Отчёт о поездках" style="text;html=1;align=right;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="820" y="270" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Стрелки между функциями -->
+        <mxCell id="edgeA1A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;" edge="1" parent="1" source="A1" target="A2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edgeA2A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;" edge="1" parent="1" source="A2" target="A3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edgeA3A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;" edge="1" parent="1" source="A3" target="A4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Обратная связь (A4 -> A2) -->
+        <mxCell id="edgeFeedback" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;strokeColor=#FF8C00;" edge="1" parent="1" source="A4" target="A2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Вход/выход стрелки -->
+        <mxCell id="edgeInputA1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;" edge="1" parent="1" source="input" target="A1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edgeA4Output" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;" edge="1" parent="1" source="A4" target="output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Управления -->
+        <mxCell id="controls" value="Управления:&#10;Форма таблицы, корпоративные лимиты, требования к экспорту" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="200" y="120" width="500" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Механизмы -->
+        <mxCell id="mechanisms" value="Механизмы:&#10;Руководитель, сотрудники, Excel, почта, мессенджеры" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="200" y="400" width="500" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Легенда -->
+        <mxCell id="legend" value="A1–A4: подфункции процесса | Пунктир = обратная связь | Версия 1.0 (AS-IS)" style="text;html=1;fontSize=9;align=left;verticalAlign=bottom;opacity=70;" vertex="1" parent="1">
+          <mxGeometry x="20" y="1060" width="780" height="24" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
